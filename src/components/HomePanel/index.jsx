@@ -11,8 +11,6 @@ import { withStyles } from '@material-ui/core/styles'
 import classNames from 'classnames'
 import StartPanel from './StartPanel'
 
-const drawerWidth = 240
-
 const styles = theme => ({
   root: {
     display: 'flex',
@@ -31,7 +29,7 @@ const styles = theme => ({
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen
     }),
-    marginLeft: -drawerWidth
+    marginLeft: 0
   },
   contentShift: {
     transition: theme.transitions.create('margin', {

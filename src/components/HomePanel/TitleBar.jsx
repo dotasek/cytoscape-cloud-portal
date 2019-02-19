@@ -11,8 +11,6 @@ import HelpIcon from '@material-ui/icons/Help'
 import classNames from 'classnames'
 import logo from '../../assets/images/cytoscape-logo.svg'
 
-const drawerWidth = 240
-
 const styles = theme => ({
   root: {
     flexGrow: 1
@@ -23,22 +21,10 @@ const styles = theme => ({
   hide: {
     display: 'none'
   },
-  menuButton: {
-    marginLeft: 12,
-    marginRight: 10
-  },
   appBar: {
     transition: theme.transitions.create(['margin', 'width'], {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen
-    })
-  },
-  appBarShift: {
-    width: `calc(100% - ${drawerWidth}px)`,
-    marginLeft: drawerWidth,
-    transition: theme.transitions.create(['margin', 'width'], {
-      easing: theme.transitions.easing.easeOut,
-      duration: theme.transitions.duration.enteringScreen
     })
   },
   logo: {
@@ -62,19 +48,9 @@ class TitleBar extends React.Component {
       <AppBar
         position="fixed"
         color="inherit"
-        className={classNames(classes.appBar, {
-          [classes.appBarShift]: open
-        })}
+        className={classNames(classes.appBar)}
       >
-        <Toolbar disableGutters={!open}>
-          <IconButton
-            className={classNames(classes.menuButton, open && classes.hide)}
-            color="inherit"
-            aria-label="Menu"
-            onClick={this.handleMenu}
-          >
-            <MenuIcon />
-          </IconButton>
+        <Toolbar disableGutters={true}>
           <img src={logo} className={classes.logo} />
           <Typography variant="h5" color="inherit" className={classes.grow} />
           <div>
@@ -82,6 +58,7 @@ class TitleBar extends React.Component {
               aria-owns={open ? 'menu-appbar' : undefined}
               aria-haspopup="true"
               color="inherit"
+              onClick={this.handleMenu}
             >
               <AccountCircle />
             </IconButton>

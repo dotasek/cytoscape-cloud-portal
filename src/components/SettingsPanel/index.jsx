@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { withStyles } from '@material-ui/core/styles'
-import Drawer from '@material-ui/core/Drawer'
+import Popover from '@material-ui/core/Popover'
 import List from '@material-ui/core/List'
 import Divider from '@material-ui/core/Divider'
 import IconButton from '@material-ui/core/IconButton'
@@ -19,12 +19,12 @@ import './style.css'
 const drawerWidth = 240
 
 const styles = theme => ({
-  drawer: {
-    width: drawerWidth,
+  accountPopover: {
+    width: '240px',
     flexShrink: 0
   },
-  drawerPaper: {
-    width: drawerWidth
+  accountPopoverPaper: {
+    width: '240px'
   }
 })
 
@@ -39,25 +39,22 @@ class SettingsPanel extends React.Component {
     const isOpen = this.props.uiState.isSettingsOpen
 
     return (
-      <Drawer
-        className={classes.drawer}
-        variant="persistent"
-        anchor="left"
+      <Popover
+        className={classes.accountPopover}
+        onClose={this.handleDrawerClose}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'center'
+        }}
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'center'
+        }}
         open={isOpen}
         classes={{
-          paper: classes.drawerPaper
+          paper: classes.accountPopoverPaper
         }}
       >
-        <div className="drawerHeader">
-          <IconButton onClick={this.handleDrawerClose}>
-            {theme.direction === 'ltr' ? (
-              <ChevronLeftIcon />
-            ) : (
-              <ChevronRightIcon />
-            )}
-          </IconButton>
-        </div>
-        <Divider />
         <List>
           {['This', 'panel is', 'for advanced', 'options'].map(
             (text, index) => (
@@ -81,7 +78,7 @@ class SettingsPanel extends React.Component {
             </ListItem>
           ))}
         </List>
-      </Drawer>
+      </Popover>
     )
   }
 }
