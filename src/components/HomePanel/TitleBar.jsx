@@ -5,7 +5,6 @@ import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
 import Typography from '@material-ui/core/Typography'
 import IconButton from '@material-ui/core/IconButton'
-import MenuIcon from '@material-ui/icons/Menu'
 import AccountCircle from '@material-ui/icons/AccountCircle'
 import HelpIcon from '@material-ui/icons/Help'
 import classNames from 'classnames'
@@ -34,9 +33,10 @@ const styles = theme => ({
 })
 
 class TitleBar extends React.Component {
-  handleMenu = () => {
+  handleMenu = event => {
     this.props.uiStateActions.setSettingsOpen(
-      !this.props.uiState.isSettingsOpen
+      {isSettingsOpen: !this.props.uiState.isSettingsOpen,
+        anchorEl: event.currentTarget}
     )
   }
 
@@ -55,7 +55,7 @@ class TitleBar extends React.Component {
           <Typography variant="h5" color="inherit" className={classes.grow} />
           <div>
             <IconButton
-              aria-owns={open ? 'menu-appbar' : undefined}
+              aria-owns={open ? 'account-popper' : undefined}
               aria-haspopup="true"
               color="inherit"
               onClick={this.handleMenu}
