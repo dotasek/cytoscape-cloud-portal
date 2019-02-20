@@ -6,9 +6,8 @@ import Toolbar from '@material-ui/core/Toolbar'
 import Typography from '@material-ui/core/Typography'
 import IconButton from '@material-ui/core/IconButton'
 import AccountCircle from '@material-ui/icons/AccountCircle'
-import HelpIcon from '@material-ui/icons/Help'
+import logo from '../../assets/images/cytoscape-logo.svg'
 import classNames from 'classnames'
-import github from '../../assets/images/github.svg'
 
 const styles = theme => ({
   root: {
@@ -61,9 +60,9 @@ class TitleBar extends React.Component {
               NDEx Network Search:
             </Typography>
           </div>
-            <Typography variant="body1">
-              Pathway Enrichment / Gene Neighborhoods / Keywords
-            </Typography>
+          <Typography variant="body1">
+            Pathway Enrichment / Gene Neighborhoods / Keywords
+          </Typography>
           <div>
             <IconButton
               aria-owns={open ? 'account-popper' : undefined}
@@ -72,13 +71,6 @@ class TitleBar extends React.Component {
               onClick={this.handleMenu}
             >
               <AccountCircle />
-            </IconButton>
-            <IconButton
-              aria-haspopup="true"
-              color="inherit"
-              onClick={() => openLink(GITHUB_URL)}
-            >
-              <img src={github} className={classes.headerLogo} />
             </IconButton>
           </div>
         </Toolbar>

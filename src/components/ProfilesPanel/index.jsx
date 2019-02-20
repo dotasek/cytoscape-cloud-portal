@@ -13,7 +13,7 @@ import MailIcon from '@material-ui/icons/Mail'
 import SettingIcon from '@material-ui/icons/Settings'
 import HelpIcon from '@material-ui/icons/Help'
 import './style.css'
-import { Avatar } from '@material-ui/core';
+import { Avatar } from '@material-ui/core'
 
 const styles = theme => ({
   accountPopover: {
@@ -39,6 +39,8 @@ class SettingsPanel extends React.Component {
   handleAddProfile = () => {
     this.props.profilesActions.addProfile('X')
   }
+
+  handleLogoutProfile = () => {}
 
   render() {
     const { classes, theme } = this.props
@@ -77,7 +79,6 @@ class SettingsPanel extends React.Component {
                 variant="contained"
                 className={classes.button}
                 onClick={() => this.handleDeleteProfile(profile)}
-                id={profile}
               >
                 Remove
               </Button>
@@ -92,6 +93,13 @@ class SettingsPanel extends React.Component {
             onClick={this.handleAddProfile}
           >
             Add Account
+          </Button>
+          <Button
+            variant="contained"
+            className={classes.button}
+            onClick={this.handleLogoutProfile}
+          >
+            Log Out
           </Button>
         </div>
       </Popover>

@@ -3,7 +3,7 @@ import './style.css'
 import InputPanel from '../InputPanel'
 import Results from '../Results'
 import TitleBar from './TitleBar'
-import SettingsPanel from '../SettingsPanel'
+import ProfilesPanel from '../ProfilesPanel'
 
 import CssBaseline from '@material-ui/core/CssBaseline'
 import { withStyles } from '@material-ui/core/styles'
@@ -56,7 +56,7 @@ const HomePanel = props => {
     <div className={classes.root}>
       <CssBaseline />
       <TitleBar {...others} />
-      <SettingsPanel {...others} />
+      <ProfilesPanel {...others} />
 
       <div
         className={classNames(classes.content, {
