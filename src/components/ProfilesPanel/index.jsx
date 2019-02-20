@@ -25,7 +25,7 @@ const styles = theme => ({
   }
 })
 
-class SettingsPanel extends React.Component {
+class ProfilesPanel extends React.Component {
   handleDrawerClose = () => {
     const isOpen = this.props.uiState.isSettingsOpen
     this.props.uiStateActions.setSettingsOpen(!isOpen)
@@ -107,9 +107,9 @@ class SettingsPanel extends React.Component {
   }
 }
 
-SettingsPanel.propTypes = {
+ProfilesPanel.propTypes = {
   classes: PropTypes.object.isRequired,
   theme: PropTypes.object.isRequired
 }
 
-export default withStyles(styles, { withTheme: true })(SettingsPanel)
+export default withStyles(styles, { withTheme: true })(ProfilesPanel)
