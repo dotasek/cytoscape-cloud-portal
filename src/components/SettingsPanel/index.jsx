@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { withStyles } from '@material-ui/core/styles'
+import Button from '@material-ui/core/Button'
 import Popover from '@material-ui/core/Popover'
 import List from '@material-ui/core/List'
 import Divider from '@material-ui/core/Divider'
@@ -12,6 +13,7 @@ import MailIcon from '@material-ui/icons/Mail'
 import SettingIcon from '@material-ui/icons/Settings'
 import HelpIcon from '@material-ui/icons/Help'
 import './style.css'
+import { Avatar } from '@material-ui/core';
 
 const styles = theme => ({
   accountPopover: {
@@ -30,10 +32,19 @@ class SettingsPanel extends React.Component {
     console.log(this.props)
   }
 
+  handleDeleteProfile = profile => {
+    this.props.profilesActions.deleteProfile(profile)
+  }
+
+  handleAddProfile = () => {
+    this.props.profilesActions.addProfile('X')
+  }
+
   render() {
     const { classes, theme } = this.props
     const isOpen = this.props.uiState.isSettingsOpen
     const anchorEl = this.props.uiState.settingsAnchorEl
+    const profiles = this.props.profiles.availableProfiles
     return (
       <Popover
         id="account-popper"
@@ -53,29 +64,36 @@ class SettingsPanel extends React.Component {
           paper: classes.accountPopoverPaper
         }}
       >
-        <List>
-          {['This', 'panel is', 'for advanced', 'options'].map(
-            (text, index) => (
-              <ListItem button key={text}>
-                <ListItemIcon>
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                </ListItemIcon>
-                <ListItemText primary={text} />
-              </ListItem>
-            )
-          )}
-        </List>
+        <Avatar>FF</Avatar>
         <Divider />
         <List>
-          {['More options', 'Help', '??'].map((text, index) => (
-            <ListItem button key={text}>
+          {profiles.map((profile, index) => (
+            <ListItem button key={profile}>
               <ListItemIcon>
-                {index % 2 === 0 ? <SettingIcon /> : <HelpIcon />}
+                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
               </ListItemIcon>
-              <ListItemText primary={text} />
+              <ListItemText primary={profile} />
+              <Button
+                variant="contained"
+                className={classes.button}
+                onClick={() => this.handleDeleteProfile(profile)}
+                id={profile}
+              >
+                Remove
+              </Button>
             </ListItem>
           ))}
         </List>
+        <Divider />
+        <div>
+          <Button
+            variant="contained"
+            className={classes.button}
+            onClick={this.handleAddProfile}
+          >
+            Add Account
+          </Button>
+        </div>
       </Popover>
     )
   }
