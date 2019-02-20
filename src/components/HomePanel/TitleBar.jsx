@@ -8,7 +8,7 @@ import IconButton from '@material-ui/core/IconButton'
 import AccountCircle from '@material-ui/icons/AccountCircle'
 import HelpIcon from '@material-ui/icons/Help'
 import classNames from 'classnames'
-import logo from '../../assets/images/cytoscape-logo.svg'
+import github from '../../assets/images/github.svg'
 
 const styles = theme => ({
   root: {
@@ -29,6 +29,9 @@ const styles = theme => ({
   logo: {
     height: '2.5em',
     marginRight: '0.7em'
+  },
+  headerLogo: {
+    height: '1.4em'
   }
 })
 
@@ -53,6 +56,14 @@ class TitleBar extends React.Component {
         <Toolbar disableGutters={true}>
           <img src={logo} className={classes.logo} />
           <Typography variant="h5" color="inherit" className={classes.grow} />
+          <div className={classes.grow}>
+            <Typography variant="h6" color="inherit">
+              NDEx Network Search:
+            </Typography>
+          </div>
+            <Typography variant="body1">
+              Pathway Enrichment / Gene Neighborhoods / Keywords
+            </Typography>
           <div>
             <IconButton
               aria-owns={open ? 'account-popper' : undefined}
@@ -63,17 +74,29 @@ class TitleBar extends React.Component {
               <AccountCircle />
             </IconButton>
             <IconButton
-              aria-owns={open ? 'menu-appbar' : undefined}
               aria-haspopup="true"
               color="inherit"
+              onClick={() => openLink(GITHUB_URL)}
             >
-              <HelpIcon />
+              <img src={github} className={classes.headerLogo} />
             </IconButton>
           </div>
         </Toolbar>
       </AppBar>
     )
   }
+}
+
+// TODO: replace this to the actual help page
+const HELP_URL = 'https://www.cytoscape.org/'
+const GITHUB_URL = 'https://github.com/idekerlab/cytoscape-cloud-portal'
+const CY_URL = 'https://www.cytoscape.org/'
+const NDEX_URL = 'https://www.ndexbio.org/'
+const UCSD_URL =
+  'https://medschool.ucsd.edu/som/medicine/research/labs/ideker/Pages/default.aspx'
+
+const openLink = url => {
+  window.open(url, '_blank')
 }
 
 TitleBar.propTypes = {
