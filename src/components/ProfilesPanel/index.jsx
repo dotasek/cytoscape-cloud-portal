@@ -10,8 +10,6 @@ import ListItemIcon from '@material-ui/core/ListItemIcon'
 import ListItemText from '@material-ui/core/ListItemText'
 import InboxIcon from '@material-ui/icons/MoveToInbox'
 import MailIcon from '@material-ui/icons/Mail'
-import SettingIcon from '@material-ui/icons/Settings'
-import HelpIcon from '@material-ui/icons/Help'
 import './style.css'
 import { Avatar } from '@material-ui/core'
 
