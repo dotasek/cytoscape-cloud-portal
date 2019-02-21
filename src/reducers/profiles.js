@@ -38,7 +38,6 @@ const profiles = handleActions(
       //window.localStorage.setItem('selectedProfile', JSON.stringify(payload.payload))
       const profile = payload.payload
       if (!profile.hasOwnProperty('userId')) {
-        const main = this
         if (
           profile.hasOwnProperty('serverAddress') &&
           profile.hasOwnProperty('userName') &&
@@ -63,11 +62,14 @@ const profiles = handleActions(
                   firstName: blob.firstName,
                   image: blob.image
                 })
-                const profiles = main.state.profiles.filter(p => p !== profile)
-                profiles.push(newProfile)
+                const availableProfiles = state.availableProfiles.filter(
+                  p => p !== profile
+                )
+                availableProfiles.push(newProfile)
                 return {
                   ...state,
-                  selectedProfile: newProfile
+                  selectedProfile: newProfile,
+                  availableProfiles: availableProfiles
                 }
                 //window.localStorage.setItem('profiles', JSON.stringify(profiles))
                 //window.localStorage.setItem('selectedProfile', JSON.stringify(newProfile))
@@ -81,11 +83,14 @@ const profiles = handleActions(
                 //main.handleProfileDelete(profile)
               })
           } else {
-            const profiles = main.state.profiles.filter(p => p !== profile)
-            profiles.push(profile)
+            const availableProfiles = state.availableProfiles.filter(
+              p => p !== profile
+            )
+            availableProfiles.push(profile)
             return {
               ...state,
-              selectedProfile: profile
+              selectedProfile: profile,
+              availableProfiles: availableProfiles
             }
             //window.localStorage.setItem('profiles', JSON.stringify(profiles))
             //window.localStorage.setItem('selectedProfile', JSON.stringify(profile))
