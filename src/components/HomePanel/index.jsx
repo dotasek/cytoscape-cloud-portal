@@ -10,6 +10,7 @@ import { withStyles } from '@material-ui/core/styles'
 
 import classNames from 'classnames'
 import StartPanel from './StartPanel'
+import NDExLogin from '../NDExLogin'
 
 const styles = theme => ({
   root: {
@@ -65,7 +66,7 @@ const HomePanel = props => {
       <CssBaseline />
       <TitleBar {...others} />
       <ProfilesPanel {...others} />
-
+      <NDExLogin {...others} />
       <div
         className={classNames(classes.content, {
           [classes.contentShift]: open

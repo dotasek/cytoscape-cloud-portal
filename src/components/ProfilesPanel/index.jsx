@@ -8,8 +8,6 @@ import Divider from '@material-ui/core/Divider'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemAvatar from '@material-ui/core/ListItemAvatar'
 import ListItemText from '@material-ui/core/ListItemText'
-import InboxIcon from '@material-ui/icons/MoveToInbox'
-import MailIcon from '@material-ui/icons/Mail'
 import './style.css'
 import { Avatar } from '@material-ui/core'
 
@@ -24,7 +22,7 @@ const styles = theme => ({
 })
 
 class ProfilesPanel extends React.Component {
-  handleDrawerClose = () => {
+  handlePopoverClose = () => {
     const isOpen = this.props.uiState.isSettingsOpen
     this.props.uiStateActions.setSettingsOpen(!isOpen)
   }
@@ -38,7 +36,7 @@ class ProfilesPanel extends React.Component {
   }
 
   handleAddProfile = () => {
-    this.props.profilesActions.addProfile('X')
+    this.props.uiStateActions.setNDExLoginOpen(true)
   }
 
   handleLogoutProfile = () => {}
@@ -53,7 +51,7 @@ class ProfilesPanel extends React.Component {
       <Popover
         id="account-popper"
         className={classes.accountPopover}
-        onClose={this.handleDrawerClose}
+        onClose={this.handlePopoverClose}
         anchorOrigin={{
           vertical: 'bottom',
           horizontal: 'center'
