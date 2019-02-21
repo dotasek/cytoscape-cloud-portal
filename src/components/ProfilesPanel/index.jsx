@@ -6,7 +6,7 @@ import Popover from '@material-ui/core/Popover'
 import List from '@material-ui/core/List'
 import Divider from '@material-ui/core/Divider'
 import ListItem from '@material-ui/core/ListItem'
-import ListItemIcon from '@material-ui/core/ListItemIcon'
+import ListItemAvatar from '@material-ui/core/ListItemAvatar'
 import ListItemText from '@material-ui/core/ListItemText'
 import InboxIcon from '@material-ui/icons/MoveToInbox'
 import MailIcon from '@material-ui/icons/Mail'
@@ -15,11 +15,11 @@ import { Avatar } from '@material-ui/core'
 
 const styles = theme => ({
   accountPopover: {
-    width: '240px',
+    //width: '240px',
     flexShrink: 0
   },
   accountPopoverPaper: {
-    width: '240px'
+    //width: '240px'
   }
 })
 
@@ -27,11 +27,14 @@ class ProfilesPanel extends React.Component {
   handleDrawerClose = () => {
     const isOpen = this.props.uiState.isSettingsOpen
     this.props.uiStateActions.setSettingsOpen(!isOpen)
-    console.log(this.props)
   }
 
   handleDeleteProfile = profile => {
     this.props.profilesActions.deleteProfile(profile)
+  }
+
+  handleSelectProfile = profile => {
+    this.props.profilesActions.selectProfile(profile)
   }
 
   handleAddProfile = () => {
@@ -44,6 +47,7 @@ class ProfilesPanel extends React.Component {
     const { classes, theme } = this.props
     const isOpen = this.props.uiState.isSettingsOpen
     const anchorEl = this.props.uiState.settingsAnchorEl
+    const selectedProfile = this.props.profiles.selectedProfile
     const profiles = this.props.profiles.availableProfiles
     return (
       <Popover
@@ -64,15 +68,26 @@ class ProfilesPanel extends React.Component {
           paper: classes.accountPopoverPaper
         }}
       >
-        <Avatar>FF</Avatar>
+        <Avatar src={selectedProfile.image}>
+          {selectedProfile.userName.substring(0, 1)}
+        </Avatar>
+        {selectedProfile.userName}
+        {selectedProfile.serverAddress}
         <Divider />
         <List>
           {profiles.map((profile, index) => (
-            <ListItem button key={profile}>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={profile} />
+            <ListItem
+              button
+              key={profile}
+              onClick={() => this.handleSelectProfile(profile)}
+            >
+              <ListItemAvatar>
+                <Avatar src={profile.image}>
+                  {profile.userName.substring(0, 1)}
+                </Avatar>
+              </ListItemAvatar>
+              <ListItemText primary={profile.userName} />
+              {profile.serverAddress}
               <Button
                 variant="contained"
                 className={classes.button}

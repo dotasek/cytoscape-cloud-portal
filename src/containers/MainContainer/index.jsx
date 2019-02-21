@@ -7,6 +7,7 @@ import * as searchActions from '../../actions/search'
 import * as uiStateActions from '../../actions/uiState'
 import * as networkActions from '../../actions/network'
 import * as profilesActions from '../../actions/profiles'
+import * as sourceActions from '../../actions/source'
 
 const MainContainer = props => <HomePanel {...props} />
 
@@ -14,8 +15,9 @@ function mapStateToProps(state) {
   return {
     search: state.search,
     uiState: state.uiState,
+    profiles: state.profiles,
     network: state.network,
-    profiles: state.profiles
+    source: state.source
   }
 }
 
@@ -23,8 +25,9 @@ function mapDispatchToProps(dispatch) {
   return {
     searchActions: bindActionCreators(searchActions, dispatch),
     uiStateActions: bindActionCreators(uiStateActions, dispatch),
+    profilesActions: bindActionCreators(profilesActions, dispatch),
     networkActions: bindActionCreators(networkActions, dispatch),
-    profilesActions: bindActionCreators(profilesActions, dispatch)
+    sourceActions: bindActionCreators(sourceActions, dispatch)
   }
 }
 

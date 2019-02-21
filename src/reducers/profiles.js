@@ -1,9 +1,25 @@
 import { handleActions } from 'redux-actions'
 import { selectProfile, addProfile, deleteProfile } from '../actions/profiles'
+import defaultProfilePic from '../assets/images/default-profile.png'
+import { getMissingScaleProps } from 'react-vis/dist/utils/scales-utils'
+
+const DEF_PROFILE = {
+  userId: 'dotasek',
+  userName: 'D Otasek',
+  serverAddress: 'ndexbio.org',
+  image: defaultProfilePic
+}
+
+const DEF_PROFILE_2 = {
+  userId: 'dotasek',
+  userName: 'D Otasek',
+  serverAddress: 'dev.ndexbio.org',
+  image: defaultProfilePic
+}
 
 const DEF_STATE = {
-  selectedProfile: null,
-  availableProfiles: []
+  selectedProfile: DEF_PROFILE,
+  availableProfiles: [DEF_PROFILE, DEF_PROFILE_2]
 }
 
 const profiles = handleActions(
