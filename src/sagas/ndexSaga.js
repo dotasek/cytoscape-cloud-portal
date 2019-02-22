@@ -2,6 +2,7 @@ import { call, put, takeLatest } from 'redux-saga/effects'
 import * as api from '../api/ndex'
 import * as myGeneApi from '../api/mygene'
 import * as cySearchApi from '../api/search'
+import defaultProfilePic from '../assets/images/default-profile.png'
 
 import {
   SEARCH_STARTED,
@@ -21,11 +22,20 @@ import {
   NETWORK_FETCH_FAILED
 } from '../actions/network'
 
+import {
+  ADD_PROFILE_STARTED,
+  ADD_PROFILE_SUCCEEDED,
+  ADD_PROFILE_FAILED
+} from '../actions/profiles'
+
+import { SET_NDEX_LOGIN_OPEN } from '../actions/uiState'
+
 export default function* rootSaga() {
   console.log('rootSaga reporting for duty')
   yield takeLatest(SEARCH_STARTED, watchSearch)
   yield takeLatest(NETWORK_FETCH_STARTED, fetchNetwork)
   yield takeLatest(FIND_SOURCE_STARTED, fetchSource)
+  yield takeLatest(ADD_PROFILE_STARTED, watchLogin)
 }
 
 /**
@@ -92,6 +102,19 @@ function* fetchSource(action) {
   } catch (error) {
     yield put({ type: FIND_SOURCE_FAILED, error })
   }
+}
+
+function* watchLogin(action) {
+  yield put({
+    type: ADD_PROFILE_SUCCEEDED,
+    payload: {
+      userId: 'dotasek',
+      userName: 'D Otasek',
+      serverAddress: 'dev.ndexbio.org',
+      image: defaultProfilePic
+    }
+  })
+  yield put({ type: SET_NDEX_LOGIN_OPEN, payload: false })
 }
 
 const filterGenes = resultList => {

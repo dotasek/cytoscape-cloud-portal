@@ -43,7 +43,7 @@ class NDExLogin extends React.Component {
   }
 
   handleAddProfile = () => {
-    this.props.profilesActions.addProfile('X')
+    this.props.profilesActions.addProfileStarted()
   }
 
   render() {
@@ -64,6 +64,13 @@ class NDExLogin extends React.Component {
           <Typography variant="subtitle1" id="simple-modal-description">
             Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
           </Typography>
+          <Button
+            variant="contained"
+            className={classes.button}
+            onClick={this.handleAddProfile}
+          >
+            Add Account
+          </Button>
         </div>
       </Modal>
     )

@@ -76,7 +76,7 @@ class ProfilesPanel extends React.Component {
           {profiles.map((profile, index) => (
             <ListItem
               button
-              key={profile}
+              key={profile.userId + '@' + profile.serverAddress}
               onClick={() => this.handleSelectProfile(profile)}
             >
               <ListItemAvatar>

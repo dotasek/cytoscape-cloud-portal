@@ -1,5 +1,11 @@
 import { handleActions } from 'redux-actions'
-import { selectProfile, addProfile, deleteProfile } from '../actions/profiles'
+import {
+  selectProfile,
+  addProfileStarted,
+  addProfileFailed,
+  addProfileSucceeded,
+  deleteProfile
+} from '../actions/profiles'
 import defaultProfilePic from '../assets/images/default-profile.png'
 import { getMissingScaleProps } from 'react-vis/dist/utils/scales-utils'
 
@@ -24,8 +30,20 @@ const DEF_STATE = {
 
 const profiles = handleActions(
   {
-    [addProfile]: (state, payload) => {
-      console.log('addProfile = ', payload.payload)
+    [addProfileStarted]: (state, payload) => {
+      console.log('addProfileStarted = ', payload.payload)
+      return {
+        ...state
+      }
+    },
+    [addProfileFailed]: (state, payload) => {
+      console.log('addProfileFailed = ', payload.payload)
+      return {
+        ...state
+      }
+    },
+    [addProfileSucceeded]: (state, payload) => {
+      console.log('addProfileSucceeded = ', payload.payload)
       //window.localStorage.setItem('profiles', JSON.stringify(this.state.profiles))
       //window.localStorage.setItem('selectedProfile', JSON.stringify(profile))
       return {
