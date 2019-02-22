@@ -7,18 +7,17 @@ import {
   deleteProfile
 } from '../actions/profiles'
 import defaultProfilePic from '../assets/images/default-profile.png'
-import { getMissingScaleProps } from 'react-vis/dist/utils/scales-utils'
 
 const DEF_PROFILE = {
-  userId: 'dotasek',
-  userName: 'D Otasek',
+  userId: 'xxxyyy1',
+  userName: 'dotasek',
   serverAddress: 'ndexbio.org',
   image: defaultProfilePic
 }
 
 const DEF_PROFILE_2 = {
-  userId: 'dotasek',
-  userName: 'D Otasek',
+  userId: 'xxxyyy2',
+  userName: 'dotasek',
   serverAddress: 'dev.ndexbio.org',
   image: defaultProfilePic
 }
