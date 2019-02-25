@@ -10,6 +10,7 @@ import ListItemAvatar from '@material-ui/core/ListItemAvatar'
 import ListItemText from '@material-ui/core/ListItemText'
 import './style.css'
 import { Avatar } from '@material-ui/core'
+import defaultProfileImage from '../../assets/images/default-profile.png'
 
 const styles = theme => ({
   accountPopover: {
@@ -32,14 +33,16 @@ class ProfilesPanel extends React.Component {
   }
 
   handleSelectProfile = profile => {
-    this.props.profilesActions.selectProfile(profile)
+    this.props.profilesActions.selectProfileStarted(profile)
   }
 
   handleAddProfile = () => {
     this.props.uiStateActions.setNDExLoginOpen(true)
   }
 
-  handleLogoutProfile = () => {}
+  handleLogoutProfile = () => {
+    this.props.profilesActions.deleteProfile(this.props.selectedProfile)
+  }
 
   render() {
     const { classes, theme } = this.props
@@ -66,35 +69,52 @@ class ProfilesPanel extends React.Component {
           paper: classes.accountPopoverPaper
         }}
       >
-        <Avatar src={selectedProfile.image}>
-          {selectedProfile.userName.substring(0, 1)}
-        </Avatar>
-        {selectedProfile.userName}
-        {selectedProfile.serverAddress}
+        {selectedProfile && (
+          <div>
+            {selectedProfile.image ? (
+              <Avatar src={selectedProfile.image} />
+            ) : (
+              <Avatar>{selectedProfile.firstName.substring(0, 1)}</Avatar>
+            )}
+            {selectedProfile.userName}
+            {selectedProfile.serverAddress}
+            <Button
+              variant="contained"
+              className={classes.button}
+              onClick={this.handleLogoutProfile}
+            >
+              Remove
+            </Button>
+          </div>
+        )}
         <Divider />
         <List>
-          {profiles.map((profile, index) => (
-            <ListItem
-              button
-              key={profile.userId + '@' + profile.serverAddress}
-              onClick={() => this.handleSelectProfile(profile)}
-            >
-              <ListItemAvatar>
-                <Avatar src={profile.image}>
-                  {profile.userName.substring(0, 1)}
-                </Avatar>
-              </ListItemAvatar>
-              <ListItemText primary={profile.userName} />
-              {profile.serverAddress}
-              <Button
-                variant="contained"
-                className={classes.button}
-                onClick={() => this.handleDeleteProfile(profile)}
+          {profiles
+            .filter(p => p !== selectedProfile)
+            .map((profile, index) => (
+              <ListItem
+                button
+                key={profile.userId + '@' + profile.serverAddress}
+                onClick={() => this.handleSelectProfile(profile)}
               >
-                Remove
-              </Button>
-            </ListItem>
-          ))}
+                <ListItemAvatar>
+                  {profile.image ? (
+                    <Avatar src={profile.image} />
+                  ) : (
+                    <Avatar>{profile.firstName.substring(0, 1)}</Avatar>
+                  )}
+                </ListItemAvatar>
+                <ListItemText primary={profile.userName} />
+                {profile.serverAddress}
+                <Button
+                  variant="contained"
+                  className={classes.button}
+                  onClick={() => this.handleDeleteProfile(profile)}
+                >
+                  Remove
+                </Button>
+              </ListItem>
+            ))}
         </List>
         <Divider />
         <div>
@@ -104,13 +124,6 @@ class ProfilesPanel extends React.Component {
             onClick={this.handleAddProfile}
           >
             Add Account
-          </Button>
-          <Button
-            variant="contained"
-            className={classes.button}
-            onClick={this.handleLogoutProfile}
-          >
-            Log Out
           </Button>
         </div>
       </Popover>

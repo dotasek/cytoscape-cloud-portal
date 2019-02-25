@@ -1,4 +1,4 @@
-import { call, put, takeLatest } from 'redux-saga/effects'
+import { call, put, takeLatest, select } from 'redux-saga/effects'
 import * as api from '../api/ndex'
 import * as myGeneApi from '../api/mygene'
 import * as cySearchApi from '../api/search'
@@ -25,10 +25,13 @@ import {
 import {
   ADD_PROFILE_STARTED,
   ADD_PROFILE_SUCCEEDED,
-  ADD_PROFILE_FAILED
+  ADD_PROFILE_FAILED,
+  SELECT_PROFILE_STARTED,
+  SELECT_PROFILE_SUCCEEDED,
+  SELECT_PROFILE_FAILED
 } from '../actions/profiles'
 
-import { SET_NDEX_LOGIN_OPEN } from '../actions/uiState'
+import { SET_NDEX_LOGIN_OPEN, SET_SETTINGS_OPEN } from '../actions/uiState'
 
 export default function* rootSaga() {
   console.log('rootSaga reporting for duty')
@@ -36,6 +39,7 @@ export default function* rootSaga() {
   yield takeLatest(NETWORK_FETCH_STARTED, fetchNetwork)
   yield takeLatest(FIND_SOURCE_STARTED, fetchSource)
   yield takeLatest(ADD_PROFILE_STARTED, watchLogin)
+  yield takeLatest(SELECT_PROFILE_STARTED, watchProfileSelect)
 }
 
 /**
@@ -104,17 +108,109 @@ function* fetchSource(action) {
   }
 }
 
+export const getProfiles = state => state.profiles
+
 function* watchLogin(action) {
+  const profile = action.payload
+  //const profile = {
+  //  userId: 'dotasek',
+  //  userName: 'D Otasek',
+  //  serverAddress: 'dev.ndexbio.org',
+  //  image: defaultProfilePic
+  //}
   yield put({
     type: ADD_PROFILE_SUCCEEDED,
-    payload: {
-      userId: 'dotasek',
-      userName: 'D Otasek',
-      serverAddress: 'dev.ndexbio.org',
-      image: defaultProfilePic
-    }
+    payload: profile
   })
+  let profiles = yield select(getProfiles)
+  window.localStorage.setItem('profiles', JSON.stringify(profiles.profiles))
+  window.localStorage.setItem('selectedProfile', JSON.stringify(profile))
   yield put({ type: SET_NDEX_LOGIN_OPEN, payload: false })
+  yield put({ type: SET_SETTINGS_OPEN, payload: false })
+}
+
+function* watchProfileSelect(action) {
+  window.localStorage.setItem('selectedProfile', JSON.stringify(action.payload))
+  const profile = action.payload
+  if (!profile.hasOwnProperty('userId')) {
+    if (
+      profile.hasOwnProperty('serverAddress') &&
+      profile.hasOwnProperty('userName') &&
+      !profile.hasOwnProperty('userId')
+    ) {
+      if (profile.userName !== '') {
+        try {
+          const response = yield call(api.fetchUser, profile)
+          if (!response.ok) {
+            throw Error()
+          }
+          const blob = response.json()
+
+          const newProfile = Object.assign(profile, {
+            userId: blob.externalId,
+            firstName: blob.firstName,
+            image: blob.image
+          })
+          const availableProfiles = yield select(
+            getProfiles
+          ).availableProfiles.filter(p => p !== profile)
+          availableProfiles.push(newProfile)
+
+          yield put({
+            type: SELECT_PROFILE_SUCCEEDED,
+            payload: {
+              profile: newProfile,
+              availableProfiles: availableProfiles
+            }
+          })
+          window.localStorage.setItem(
+            'profiles',
+            JSON.stringify(availableProfiles)
+          )
+          window.localStorage.setItem(
+            'selectedProfile',
+            JSON.stringify(newProfile)
+          )
+        } catch (error) {
+          yield put({ type: SELECT_PROFILE_FAILED, payload: error })
+          //  alert(
+          //    'Unable to update profile from NDEx. Try logging in again'
+          //  )
+          //TODO: REINTRODUCE THIS
+          //main.handleProfileLogout(profile)
+          //main.handleProfileDelete(profile)
+          //})
+        }
+      } else {
+        const availableProfiles = yield select(getProfiles).availableProfiles.filter(
+          p => p !== profile
+        )
+        availableProfiles.push(profile)
+        yield put({
+          type: SELECT_PROFILE_SUCCEEDED,
+          payload: {
+            selectedProfile: profile,
+            availableProfiles: availableProfiles
+          }
+        })
+        window.localStorage.setItem(
+          'profiles',
+          JSON.stringify(availableProfiles)
+        )
+        window.localStorage.setItem('selectedProfile', JSON.stringify(profile))
+      }
+    }
+  } else {
+    const profiles = yield select(getProfiles)
+    console.log("Problem position: " + profiles)
+    yield put({
+      type: SELECT_PROFILE_SUCCEEDED,
+      payload: {
+        selectedProfile: profile,
+        availableProfiles: profiles.availableProfiles
+      }
+    })
+  }
 }
 
 const filterGenes = resultList => {

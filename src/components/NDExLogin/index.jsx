@@ -4,9 +4,7 @@ import { withStyles } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button'
 import Modal from '@material-ui/core/Modal'
 import TextField from '@material-ui/core/TextField'
-import Typography from '@material-ui/core/Typography'
 import './style.css'
-import { Avatar } from '@material-ui/core'
 
 const styles = theme => ({
   loginModal: {
@@ -67,7 +65,11 @@ class NDExLogin extends React.Component {
       this.setState({ error: 'Must provide a ' + missingVal })
       return
     }
-    const filtered = this.props.profiles.availableProfiles.filter((p) => p.serverAddress === profile.serverAddress && p.userName === profile.userName)
+    const filtered = this.props.profiles.availableProfiles.filter(
+      p =>
+        p.serverAddress === profile.serverAddress &&
+        p.userName === profile.userName
+    )
 
     if (filtered.length !== 0) {
       this.setState({ error: 'The profile is already logged in.' })

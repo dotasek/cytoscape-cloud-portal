@@ -6,6 +6,7 @@ import Toolbar from '@material-ui/core/Toolbar'
 import Typography from '@material-ui/core/Typography'
 import IconButton from '@material-ui/core/IconButton'
 import AccountCircle from '@material-ui/icons/AccountCircle'
+import { Avatar } from '@material-ui/core'
 import logo from '../../assets/images/cytoscape-logo.svg'
 import classNames from 'classnames'
 
@@ -45,7 +46,7 @@ class TitleBar extends React.Component {
   render() {
     const { classes } = this.props
     const open = this.props.uiState.isSettingsOpen
-
+    const selectedProfile = this.props.profiles.selectedProfile
     return (
       <AppBar
         position="fixed"
@@ -70,7 +71,17 @@ class TitleBar extends React.Component {
               color="inherit"
               onClick={this.handleMenu}
             >
-              <AccountCircle />
+              {selectedProfile ? (
+                <div>
+                  {selectedProfile.image ? (
+                    <Avatar src={selectedProfile.image} />
+                  ) : (
+                    <Avatar>{selectedProfile.firstName.substring(0, 1)}</Avatar>
+                  )}
+                </div>
+              ) : (
+                <AccountCircle />
+              )}
             </IconButton>
           </div>
         </Toolbar>

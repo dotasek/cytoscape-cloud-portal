@@ -35,4 +35,12 @@ const fetchNetwork = uuid => {
   })
 }
 
-export { searchNetwork, fetchNetwork }
+const fetchUser = profile => {
+  return fetch(profile.serverAddress + '/v2/user?valid=true', {
+    headers: new Headers({
+      Authorization: 'Basic ' + btoa(profile.userName + ':' + profile.password)
+    })
+  })
+}
+
+export { searchNetwork, fetchNetwork, fetchUser }
