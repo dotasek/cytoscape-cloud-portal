@@ -8,5 +8,8 @@ import { createAction } from 'redux-actions'
 export const SET_SETTINGS_OPEN = 'SET_SETTINGS_OPEN'
 export const setSettingsOpen = createAction(SET_SETTINGS_OPEN)
 
+export const SET_CYTOSCAPE_STATUS = 'SET_CYTOSCAPE_STATUS'
+export const setCytoscapeStatus = createAction(SET_CYTOSCAPE_STATUS)
 export const SET_NDEX_LOGIN_OPEN = 'SET_NDEX_LOGIN_OPEN'
 export const setNDExLoginOpen = createAction(SET_NDEX_LOGIN_OPEN)
+

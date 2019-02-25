@@ -1,10 +1,12 @@
 import { handleActions } from 'redux-actions'
-import { setSettingsOpen, setNDExLoginOpen } from '../actions/uiState'
+import {
+  setSettingsOpen,
+  setNDExLoginOpen,
+  setCytoscapeStatus
+} from '../actions/uiState'
 
 const DEF_STATE = {
-  isSettingsOpen: false,
-  isNDExLoginOpen: false,
-  settingsAnchorEl: null
+  isCytoscapeRunning: false
 }
 
 const uiState = handleActions(
@@ -25,6 +27,10 @@ const uiState = handleActions(
         ...state,
         isNDExLoginOpen: payload.payload
       }
+    },
+    [setCytoscapeStatus]: (state, payload) => {
+      console.log('Cytoscape is running = ', payload.payload)
+      return { ...state, isCytoscapeRunning: payload.payload }
     }
   },
   DEF_STATE
