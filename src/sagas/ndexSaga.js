@@ -125,7 +125,10 @@ function* watchLogin(action) {
     payload: profile
   })
   let profiles = yield select(getProfiles)
-  window.localStorage.setItem('profiles', JSON.stringify(profiles.availableProfiles))
+  window.localStorage.setItem(
+    'profiles',
+    JSON.stringify(profiles.availableProfiles)
+  )
   window.localStorage.setItem('selectedProfile', JSON.stringify(profile))
   yield put({ type: SET_NDEX_LOGIN_OPEN, payload: false })
   yield put({ type: SET_SETTINGS_OPEN, payload: { isSettingsOpen: false } })
@@ -184,9 +187,9 @@ function* watchProfileSelect(action) {
           //})
         }
       } else {
-        const availableProfiles = yield select(getProfiles).availableProfiles.filter(
-          p => p !== profile
-        )
+        const availableProfiles = yield select(
+          getProfiles
+        ).availableProfiles.filter(p => p !== profile)
         availableProfiles.push(profile)
         yield put({
           type: SELECT_PROFILE_SUCCEEDED,
