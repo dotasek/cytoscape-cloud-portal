@@ -8,13 +8,29 @@ import {
   addProfileSucceeded,
   deleteProfile
 } from '../actions/profiles'
-import defaultProfilePic from '../assets/images/default-profile.png'
 
-const DEF_STATE = {
-  selectedProfile:
-    JSON.parse(window.localStorage.getItem('selectedProfile')) || {},
-  availableProfiles: JSON.parse(window.localStorage.getItem('profiles')) || []
+// Not happy about this, but JSON.parse does not create objects that are equal via ==
+// so to make our post-init life easier, we do a compare via JSON.stringify here.
+const initProfiles = (selectedProfileJSON, availableProfilesJSON) => {
+  let selectedProfile = JSON.parse(selectedProfileJSON)
+  const availableProfiles = JSON.parse(availableProfilesJSON)
+
+  availableProfiles.forEach(element => {
+    if (JSON.stringify(selectedProfile) == JSON.stringify(element)) {
+      selectedProfile = element
+    }
+  })
+
+  return {
+    selectedProfile: selectedProfile,
+    availableProfiles: availableProfiles
+  }
 }
+
+const DEF_STATE = initProfiles(
+  window.localStorage.getItem('selectedProfile'),
+  window.localStorage.getItem('profiles')
+)
 
 const profiles = handleActions(
   {
@@ -57,11 +73,18 @@ const profiles = handleActions(
       return { ...state }
     },
     [deleteProfile]: (state, payload) => {
+      let selectedProfile = state.selectedProfile
       const profiles = state.availableProfiles.filter(
         p => p !== payload.payload
       )
+      if (selectedProfile == payload.payload) {
+        console.log("Deleting selectedProfile")
+        selectedProfile =
+          state.availableProfiles.length > 0 ? state.availableProfiles[0] : null
+      }
       return {
         ...state,
+        selectedProfile: selectedProfile,
         availableProfiles: profiles
       }
     }

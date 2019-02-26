@@ -17,7 +17,7 @@ const uiState = handleActions(
       console.log('Profiles OPEN payload.payload= ', payload.payload)
       return {
         ...state,
-        isSettingsOpen: payload.payload.isSettingsOpen,
+        isSettingsOpen: payload.payload.isSettingsOpen ? true : false,
         settingsAnchorEl: payload.payload.isSettingsOpen
           ? payload.payload.anchorEl
           : null

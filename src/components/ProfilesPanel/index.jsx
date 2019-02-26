@@ -40,10 +40,6 @@ class ProfilesPanel extends React.Component {
     this.props.uiStateActions.setNDExLoginOpen(true)
   }
 
-  handleLogoutProfile = () => {
-    this.props.profilesActions.deleteProfile(this.props.selectedProfile)
-  }
-
   render() {
     const { classes, theme } = this.props
     const isOpen = this.props.uiState.isSettingsOpen
@@ -81,7 +77,7 @@ class ProfilesPanel extends React.Component {
             <Button
               variant="contained"
               className={classes.button}
-              onClick={this.handleLogoutProfile}
+              onClick={() => this.handleDeleteProfile(selectedProfile)}
             >
               Remove
             </Button>
