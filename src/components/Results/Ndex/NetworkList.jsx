@@ -20,6 +20,8 @@ import Tooltip from '@material-ui/core/Tooltip'
 
 import lightGreen from '@material-ui/core/colors/lightGreen'
 
+import * as cyRESTApi from '../../../api/cyrest'
+
 import './style.css'
 import Sorter from './Sorter'
 import {
@@ -76,10 +78,9 @@ const styles = theme => ({
   }
 })
 
-const CYTOSCAPE_URL = 'http://localhost:2607/status/'
-
-const checkCytoscapeConnection = (props) => {
-  fetch(CYTOSCAPE_URL, { mode: 'no-cors' })
+const checkCytoscapeConnection = props => {
+  cyRESTApi
+    .status(1234)
     .catch(e => {
       throw Error(e)
     })
@@ -87,7 +88,6 @@ const checkCytoscapeConnection = (props) => {
     .then(running => {
       console.log('8888888888888888888888', running)
       props.uiStateActions.setCytoscapeStatus(true)
-
     })
     .catch(error => {
       props.uiStateActions.setCytoscapeStatus(false)
