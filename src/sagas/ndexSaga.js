@@ -53,7 +53,8 @@ function* watchSearch(action) {
   try {
     const geneRes = yield call(myGeneApi.searchGenes, query.split(' ').join())
     const geneJson = yield call([geneRes, 'json'])
-    const res = yield call(api.searchNetwork, query)
+    const profiles = yield select(getProfiles)
+    const res = yield call(api.searchNetwork, query, profiles.selectedProfile)
     const json = yield call([res, 'json'])
 
     const resCySearch = yield call(cySearchApi.getResult, 'foo')
@@ -87,7 +88,8 @@ function* watchSearch(action) {
 function* fetchNetwork(action) {
   try {
     const uuid = action.payload.uuid
-    const cx = yield call(api.fetchNetwork, uuid)
+    const profiles = yield select(getProfiles)
+    const cx = yield call(api.fetchNetwork, uuid, profiles.selectedProfile)
     const json = yield call([cx, 'json'])
 
     yield put({ type: NETWORK_FETCH_SUCCEEDED, cx: json })
@@ -126,7 +128,7 @@ function* watchLogin(action) {
   window.localStorage.setItem('profiles', JSON.stringify(profiles.profiles))
   window.localStorage.setItem('selectedProfile', JSON.stringify(profile))
   yield put({ type: SET_NDEX_LOGIN_OPEN, payload: false })
-  yield put({ type: SET_SETTINGS_OPEN, payload: false })
+  yield put({ type: SET_SETTINGS_OPEN, payload: { isSettingsOpen: false } })
 }
 
 function* watchProfileSelect(action) {

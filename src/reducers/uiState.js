@@ -6,7 +6,9 @@ import {
 } from '../actions/uiState'
 
 const DEF_STATE = {
-  isCytoscapeRunning: false
+  isCytoscapeRunning: false,
+  isSettingsOpen: false,
+  isNDExLoginOpen: false
 }
 
 const uiState = handleActions(
