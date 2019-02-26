@@ -125,7 +125,7 @@ function* watchLogin(action) {
     payload: profile
   })
   let profiles = yield select(getProfiles)
-  window.localStorage.setItem('profiles', JSON.stringify(profiles.profiles))
+  window.localStorage.setItem('profiles', JSON.stringify(profiles.availableProfiles))
   window.localStorage.setItem('selectedProfile', JSON.stringify(profile))
   yield put({ type: SET_NDEX_LOGIN_OPEN, payload: false })
   yield put({ type: SET_SETTINGS_OPEN, payload: { isSettingsOpen: false } })
@@ -204,7 +204,6 @@ function* watchProfileSelect(action) {
     }
   } else {
     const profiles = yield select(getProfiles)
-    console.log("Problem position: " + profiles)
     yield put({
       type: SELECT_PROFILE_SUCCEEDED,
       payload: {

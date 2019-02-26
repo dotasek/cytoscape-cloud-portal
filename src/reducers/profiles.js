@@ -11,8 +11,9 @@ import {
 import defaultProfilePic from '../assets/images/default-profile.png'
 
 const DEF_STATE = {
-  selectedProfile: null,
-  availableProfiles: []
+  selectedProfile:
+    JSON.parse(window.localStorage.getItem('selectedProfile')) || {},
+  availableProfiles: JSON.parse(window.localStorage.getItem('profiles')) || []
 }
 
 const profiles = handleActions(
