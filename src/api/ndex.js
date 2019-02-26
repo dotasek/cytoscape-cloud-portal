@@ -2,10 +2,15 @@ import { METHOD_GET, METHOD_POST } from './apiConstants'
 const NDEX_BASE_URL = 'http://public.ndexbio.org/v2/'
 
 const searchNetwork = (query, profile) => {
-  let baseHeaders = {
+  const baseHeaders = {
     Accept: 'application/json',
     'Content-Type': 'application/json'
   }
+  const authHeaders = Object.assign(baseHeaders, {
+    Authorization: profile
+      ? 'Basic ' + btoa(profile.userName + ':' + profile.password)
+      : null
+  })
 
   const body = JSON.stringify({
     searchString: query
@@ -14,30 +19,25 @@ const searchNetwork = (query, profile) => {
 
   console.log('*******Calling NDEx API:', query, body, searchUrl)
 
-  if (profile) {
-    baseHeaders['Authorization'] =
-      'Basic ' + btoa(profile.userName + ':' + profile.password)
-  }
-
   return fetch(searchUrl, {
     method: METHOD_POST,
     body,
-    headers: new Headers(baseHeaders)
+    headers: new Headers(authHeaders)
   })
 }
 
 const fetchNetwork = (uuid, profile) => {
-  let baseHeaders = {
+  const baseHeaders = {
     Accept: 'application/json',
     'Content-Type': 'application/json'
   }
+  const authHeaders = Object.assign(baseHeaders, {
+    Authorization: profile
+      ? 'Basic ' + btoa(profile.userName + ':' + profile.password)
+      : null
+  })
 
   const fetchUrl = NDEX_BASE_URL + 'network/' + uuid
-
-  if (profile) {
-    baseHeaders['Authorization'] =
-      'Basic ' + btoa(profile.userName + ':' + profile.password)
-  }
 
   console.log('Calling CX API:', uuid, fetchUrl)
 
