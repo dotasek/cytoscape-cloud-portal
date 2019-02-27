@@ -8,6 +8,7 @@ import * as uiStateActions from '../../actions/uiState'
 import * as networkActions from '../../actions/network'
 import * as profilesActions from '../../actions/profiles'
 import * as sourceActions from '../../actions/source'
+import * as cyrestActions from '../../actions/cyrest'
 
 const MainContainer = props => <HomePanel {...props} />
 
@@ -27,7 +28,8 @@ function mapDispatchToProps(dispatch) {
     uiStateActions: bindActionCreators(uiStateActions, dispatch),
     profilesActions: bindActionCreators(profilesActions, dispatch),
     networkActions: bindActionCreators(networkActions, dispatch),
-    sourceActions: bindActionCreators(sourceActions, dispatch)
+    sourceActions: bindActionCreators(sourceActions, dispatch),
+    cyrestActions: bindActionCreators(cyrestActions, dispatch)
   }
 }
 

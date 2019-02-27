@@ -2,7 +2,6 @@ import { call, put, takeLatest, select } from 'redux-saga/effects'
 import * as api from '../api/ndex'
 import * as myGeneApi from '../api/mygene'
 import * as cySearchApi from '../api/search'
-import defaultProfilePic from '../assets/images/default-profile.png'
 
 import {
   SEARCH_STARTED,

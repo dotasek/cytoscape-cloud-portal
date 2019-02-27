@@ -11,4 +11,19 @@ const status = cyRESTPort => {
   })
 }
 
-export { status }
+const importNetwork = (cyRESTPort, payload) => {
+  const importNetworkUrl =
+    CYREST_BASE_URL + ':' + cyRESTPort + '/cyndex2/v1/networks'
+  console.log('Calling CyREST API:', importNetworkUrl, payload)
+
+  return fetch(importNetworkUrl, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(payload)
+  })
+}
+
+export { status, importNetwork }
