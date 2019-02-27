@@ -79,8 +79,9 @@ const styles = theme => ({
 })
 
 const checkCytoscapeConnection = props => {
+  console.log(props.uiState.urlParams)
   cyRESTApi
-    .status(1234)
+    .status(props.uiState.urlParams.has('cyrestport') ? props.uiState.urlParams.get('cyrestport') : 1234)
     .catch(e => {
       throw Error(e)
     })

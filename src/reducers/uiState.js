@@ -8,7 +8,8 @@ import {
 const DEF_STATE = {
   isCytoscapeRunning: false,
   isSettingsOpen: false,
-  isNDExLoginOpen: false
+  isNDExLoginOpen: false,
+  urlParams: new URLSearchParams(window.location.search)
 }
 
 const uiState = handleActions(
