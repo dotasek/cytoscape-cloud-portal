@@ -24,8 +24,11 @@ export const getProfiles = state => state.profiles
  */
 function* watchImportNetwork(action) {
   const networkId = action.payload
-  const accessKey = 0
-  const server = ''
+
+  //Note: the accessKey value was formerly extracted from a share URL
+  //the relevant code can be located at:
+  //https://github.com/idekerlab/ndex-web/blob/e84b16d19175c439ed6f6b6ef483d55ec0a57fff/src/containers/Choose.js#L51
+  const accessKey = null
 
   console.log('watchImportNetwork', action.payload)
 
@@ -45,7 +48,10 @@ function* watchImportNetwork(action) {
     serverUrl: serverAddress + '/v2',
     uuid: networkId
   }
-
+  //Note: this server value was formerly extracted from a share URL
+  //the relevant code can be located at:
+  //https://github.com/idekerlab/ndex-web/blob/e84b16d19175c439ed6f6b6ef483d55ec0a57fff/src/containers/Choose.js#L51
+  const server = serverAddress
   if (accessKey) {
     payload['accessKey'] = accessKey
     if (server !== serverAddress) {

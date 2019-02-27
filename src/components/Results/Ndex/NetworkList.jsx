@@ -91,7 +91,6 @@ const checkCytoscapeConnection = props => {
     })
     .then(res => handleErrors(res))
     .then(running => {
-      console.log('8888888888888888888888', running)
       props.uiStateActions.setCytoscapeStatus(true)
     })
     .catch(error => {
@@ -114,9 +113,9 @@ const NetworkList = props => {
     props.networkActions.networkFetchStarted({ uuid, networkName })
   }
 
+  //TODO replace geneEntry with network
   const getListItem = (geneEntry, classes) => {
     const dummyOverlap = Math.random() * 100
-
     return (
       <MenuItem
         className={classes.menuItem}
