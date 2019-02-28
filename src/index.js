@@ -30,7 +30,7 @@ sagaMiddleware.run(cyRestSaga)
 const Root = ({ store }) => (
   <Provider store={store}>
     <Router>
-      <Route path="/" component={App} />
+      <Route path="/:jobid?" component={App} />
     </Router>
   </Provider>
 )
