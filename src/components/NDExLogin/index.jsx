@@ -2,7 +2,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { withStyles } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button'
-import Modal from '@material-ui/core/Modal'
+import DialogTitle from '@material-ui/core/DialogTitle'
+import Dialog from '@material-ui/core/Dialog'
 import TextField from '@material-ui/core/TextField'
 import './style.css'
 
@@ -10,26 +11,10 @@ const styles = theme => ({
   loginModal: {
     //width: '240px',
   },
-  loginModalPaper: {
-    position: 'absolute',
-    width: theme.spacing.unit * 50,
-    backgroundColor: theme.palette.background.paper,
-    boxShadow: theme.shadows[5],
-    padding: theme.spacing.unit * 4,
-    outline: 'none'
-  }
+  loginModalPaper: {}
 })
 
-function getModalStyle() {
-  const top = 50 + 0
-  const left = 50 + 0
-
-  return {
-    top: `${top}%`,
-    left: `${left}%`,
-    transform: `translate(-${top}%, -${left}%)`
-  }
-}
+function getModalStyle() {}
 
 class NDExLogin extends React.Component {
   state = {
@@ -112,30 +97,25 @@ class NDExLogin extends React.Component {
     }
   }
 
-  handleNameChange = event => {
-    this.setState({ userName: event.target.value })
-  }
-
-  handlePasswordChange = event => {
-    this.setState({ password: event.target.value })
-  }
-
-  handleServerChange = event => {
-    this.setState({ serverAddress: event.target.value })
+  handleFieldChange = e => {
+    const newState = {
+      [e.target.name]: e.target.value
+    }
+    this.setState(newState)
   }
 
   render() {
     const { classes, theme } = this.props
     const isOpen = this.props.uiState.isNDExLoginOpen
     const defaultServer = this.state.server
-    console.log('rendering modal: ' + isOpen)
+    console.log('rendering NDEx login modal: ' + isOpen)
     return (
-      <Modal
-        aria-labelledby="simple-modal-title"
-        aria-describedby="simple-modal-description"
+      <Dialog
         open={isOpen}
         onClose={this.handleClose}
+        aria-labelledby="import-dialog-title"
       >
+        <DialogTitle id="simple-dialog-title">Add NDEx Account</DialogTitle>
         <div style={getModalStyle()} className={classes.loginModalPaper}>
           <form className={classes.container} noValidate>
             <div className="form-group">
@@ -143,7 +123,7 @@ class NDExLogin extends React.Component {
                 name="userName"
                 label="User Name"
                 required
-                onChange={this.handleNameChange}
+                onChange={this.handleFieldChange}
               />
             </div>
             <div className="form-group">
@@ -155,14 +135,14 @@ class NDExLogin extends React.Component {
                 required
                 title=""
                 autoComplete="password"
-                onChange={this.handlePasswordChange}
+                onChange={this.handleFieldChange}
               />
             </div>
             <div className="form-group">
               <TextField
                 name="server"
                 label="NDEx Server Address"
-                onChange={this.handleServerChange}
+                onChange={this.handleFieldChange}
               />
             </div>
             {this.state.error && (
@@ -203,7 +183,7 @@ class NDExLogin extends React.Component {
             </div>
           </form>
         </div>
-      </Modal>
+      </Dialog>
     )
   }
 }

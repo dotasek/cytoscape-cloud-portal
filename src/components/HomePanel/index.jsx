@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, componentDidMount } from 'react'
 import './style.css'
 import InputPanel from '../InputPanel'
 import Results from '../Results'
@@ -11,6 +11,7 @@ import { withStyles } from '@material-ui/core/styles'
 import classNames from 'classnames'
 import StartPanel from './StartPanel'
 import NDExLogin from '../NDExLogin'
+import NDExImport from '../NDExImport'
 
 const styles = theme => ({
   root: {
@@ -53,7 +54,11 @@ const HomePanel = props => {
 
   useEffect(() => {
     props.sourceActions.findSourceStarted()
-    console.log('Base component mounted:')
+    if (props.uiState.urlParams.has('suid')) {
+      console.log("Importing network.")
+      props.uiStateActions.setNDExImportOpen(true)
+    }
+    console.log('Base component mounted.')
     return () => {
       console.log('Page unmounted')
     }
@@ -67,6 +72,7 @@ const HomePanel = props => {
       <TitleBar {...others} />
       <ProfilesPanel {...others} />
       <NDExLogin {...others} />
+      <NDExImport {...others} />
       <div
         className={classNames(classes.content, {
           [classes.contentShift]: open

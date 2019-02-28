@@ -2,12 +2,14 @@ import { handleActions } from 'redux-actions'
 import {
   setSettingsOpen,
   setNDExLoginOpen,
+  setNDExImportOpen,
   setCytoscapeStatus
 } from '../actions/uiState'
 
 const DEF_STATE = {
   isCytoscapeRunning: false,
   isProfilesOpen: false,
+  isNDExImportOpen: false,
   isNDExLoginOpen: false,
   urlParams: new URLSearchParams(window.location.search)
 }
@@ -29,6 +31,13 @@ const uiState = handleActions(
       return {
         ...state,
         isNDExLoginOpen: payload.payload
+      }
+    },
+    [setNDExImportOpen]: (state, payload) => {
+      console.log('NDExImport OPEN payload.payload= ', payload.payload)
+      return {
+        ...state,
+        isNDExImportOpen: payload.payload
       }
     },
     [setCytoscapeStatus]: (state, payload) => {
