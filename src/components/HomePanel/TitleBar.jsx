@@ -38,14 +38,14 @@ const styles = theme => ({
 class TitleBar extends React.Component {
   handleMenu = event => {
     this.props.uiStateActions.setSettingsOpen(
-      {isSettingsOpen: !this.props.uiState.isSettingsOpen,
+      {isProfilesOpen: !this.props.uiState.isProfilesOpen,
         anchorEl: event.currentTarget}
     )
   }
 
   render() {
     const { classes } = this.props
-    const open = this.props.uiState.isSettingsOpen
+    const open = this.props.uiState.isProfilesOpen
     const selectedProfile = this.props.profiles.selectedProfile
     return (
       <AppBar

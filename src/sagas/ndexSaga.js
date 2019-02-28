@@ -130,7 +130,7 @@ function* watchLogin(action) {
   )
   window.localStorage.setItem('selectedProfile', JSON.stringify(profile))
   yield put({ type: SET_NDEX_LOGIN_OPEN, payload: false })
-  yield put({ type: SET_SETTINGS_OPEN, payload: { isSettingsOpen: false } })
+  yield put({ type: SET_SETTINGS_OPEN, payload: { isProfilesOpen: false } })
 }
 
 function* watchProfileSelect(action) {

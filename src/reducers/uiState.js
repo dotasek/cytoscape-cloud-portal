@@ -7,7 +7,7 @@ import {
 
 const DEF_STATE = {
   isCytoscapeRunning: false,
-  isSettingsOpen: false,
+  isProfilesOpen: false,
   isNDExLoginOpen: false,
   urlParams: new URLSearchParams(window.location.search)
 }
@@ -18,8 +18,8 @@ const uiState = handleActions(
       console.log('Profiles OPEN payload.payload= ', payload.payload)
       return {
         ...state,
-        isSettingsOpen: payload.payload.isSettingsOpen ? true : false,
-        settingsAnchorEl: payload.payload.isSettingsOpen
+        isProfilesOpen: payload.payload.isProfilesOpen ? true : false,
+        settingsAnchorEl: payload.payload.isProfilesOpen
           ? payload.payload.anchorEl
           : null
       }

@@ -59,7 +59,7 @@ const HomePanel = props => {
     }
   }, [])
 
-  const open = props.uiState.isSettingsOpen
+  const open = props.uiState.isProfilesOpen
 
   return (
     <div className={classes.root}>
