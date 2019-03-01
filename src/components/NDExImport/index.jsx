@@ -116,12 +116,16 @@ class NDExImport extends React.Component {
         let newData = {
           collection: resp['data']['currentRootNetwork']
         }
-        resp['data']['members'].forEach(member => {
-          if (member['suid'] === resp['data']['currentNetworkSuid']) {
-            newData['network'] = member
-          }
-        })
-        main.networkData = newData
+        if (resp['data']['members']) {
+          resp['data']['members'].forEach(member => {
+            if (member['suid'] === resp['data']['currentNetworkSuid']) {
+              newData['network'] = member
+            }
+          })
+          main.networkData = newData
+        } else {
+          main.networkData = {}
+        }
       })
       .then(() => {
         main.getAttributes()
