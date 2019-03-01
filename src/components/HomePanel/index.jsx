@@ -1,4 +1,4 @@
-import React, { useEffect, componentDidMount } from 'react'
+import React, { useEffect } from 'react'
 import './style.css'
 import InputPanel from '../InputPanel'
 import Results from '../Results'
