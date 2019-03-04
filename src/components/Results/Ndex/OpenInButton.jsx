@@ -29,7 +29,7 @@ const OpenInButton = (props) => {
       onClick={handleImportNetwork}
     >
       Open in
-      <img src={logo} className={classes.buttonIcon} />
+      <img alt="Cytoscape logo" src={logo} className={classes.buttonIcon} />
     </Button>
   )
 }

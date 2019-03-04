@@ -1,16 +1,14 @@
 import React from 'react'
 import './style.css'
 import TitleBar from './TitleBar'
+import SettingsPanel from '../SettingsPanel'
 import CssBaseline from '@material-ui/core/CssBaseline'
 import { withStyles } from '@material-ui/core/styles'
 import classNames from 'classnames'
-import SettingsPanel from '../SettingsPanel'
 import ProfilesPanel from '../ProfilesPanel'
 import NDExLogin from '../NDExLogin'
 import NDExImport from '../NDExImport'
-
 const drawerWidth = 240
-
 const styles = theme => ({
   root: {
     display: 'flex',
@@ -39,8 +37,8 @@ const styles = theme => ({
     marginLeft: 0
   }
 })
-
 const AppShell = props => {
+
   const { classes, ...others } = props
 
   const open = props.uiState.isSettingsOpen
@@ -53,15 +51,16 @@ const AppShell = props => {
       <ProfilesPanel {...others} />
       <NDExLogin {...others} />
       <NDExImport {...others} />
+
       <div
         className={classNames(classes.content, {
           [classes.contentShift]: open
         })}
       />
-
       {props.children}
     </div>
   )
 }
-
 export default withStyles(styles, { withTheme: true })(AppShell)
+
+

@@ -4,13 +4,13 @@ import { withStyles } from '@material-ui/core/styles'
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
 import Typography from '@material-ui/core/Typography'
-import AccountCircle from '@material-ui/icons/AccountCircle'
-import { Avatar } from '@material-ui/core'
 import IconButton from '@material-ui/core/IconButton'
 import MenuIcon from '@material-ui/icons/Menu'
 import HelpIcon from '@material-ui/icons/Help'
 import classNames from 'classnames'
 import github from '../../assets/images/github.svg'
+import AccountCircle from '@material-ui/icons/AccountCircle'
+import { Avatar } from '@material-ui/core'
 
 const drawerWidth = 240
 
@@ -71,8 +71,6 @@ class TitleBar extends React.Component {
 
     const profilesOpen = this.props.uiState.isProfilesOpen
     const selectedProfile = this.props.profiles.selectedProfile
-
-
     return (
       <AppBar
         position="fixed"
@@ -131,7 +129,11 @@ class TitleBar extends React.Component {
               color="inherit"
               onClick={() => openLink(GITHUB_URL)}
             >
-              <img src={github} className={classes.headerLogo} />
+              <img
+                alt="GitHub logo"
+                src={github}
+                className={classes.headerLogo}
+              />
             </IconButton>
           </div>
         </Toolbar>
@@ -143,7 +145,6 @@ class TitleBar extends React.Component {
 // TODO: replace this to the actual help page
 const HELP_URL = 'https://www.cytoscape.org/'
 const GITHUB_URL = 'https://github.com/idekerlab/cytoscape-cloud-portal'
-
 const openLink = url => {
   window.open(url, '_blank')
 }

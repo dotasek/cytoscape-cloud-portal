@@ -6,7 +6,10 @@ import * as cySearchApi from '../api/search'
 import {
   SEARCH_STARTED,
   SEARCH_FAILED,
-  SEARCH_SUCCEEDED
+  SEARCH_SUCCEEDED,
+  FETCH_RESULT_STARTED,
+  FETCH_RESULT_SUCCEEDED,
+  FETCH_RESULT_FAILED
 } from '../actions/search'
 
 import {
@@ -35,6 +38,7 @@ import { SET_NDEX_LOGIN_OPEN, SET_SETTINGS_OPEN } from '../actions/uiState'
 export default function* rootSaga() {
   console.log('rootSaga reporting for duty')
   yield takeLatest(SEARCH_STARTED, watchSearch)
+  yield takeLatest(FETCH_RESULT_STARTED, watchSearchResult)
   yield takeLatest(NETWORK_FETCH_STARTED, fetchNetwork)
   yield takeLatest(FIND_SOURCE_STARTED, fetchSource)
   yield takeLatest(ADD_PROFILE_STARTED, watchLogin)
@@ -53,7 +57,7 @@ function* watchSearch(action) {
   const geneListString = geneList.join()
   const profiles = yield select(getProfiles)
   try {
-    // Parallel call
+    // Call 1: Send query and get JobID w/ gene props from MyGene
     const [geneRes, ndexRes, searchRes] = yield all([
       call(myGeneApi.searchGenes, geneListString),
       call(api.searchNetwork, geneListString, profiles.selectedProfile),
@@ -61,13 +65,12 @@ function* watchSearch(action) {
     ])
 
     const geneJson = yield call([geneRes, 'json'])
-    const json = yield call([ndexRes, 'json'])
+    // const json = yield call([ndexRes, 'json'])
 
     const resultLocation = searchRes.headers.get('Location')
-    console.log('Fake search result:', resultLocation)
-
     const parts = resultLocation.split('/')
     const jobId = parts[parts.length - 1]
+
     // TODO: Parallelize this!
 
     const filtered = filterGenes(geneJson)
@@ -75,7 +78,6 @@ function* watchSearch(action) {
     yield put({
       type: SEARCH_SUCCEEDED,
       payload: {
-        ndex: json,
         genes: filtered.uniqueGeneMap,
         notFound: filtered.notFound,
         resultLocation,
@@ -89,6 +91,35 @@ function* watchSearch(action) {
       payload: {
         message: 'NDEx network search error',
         query: geneListString,
+        error: e.message
+      }
+    })
+  }
+}
+
+function* watchSearchResult(action) {
+  const jobId = action.payload.jobId
+  console.log('SR fetch:', jobId)
+
+  try {
+    const statusRes = yield call(cySearchApi.checkStatus, jobId)
+    const statusJson = yield call([statusRes, 'json'])
+
+    console.log('SR fetch result:', statusJson)
+
+    yield put({
+      type: FETCH_RESULT_SUCCEEDED,
+      payload: {
+        searchStatus: statusJson
+      }
+    })
+  } catch (e) {
+    console.warn('NDEx search error:', e)
+    yield put({
+      type: FETCH_RESULT_FAILED,
+      payload: {
+        message: 'Failed to fetch search result',
+        jobId,
         error: e.message
       }
     })
@@ -112,7 +143,6 @@ function* fetchSource(action) {
   try {
     const sources = yield call(cySearchApi.getSource, null)
     const json = yield call([sources, 'json'])
-    console.log('Data Source:', json.results)
 
     yield put({ type: FIND_SOURCE_SUCCEEDED, sources: json.results })
   } catch (error) {

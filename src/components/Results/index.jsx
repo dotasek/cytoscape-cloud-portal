@@ -4,7 +4,6 @@ import Tabs from '@material-ui/core/Tabs'
 import Tab from '@material-ui/core/Tab'
 import Empty from './Empty'
 import Ndex from './Ndex'
-import GeneDetails from './GeneDetails'
 
 const styles = theme => ({
   tabs: {
@@ -45,11 +44,9 @@ const Results = props => {
     <div className="results-container">
       <div className="results-wrapper">
         <Tabs value={value} onChange={handleChange}>
-          <Tab label="Enrichment (22)" />
-          <Tab label="Neighborhoods (102)" />
-          <Tab
-            label={'Keywords (' + props.search.results.ndex.numFound + ')'}
-          />
+          <Tab label="Enrichment" />
+          <Tab label="Neighborhoods" />
+          <Tab label={'Keywords'} />
         </Tabs>
         {value === 0 && <Ndex {...others} panelType={'enrichment'} />}
         {value === 1 && <h2>Neighborhoods</h2>}

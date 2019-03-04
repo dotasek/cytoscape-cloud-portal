@@ -42,6 +42,8 @@ const SearchTextBox = props => {
     if (props.search.results !== null) {
       const jobId = props.search.results.jobId
 
+      const pathParam = props
+      console.log('** Search route:', jobId, pathParam)
       props.history.push(`/${jobId}`)
     }
     return () => {
