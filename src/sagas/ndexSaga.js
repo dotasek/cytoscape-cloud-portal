@@ -33,7 +33,7 @@ import {
   SELECT_PROFILE_FAILED
 } from '../actions/profiles'
 
-import { SET_NDEX_LOGIN_OPEN, SET_SETTINGS_OPEN } from '../actions/uiState'
+import { SET_NDEX_LOGIN_OPEN, SET_PROFILES_OPEN } from '../actions/uiState'
 
 export default function* rootSaga() {
   console.log('rootSaga reporting for duty')
@@ -171,7 +171,7 @@ function* watchLogin(action) {
   )
   window.localStorage.setItem('selectedProfile', JSON.stringify(profile))
   yield put({ type: SET_NDEX_LOGIN_OPEN, payload: false })
-  yield put({ type: SET_SETTINGS_OPEN, payload: { isProfilesOpen: false } })
+  yield put({ type: SET_PROFILES_OPEN, payload: { isProfilesOpen: false } })
 }
 
 function* watchProfileSelect(action) {

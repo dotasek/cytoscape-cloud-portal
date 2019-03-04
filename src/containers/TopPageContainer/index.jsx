@@ -23,8 +23,8 @@ function mapDispatchToProps(dispatch) {
     searchActions: bindActionCreators(searchActions, dispatch),
     uiStateActions: bindActionCreators(uiStateActions, dispatch),
     networkActions: bindActionCreators(networkActions, dispatch),
-    sourceActions: bindActionCreators(sourceActions, dispatch)
-
+    sourceActions: bindActionCreators(sourceActions, dispatch),
+    profilesActions: bindActionCreators(profilesActions, dispatch)
   }
 }
 
