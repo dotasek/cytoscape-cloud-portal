@@ -25,7 +25,7 @@ const styles = theme => ({
 class ProfilesPanel extends React.Component {
   handlePopoverClose = () => {
     const isOpen = this.props.uiState.isProfilesOpen
-    this.props.uiStateActions.setSettingsOpen(!isOpen)
+    this.props.uiStateActions.setProfilesOpen(!isOpen)
   }
 
   handleDeleteProfile = profile => {

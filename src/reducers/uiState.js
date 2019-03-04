@@ -1,6 +1,7 @@
 import { handleActions } from 'redux-actions'
 import {
   setSettingsOpen,
+  setProfilesOpen,
   setNDExLoginOpen,
   setNDExImportOpen,
   setCytoscapeStatus
@@ -8,6 +9,7 @@ import {
 
 const DEF_STATE = {
   isCytoscapeRunning: false,
+  isSettingsOpen: false,
   isProfilesOpen: false,
   isNDExImportOpen: false,
   isNDExLoginOpen: false,
@@ -17,6 +19,10 @@ const DEF_STATE = {
 const uiState = handleActions(
   {
     [setSettingsOpen]: (state, payload) => {
+      console.log('OPEN = ', payload.payload)
+      return { ...state, isSettingsOpen: payload.payload }
+    },
+    [setProfilesOpen]: (state, payload) => {
       console.log('Profiles OPEN payload.payload= ', payload.payload)
       return {
         ...state,

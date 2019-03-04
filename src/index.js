@@ -3,13 +3,12 @@ import { createStore, applyMiddleware } from 'redux'
 import { Provider } from 'react-redux'
 import 'typeface-roboto'
 import { render } from 'react-dom'
-import { BrowserRouter as Router, Route } from 'react-router-dom'
-
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import createSagaMiddleware from 'redux-saga'
 import { composeWithDevTools } from 'redux-devtools-extension'
 
 import './index.css'
-import App from './App'
+import { App, Top } from './App'
 import * as serviceWorker from './serviceWorker'
 
 // Import root reducers
@@ -30,7 +29,12 @@ sagaMiddleware.run(cyRestSaga)
 const Root = ({ store }) => (
   <Provider store={store}>
     <Router>
-      <Route path="/:jobid?" component={App} />
+      <Switch>
+        <Route exact path="/" component={Top} />
+        <Route path="/:jobid/:sourceId/:networkId" component={App} />
+        <Route path="/:jobid/:sourceId" component={App} />
+        <Route path="/:jobid" component={App} />
+      </Switch>
     </Router>
   </Provider>
 )

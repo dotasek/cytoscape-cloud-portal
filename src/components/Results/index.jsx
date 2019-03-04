@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { withStyles } from '@material-ui/core/styles'
 import Tabs from '@material-ui/core/Tabs'
 import Tab from '@material-ui/core/Tab'
@@ -13,45 +13,49 @@ const styles = theme => ({
   }
 })
 
-class Results extends React.Component {
-  state = {
-    value: 0
+const Results = props => {
+  // useEffect(() => {
+  //   if (props.search.results !== null) {
+  //     const jobId = props.search.results.jobId
+  //     props.history.push(`/${jobId}`)
+  //   }
+  //   return () => {
+  //     console.log('Page unmounted')
+  //   }
+  // }, [])
+
+  const [value, setValue] = useState(0)
+
+  const handleChange = (event, newValue) => {
+    setValue(newValue)
   }
 
-  handleChange = (event, value) => {
-    this.setState({ value })
+  const { classes, ...others } = props
+
+  const searchResult = props.search.results
+
+  console.log('Current Result:', searchResult)
+
+  // Display message panel if no result is available
+  if (searchResult === null) {
+    return <Empty />
   }
 
-  render() {
-    const { classes, ...others } = this.props
-    const { value } = this.state
-
-    const searchResult = this.props.search.results
-
-    // Display message panel if no result is available
-    if (searchResult === null) {
-      return <Empty />
-    }
-
-    return (
-      <div className="results-container">
-        <div className="results-wrapper">
-          <Tabs value={value} onChange={this.handleChange}>
-            <Tab label="Enrichment (22)" />
-            <Tab label="Neighborhoods (102)" />
-            <Tab
-              label={
-                'Keywords (' + this.props.search.results.ndex.numFound + ')'
-              }
-            />
-          </Tabs>
-          {value === 0 && <Ndex {...others} panelType={'enrichment'} />}
-          {value === 1 && <h2>Neighborhoods</h2>}
-          {value === 2 && <Ndex {...others} />}
-        </div>
+  return (
+    <div className="results-container">
+      <div className="results-wrapper">
+        <Tabs value={value} onChange={handleChange}>
+          <Tab label="Enrichment (22)" />
+          <Tab label="Neighborhoods (102)" />
+          <Tab
+            label={'Keywords (' + props.search.results.ndex.numFound + ')'}
+          />
+        </Tabs>
+        {value === 0 && <Ndex {...others} panelType={'enrichment'} />}
+        {value === 1 && <h2>Neighborhoods</h2>}
+        {value === 2 && <Ndex {...others} />}
       </div>
-    )
-  }
+    </div>
+  )
 }
-
 export default withStyles(styles)(Results)
