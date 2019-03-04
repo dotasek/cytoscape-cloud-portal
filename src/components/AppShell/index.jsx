@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import './style.css'
 import TitleBar from './TitleBar'
 import SettingsPanel from '../SettingsPanel'
@@ -38,6 +38,16 @@ const styles = theme => ({
   }
 })
 const AppShell = props => {
+  useEffect(() => {
+    if (props.uiState.urlParams.has('suid')) {
+      props.uiStateActions.setNDExImportOpen(true)
+      console.log("Importing network.")
+    }
+
+    return () => {
+      console.log('App shell unmounted')
+    }
+  }, [])
 
   const { classes, ...others } = props
 
@@ -62,5 +72,3 @@ const AppShell = props => {
   )
 }
 export default withStyles(styles, { withTheme: true })(AppShell)
-
-

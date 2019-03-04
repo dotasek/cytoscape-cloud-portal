@@ -167,7 +167,7 @@ class NDExImport extends React.Component {
   render() {
     const { classes, theme } = this.props
     const isOpen = this.props.uiState.isNDExImportOpen
-
+    console.log("NDExImport dialog instantiated")
     return (
       <Dialog
         open={isOpen}

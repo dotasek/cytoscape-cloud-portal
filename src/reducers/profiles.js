@@ -13,7 +13,7 @@ import {
 // so to make our post-init life easier, we do a compare via JSON.stringify here.
 const initProfiles = (selectedProfileJSON, availableProfilesJSON) => {
   let selectedProfile = JSON.parse(selectedProfileJSON)
-  const availableProfiles = JSON.parse(availableProfilesJSON)
+  const availableProfiles = JSON.parse(availableProfilesJSON) || []
 
   availableProfiles.forEach(element => {
     if (JSON.stringify(selectedProfile) == JSON.stringify(element)) {
