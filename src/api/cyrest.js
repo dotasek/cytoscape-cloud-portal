@@ -14,7 +14,7 @@ const status = cyRESTPort => {
 const importNetwork = (cyRESTPort, payload) => {
   const importNetworkUrl =
     CYREST_BASE_URL + ':' + cyRESTPort + '/cyndex2/v1/networks'
-  console.log('Calling CyREST API:', importNetworkUrl, payload)
+  console.log('Calling CyREST POST:', importNetworkUrl, payload)
 
   return fetch(importNetworkUrl, {
     method: 'POST',
@@ -26,4 +26,18 @@ const importNetwork = (cyRESTPort, payload) => {
   })
 }
 
-export { status, importNetwork }
+const cyndex2Networks = (cyRESTPort, method, suid, payload) => {
+  const currentNetworkUrl =
+    CYREST_BASE_URL + ':' + cyRESTPort + '/cyndex2/v1/networks/' + suid
+  console.log('Calling CyREST getNetwork:', currentNetworkUrl, method, payload)
+  return fetch(currentNetworkUrl, {
+    method: method,
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: payload
+  })
+}
+
+export { status, importNetwork, cyndex2Networks }

@@ -1,5 +1,6 @@
 import { all, call, put, select, takeLatest } from 'redux-saga/effects'
 import * as api from '../api/ndex'
+import * as cyrest from '../api/cyrest'
 import * as myGeneApi from '../api/mygene'
 import * as cySearchApi from '../api/search'
 
@@ -40,9 +41,11 @@ import {
 } from '../actions/uiState'
 
 import {
-  IMPORT_NETWORK_STARTED,
-  IMPORT_NETWORK_SUCCEEDED
+  SAVE_TO_NDEX_STARTED,
+  SAVE_TO_NDEX_SUCCEEDED,
+  SAVE_TO_NDEX_FAILED
 } from '../actions/ndexImport'
+import { notDeepStrictEqual } from 'assert';
 
 export default function* rootSaga() {
   console.log('rootSaga reporting for duty')
@@ -52,7 +55,7 @@ export default function* rootSaga() {
   yield takeLatest(FIND_SOURCE_STARTED, fetchSource)
   yield takeLatest(ADD_PROFILE_STARTED, watchLogin)
   yield takeLatest(SELECT_PROFILE_STARTED, watchProfileSelect)
-  yield takeLatest(IMPORT_NETWORK_STARTED, watchImportNetwork)
+  yield takeLatest(SAVE_TO_NDEX_STARTED, watchSaveToNDEx)
 }
 
 /**
@@ -267,11 +270,79 @@ function* watchProfileSelect(action) {
   }
 }
 
-function* watchImportNetwork(action) {
-  console.log("Heyo")
-  const network = action.payload
-  yield put({ type: IMPORT_NETWORK_SUCCEEDED, payload: {} })
-  yield put({ type: SET_NDEX_IMPORT_OPEN, payload: false })
+export const getUIState = state => state.uiState
+
+function* watchSaveToNDEx(action) {
+  const uiState = yield select(getUIState)
+  const cyrestport = uiState.urlParams.has('cyrestport')
+    ? uiState.urlParams.get('cyrestport')
+    : 1234
+
+  const profiles = yield select(getProfiles)
+  console.log("Profiles: ", profiles)
+  const selectedProfile = profiles.selectedProfile
+  console.log("Selected profile: ", selectedProfile)
+
+  const { serverAddress, userName, password } = selectedProfile
+
+  const metadata = {
+    name: action.payload.state.name,
+    author: action.payload.state.author,
+    organism: action.payload.state.organism,
+    version: action.payload.state.version,
+    disease: action.payload.state.disease,
+    tissue: action.payload.state.tissue,
+    rightsHolder: action.payload.state.rightsHolder,
+    reference: action.payload.state.reference,
+    description: action.payload.state.description
+  }
+
+  const payloadObj = {
+    username: userName,
+    password: password,
+    serverUrl: serverAddress + '/v2',
+    metadata: metadata
+  }
+
+  let method = 'POST'
+  if (action.payload.state.overwrite) {
+    method = 'PUT'
+  } else {
+    payloadObj.isPublic = action.payload.state.public
+  }
+  const payload = JSON.stringify(payloadObj)
+
+  console.log('action.payload.networkData', action.payload.networkData)
+
+  const suid = action.payload.networkData[action.payload.state.saveType]['suid']
+
+  if (userName === undefined || userName === '') {
+    alert('You must be logged with your NDEx username to save a network.')
+    return
+  }
+
+  const response = yield call(
+    cyrest.cyndex2Networks,
+    cyrestport,
+    method,
+    suid,
+    payload
+  )
+
+  if (response.errors && response.errors.length !== 0) {
+    alert('Error saving: ' + response.errors[0].message || 'Unknown')
+    yield put({ type: SAVE_TO_NDEX_FAILED, payload: response.errors[0] })
+    yield put({ type: SET_NDEX_IMPORT_OPEN, payload: false })
+  } else {
+    //this.saveImage(resp.data.suid, resp.data.uuid)
+    var shareURL = null
+    if (action.payload.state.public) {
+      shareURL =
+        selectedProfile.serverAddress + '/#/network/' + response.data.uuid
+    }
+    yield put({ type: SAVE_TO_NDEX_SUCCEEDED, payload: {} })
+    yield put({ type: SET_NDEX_IMPORT_OPEN, payload: false })
+  }
 }
 
 const filterGenes = resultList => {

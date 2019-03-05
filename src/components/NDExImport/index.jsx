@@ -41,6 +41,8 @@ class NDExImport extends React.Component {
     overwrite: false
   }
 
+  networkData = null
+
   checkPermissions = (profile, saveType) => {
     const main = this
     saveType = saveType || this.state.saveType
@@ -104,7 +106,33 @@ class NDExImport extends React.Component {
     this.checkPermissions(this.props.profiles.selectedProfile, saveType)
   }
 
+  loadComponentConfig() {
+    fetch(
+      'http://localhost:' + (window.restPort || '1234') + '/cyndex2/v1/status'
+    )
+      .then(blob => blob.json())
+      .then(resp => {
+        if (resp.errors.length !== 0) {
+          this.setState({
+            component: 'error'
+          })
+        } else {
+          console.log(resp.data.parameters)
+          //this.setState({
+          //  component: window.cyndexMode || resp.data.widget,
+          //  parameters: resp.data.parameters
+          //})
+          this.setState(resp.data.parameters)
+        }
+      })
+      .catch(exc => {
+        //this.setState({component: 'cyrestError'})
+      })
+  }
+
   loadData() {
+    this.loadComponentConfig()
+    console.log('loadData')
     const main = this
     fetch(
       'http://localhost:' +
@@ -116,6 +144,7 @@ class NDExImport extends React.Component {
         let newData = {
           collection: resp['data']['currentRootNetwork']
         }
+        console.log('resp:', resp)
         if (resp['data']['members']) {
           resp['data']['members'].forEach(member => {
             if (member['suid'] === resp['data']['currentNetworkSuid']) {
@@ -142,7 +171,10 @@ class NDExImport extends React.Component {
   }
 
   handleImport = () => {
-    this.props.ndexImportActions.importNetworkStarted(this.state)
+    this.props.ndexImportActions.saveToNDExStarted({
+      state: this.state,
+      networkData: this.networkData
+    })
   }
 
   handleFieldChange = e => {
@@ -174,7 +206,7 @@ class NDExImport extends React.Component {
         onClose={this.handleClose}
         aria-labelledby="import-dialog-title"
       >
-        <DialogTitle id="simple-dialog-title">Import Network to NDEx</DialogTitle>
+        <DialogTitle id="simple-dialog-title">Save Network to NDEx</DialogTitle>
         <div style={getModalStyle()} className={classes.loginModalPaper}>
           <form className={classes.container} noValidate>
             <div className="form-group">

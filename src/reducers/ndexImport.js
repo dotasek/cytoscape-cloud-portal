@@ -1,8 +1,8 @@
 import { handleActions } from 'redux-actions'
 import {
-  importNetworkFailed,
-  importNetworkStarted,
-  importNetworkSucceeded
+  saveToNDExFailed,
+  saveToNDExStarted,
+  saveToNDExSucceeded
 } from '../actions/ndexImport'
 
 const defaultState = {
@@ -12,21 +12,21 @@ const defaultState = {
 
 const source = handleActions(
   {
-    [importNetworkStarted]: (state, payload) => {
+    [saveToNDExStarted]: (state, payload) => {
       return {
         ...state,
         isImportingNetwork: true,
         error: null
       }
     },
-    [importNetworkSucceeded]: (state, payload) => {
+    [saveToNDExSucceeded]: (state, payload) => {
       return {
         ...state,
         isImportingNetwork: false,
         error: null
       }
     },
-    [importNetworkFailed]: (state, payload) => {
+    [saveToNDExFailed]: (state, payload) => {
       console.warn('Error:', payload.error)
       return {
         ...state,
