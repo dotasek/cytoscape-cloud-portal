@@ -142,7 +142,7 @@ class NDExImport extends React.Component {
   }
 
   handleImport = () => {
-    this.props.uiStateActions.setNDExImportOpen(false)
+    this.props.ndexImportActions.importNetworkStarted(this.state)
   }
 
   handleFieldChange = e => {

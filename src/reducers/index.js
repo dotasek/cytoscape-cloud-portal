@@ -6,6 +6,7 @@ import network from './network'
 import profiles from './profiles'
 import source from './source'
 import cyrest from './cyrest'
+import ndexImport from './ndexImport'
 
 const rootReducer = combineReducers({
   source,
@@ -13,7 +14,8 @@ const rootReducer = combineReducers({
   uiState,
   network,
   profiles,
-  cyrest
+  cyrest,
+  ndexImport
 })
 
 export default rootReducer

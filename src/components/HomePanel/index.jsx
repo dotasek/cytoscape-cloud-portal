@@ -1,4 +1,4 @@
-import React, { useEffect } from "react"
+import React, { useEffect } from 'react'
 import './style.css'
 import InputPanel from '../InputPanel'
 import Results from '../Results'
@@ -8,7 +8,7 @@ const HomePanel = props => {
   useEffect(() => {
     // Call search
 
-    if(props.search.results !== null) {
+    if (props.search.results !== null) {
       const jobId = props.search.results.jobId
       console.log('Fetching res')
       props.searchActions.fetchResultStarted({ jobId })

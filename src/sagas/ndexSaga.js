@@ -33,7 +33,16 @@ import {
   SELECT_PROFILE_FAILED
 } from '../actions/profiles'
 
-import { SET_NDEX_LOGIN_OPEN, SET_PROFILES_OPEN } from '../actions/uiState'
+import {
+  SET_NDEX_LOGIN_OPEN,
+  SET_PROFILES_OPEN,
+  SET_NDEX_IMPORT_OPEN
+} from '../actions/uiState'
+
+import {
+  IMPORT_NETWORK_STARTED,
+  IMPORT_NETWORK_SUCCEEDED
+} from '../actions/ndexImport'
 
 export default function* rootSaga() {
   console.log('rootSaga reporting for duty')
@@ -43,6 +52,7 @@ export default function* rootSaga() {
   yield takeLatest(FIND_SOURCE_STARTED, fetchSource)
   yield takeLatest(ADD_PROFILE_STARTED, watchLogin)
   yield takeLatest(SELECT_PROFILE_STARTED, watchProfileSelect)
+  yield takeLatest(IMPORT_NETWORK_STARTED, watchImportNetwork)
 }
 
 /**
@@ -255,6 +265,13 @@ function* watchProfileSelect(action) {
       }
     })
   }
+}
+
+function* watchImportNetwork(action) {
+  console.log("Heyo")
+  const network = action.payload
+  yield put({ type: IMPORT_NETWORK_SUCCEEDED, payload: {} })
+  yield put({ type: SET_NDEX_IMPORT_OPEN, payload: false })
 }
 
 const filterGenes = resultList => {

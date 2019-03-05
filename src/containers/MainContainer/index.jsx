@@ -10,6 +10,7 @@ import * as networkActions from '../../actions/network'
 import * as profilesActions from '../../actions/profiles'
 import * as sourceActions from '../../actions/source'
 import * as cyrestActions from '../../actions/cyrest'
+import * as ndexImportActions from '../../actions/ndexImport'
 
 const MainContainer = props => <HomePanel {...props} />
 
@@ -19,7 +20,8 @@ function mapStateToProps(state) {
     uiState: state.uiState,
     profiles: state.profiles,
     network: state.network,
-    source: state.source
+    source: state.source,
+    ndexImport: state.ndexImport
   }
 }
 
@@ -30,7 +32,8 @@ function mapDispatchToProps(dispatch) {
     profilesActions: bindActionCreators(profilesActions, dispatch),
     networkActions: bindActionCreators(networkActions, dispatch),
     sourceActions: bindActionCreators(sourceActions, dispatch),
-    cyrestActions: bindActionCreators(cyrestActions, dispatch)
+    cyrestActions: bindActionCreators(cyrestActions, dispatch),
+    ndexImportActions: bindActionCreators(ndexImportActions, dispatch)
   }
 }
 
