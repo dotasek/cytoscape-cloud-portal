@@ -3,6 +3,7 @@ import './style.css'
 import InputPanel from '../InputPanel'
 import Results from '../Results'
 import AppShell from '../AppShell'
+import LoadingPanel from '../LoadingPanel'
 
 const HomePanel = props => {
   useEffect(() => {
@@ -32,6 +33,11 @@ const HomePanel = props => {
   }
 
   console.log('----------------------- New Home Panel ------------------')
+
+  if (props.search.isFetching) {
+    return <LoadingPanel title="Loading Search Results" />
+  }
+
   return (
     <AppShell {...props}>
       <div className="container">

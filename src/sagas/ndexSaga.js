@@ -49,14 +49,12 @@ function* watchSearch(action) {
   const profiles = yield select(getProfiles)
   try {
     // Call 1: Send query and get JobID w/ gene props from MyGene
-    const [geneRes, ndexRes, searchRes] = yield all([
+    const [geneRes, searchRes] = yield all([
       call(myGeneApi.searchGenes, geneListString),
-      call(api.searchNetwork, geneListString, profiles.selectedProfile),
       call(cySearchApi.postQuery, geneList, sourceNames)
     ])
 
     const geneJson = yield call([geneRes, 'json'])
-    // const json = yield call([ndexRes, 'json'])
 
     const resultLocation = searchRes.headers.get('Location')
     const parts = resultLocation.split('/')
@@ -65,6 +63,8 @@ function* watchSearch(action) {
     // TODO: Parallelize this!
 
     const filtered = filterGenes(geneJson)
+
+    console.log('## Filtered genes:', filtered)
 
     yield put({
       type: SEARCH_SUCCEEDED,
@@ -96,12 +96,17 @@ function* watchSearchResult(action) {
     const statusRes = yield call(cySearchApi.checkStatus, jobId)
     const statusJson = yield call([statusRes, 'json'])
 
-    console.log('SR fetch result:', statusJson)
+    // TODO: insert status checker w/ interval
+
+    const resultRes = yield call(cySearchApi.getResult, jobId)
+    const resultJson = yield call([resultRes, 'json'])
+
+    console.log('## SR fetch result:', statusJson, resultJson)
 
     yield put({
       type: FETCH_RESULT_SUCCEEDED,
       payload: {
-        searchStatus: statusJson
+        searchResults: resultJson
       }
     })
   } catch (e) {

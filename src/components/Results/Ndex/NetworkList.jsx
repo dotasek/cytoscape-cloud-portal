@@ -92,27 +92,35 @@ const handleErrors = res => {
 }
 
 const NetworkList = props => {
+  const { classes, hits } = props
+
   const handleFetch = (uuid, networkName) => {
     checkCytoscapeConnection(props)
     props.networkActions.networkFetchStarted({ uuid, networkName })
   }
 
-  //TODO replace geneEntry with network
-  const getListItem = (geneEntry, classes) => {
-    const dummyOverlap = Math.random() * 100
+  const getListItem = (networkEntry, classes) => {
+    const {
+      description,
+      networkUUID,
+      percentOverlap,
+      nodes,
+      edges
+    } = networkEntry
+
     return (
       <MenuItem
         className={classes.menuItem}
         alignItems="flex-start"
-        key={geneEntry.externalId}
-        onClick={val => handleFetch(geneEntry.externalId, geneEntry.name)}
+        key={networkUUID}
+        onClick={val => handleFetch(networkUUID, description)}
       >
         <ListItemAvatar>
           <Avatar className={classes.networkAvatar}>N</Avatar>
         </ListItemAvatar>
         <ListItemText
           className={classes.menuText}
-          primary={geneEntry.name}
+          primary={description}
           secondary={
             <React.Fragment>
               <Typography
@@ -120,13 +128,10 @@ const NetworkList = props => {
                 className={classes.inline}
                 color="textPrimary"
               >
-                {'Nodes: ' +
-                  geneEntry.nodeCount +
-                  ', Edges: ' +
-                  geneEntry.edgeCount}
+                {'Nodes: ' + nodes + ', Edges: ' + edges}
               </Typography>
               <Typography variant="caption">
-                {'UUID: ' + geneEntry.externalId}
+                {'UUID: ' + networkUUID}
               </Typography>
             </React.Fragment>
           }
@@ -134,7 +139,7 @@ const NetworkList = props => {
         <ListItemSecondaryAction className={classes.secondary}>
           <Tooltip title="Open in NDEx" placement="bottom">
             <IconButton
-              href={NDEX_LINK_URL + geneEntry.externalId}
+              href={NDEX_LINK_URL + networkUUID}
               target={'_blank'}
               aria-label="Open in NDEx"
             >
@@ -146,27 +151,17 @@ const NetworkList = props => {
               background: 'lightGreen',
               color: 'white',
               height: '2em',
-              width: dummyOverlap + '%'
+              width: percentOverlap + '%'
             }}
           >
-            <Typography variant="h6">
-              {dummyOverlap.toFixed(1) + '%'}
-            </Typography>
+            <Typography variant="h6">{percentOverlap + '%'}</Typography>
           </div>
         </ListItemSecondaryAction>
       </MenuItem>
     )
   }
 
-  const { classes } = props
-  const results = props.ndexResults
-
-  if (!results) {
-    return <div className="network-list-wrapper" />
-  }
-
-  const networkList = results.networks
-  if (!networkList) {
+  if (!hits) {
     return <div className="network-list-wrapper" />
   }
 
@@ -174,9 +169,7 @@ const NetworkList = props => {
     <div className="network-list-wrapper">
       <Sorter />
       <div className="network-list">
-        <MenuList>
-          {networkList.map(entry => getListItem(entry, classes))}
-        </MenuList>
+        <MenuList>{hits.map(entry => getListItem(entry, classes))}</MenuList>
       </div>
     </div>
   )
