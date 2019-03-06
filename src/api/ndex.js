@@ -1,16 +1,12 @@
 import { METHOD_GET, METHOD_POST } from './apiConstants'
 const NDEX_BASE_URL = 'http://public.ndexbio.org/v2/'
 
-const searchNetwork = (query, profile) => {
+const searchNetwork = (query, authHeaders) => {
   const baseHeaders = {
     Accept: 'application/json',
     'Content-Type': 'application/json'
   }
-  const authHeaders = Object.assign(baseHeaders, {
-    Authorization: profile
-      ? 'Basic ' + btoa(profile.userName + ':' + profile.password)
-      : null
-  })
+  const headers = Object.assign(baseHeaders, authHeaders)
 
   const body = JSON.stringify({
     searchString: query
@@ -22,20 +18,16 @@ const searchNetwork = (query, profile) => {
   return fetch(searchUrl, {
     method: METHOD_POST,
     body,
-    headers: new Headers(authHeaders)
+    headers: new Headers(headers)
   })
 }
 
-const fetchNetwork = (uuid, profile) => {
+const fetchNetwork = (uuid, authHeaders) => {
   const baseHeaders = {
     Accept: 'application/json',
     'Content-Type': 'application/json'
   }
-  const authHeaders = Object.assign(baseHeaders, {
-    Authorization: profile
-      ? 'Basic ' + btoa(profile.userName + ':' + profile.password)
-      : null
-  })
+  const headers = Object.assign(baseHeaders, authHeaders)
 
   const fetchUrl = NDEX_BASE_URL + 'network/' + uuid
 
@@ -43,7 +35,7 @@ const fetchNetwork = (uuid, profile) => {
 
   return fetch(fetchUrl, {
     method: METHOD_GET,
-    headers: new Headers(baseHeaders)
+    headers: new Headers(headers)
   })
 }
 

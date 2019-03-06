@@ -11,6 +11,8 @@ export const FETCH_RESULT_STARTED = 'FETCH_RESULT_STARTED'
 export const FETCH_RESULT_SUCCEEDED = 'FETCH_RESULT_SUCCEEDED'
 export const FETCH_RESULT_FAILED = 'FETCH_RESULT_FAILED'
 
+export const SET_AUTH_HEADERS = 'SET_AUTH_HEADERS'
+
 export const CLEAR_ALL = 'CLEAR_ALL'
 
 export const SET_SELECTED_GENES = 'SET_SELECTED_GENES'
@@ -27,6 +29,8 @@ export const searchFailed = createAction(SEARCH_FAILED)
 export const fetchResultStarted = createAction(FETCH_RESULT_STARTED)
 export const fetchResultSucceeded = createAction(FETCH_RESULT_SUCCEEDED)
 export const fetchResultFailed = createAction(FETCH_RESULT_FAILED)
+
+export const setAuthHeaders = createAction(SET_AUTH_HEADERS)
 
 export const clearAll = createAction(CLEAR_ALL)
 

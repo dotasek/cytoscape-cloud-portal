@@ -26,7 +26,7 @@ import {
 
 import { notDeepStrictEqual } from 'assert'
 
-export const getProfiles = state => state.profiles
+export const getAuthHeaders = state => state.search.authHeaders
 
 export default function* rootSaga() {
   console.log('rootSaga reporting for duty')
@@ -46,7 +46,7 @@ function* watchSearch(action) {
   const geneList = action.payload.geneList
   const sourceNames = action.payload.sourceNames
   const geneListString = geneList.join()
-  const profiles = yield select(getProfiles)
+
   try {
     // Call 1: Send query and get JobID w/ gene props from MyGene
     const [geneRes, searchRes] = yield all([
@@ -125,8 +125,8 @@ function* watchSearchResult(action) {
 function* fetchNetwork(action) {
   try {
     const uuid = action.payload.uuid
-    const profiles = yield select(getProfiles)
-    const cx = yield call(api.fetchNetwork, uuid, profiles.selectedProfile)
+    const authHeaders = yield select(getAuthHeaders)
+    const cx = yield call(api.fetchNetwork, uuid, authHeaders)
     const json = yield call([cx, 'json'])
 
     yield put({ type: NETWORK_FETCH_SUCCEEDED, cx: json })

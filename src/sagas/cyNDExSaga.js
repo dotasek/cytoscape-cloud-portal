@@ -11,6 +11,8 @@ import {
   SELECT_PROFILE_FAILED
 } from '../actions/profiles'
 
+import { SET_AUTH_HEADERS } from '../actions/search'
+
 import {
   SET_NDEX_LOGIN_OPEN,
   SET_PROFILES_OPEN,
@@ -89,6 +91,10 @@ function* watchProfileSelect(action) {
               availableProfiles: availableProfiles
             }
           })
+          yield put({
+            type: SET_AUTH_HEADERS,
+            payload: generateAuth(newProfile)
+          })
           window.localStorage.setItem(
             'profiles',
             JSON.stringify(availableProfiles)
@@ -119,6 +125,10 @@ function* watchProfileSelect(action) {
             availableProfiles: availableProfiles
           }
         })
+        yield put({
+          type: SET_AUTH_HEADERS,
+          payload: generateAuth(profile)
+        })
         window.localStorage.setItem(
           'profiles',
           JSON.stringify(availableProfiles)
@@ -134,6 +144,10 @@ function* watchProfileSelect(action) {
         selectedProfile: profile,
         availableProfiles: profiles.availableProfiles
       }
+    })
+    yield put({
+      type: SET_AUTH_HEADERS,
+      payload: generateAuth(profile)
     })
   }
 }
@@ -208,5 +222,13 @@ function* watchSaveToNDEx(action) {
     }
     yield put({ type: SAVE_TO_NDEX_SUCCEEDED, payload: {} })
     yield put({ type: SET_NDEX_IMPORT_OPEN, payload: false })
+  }
+}
+
+const generateAuth = profile => {
+  return {
+    Authorization: profile
+      ? 'Basic ' + btoa(profile.userName + ':' + profile.password)
+      : null
   }
 }

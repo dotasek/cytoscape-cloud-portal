@@ -78,9 +78,8 @@ const profiles = handleActions(
         p => p !== payload.payload
       )
       if (selectedProfile == payload.payload) {
-        console.log("Deleting selectedProfile")
-        selectedProfile =
-          state.availableProfiles.length > 0 ? state.availableProfiles[0] : null
+        console.log('Deleting selectedProfile')
+        selectedProfile = profiles.length > 0 ? profiles[0] : null
       }
       return {
         ...state,

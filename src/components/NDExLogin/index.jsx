@@ -140,7 +140,7 @@ class NDExLogin extends React.Component {
             </div>
             <div className="form-group">
               <TextField
-                name="server"
+                name="serverAddress"
                 label="NDEx Server Address"
                 onChange={this.handleFieldChange}
               />
