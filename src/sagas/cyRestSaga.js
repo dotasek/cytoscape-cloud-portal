@@ -1,6 +1,5 @@
 import { call, put, takeLatest, select } from 'redux-saga/effects'
 import * as cyrest from '../api/cyrest'
-import * as ndex from '../api/ndex'
 
 import {
   IMPORT_NETWORK_STARTED,

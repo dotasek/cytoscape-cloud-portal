@@ -15,7 +15,8 @@ import * as serviceWorker from './serviceWorker'
 // Import root reducers
 import rootReducer from './reducers'
 import rootSaga from './sagas/ndexSaga'
-import cyRestSaga from './sagas/cyrestSaga'
+import cyRestSaga from './sagas/cyRestSaga'
+import cyNDExSaga from './sagas/cyNDExSaga'
 
 const sagaMiddleware = createSagaMiddleware()
 
@@ -26,6 +27,7 @@ const store = createStore(
 
 sagaMiddleware.run(rootSaga)
 sagaMiddleware.run(cyRestSaga)
+sagaMiddleware.run(cyNDExSaga)
 
 const Root = ({ store }) => (
   <Provider store={store}>
