@@ -5,7 +5,9 @@ import SettingsPanel from '../SettingsPanel'
 import CssBaseline from '@material-ui/core/CssBaseline'
 import { withStyles } from '@material-ui/core/styles'
 import classNames from 'classnames'
+
 const drawerWidth = 240
+
 const styles = theme => ({
   root: {
     display: 'flex',
