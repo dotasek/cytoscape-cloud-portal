@@ -12,7 +12,7 @@ const DEF_STATE = {
   urlParams: new URLSearchParams(window.location.search)
 }
 
-const uiState = handleActions(
+const ndexUiState = handleActions(
   {
     [setProfilesOpen]: (state, payload) => {
       console.log('Profiles OPEN payload.payload= ', payload.payload)
@@ -42,4 +42,4 @@ const uiState = handleActions(
   DEF_STATE
 )
 
-export default uiState
+export default ndexUiState

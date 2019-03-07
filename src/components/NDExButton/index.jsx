@@ -12,11 +12,11 @@ const styles = theme => ({})
 
 const NDExButton = props => {
   const { classes, ...others } = props
-  const profilesOpen = props.ndexUiState.isProfilesOpen
-  const selectedProfile = props.profiles.selectedProfile
 
   useEffect(() => {
     console.log("NDEXButton useEffect.")
+
+    props.profilesActions.importFromLocalStorage()
 
     if (props.uiState.urlParams.has('suid')) {
       props.ndexUiStateActions.setNDExImportOpen(true)
@@ -33,6 +33,9 @@ const NDExButton = props => {
       anchorEl: event.currentTarget
     })
   }
+
+  const profilesOpen = props.ndexUiState.isProfilesOpen
+  const selectedProfile = props.profiles.selectedProfile
 
   return (
     <div>

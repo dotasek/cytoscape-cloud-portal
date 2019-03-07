@@ -10,7 +10,6 @@ import ListItemAvatar from '@material-ui/core/ListItemAvatar'
 import ListItemText from '@material-ui/core/ListItemText'
 import './style.css'
 import { Avatar } from '@material-ui/core'
-import defaultProfileImage from '../../assets/images/default-profile.png'
 
 const styles = theme => ({
   accountPopover: {

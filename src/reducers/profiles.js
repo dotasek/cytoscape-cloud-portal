@@ -6,31 +6,14 @@ import {
   addProfileStarted,
   addProfileFailed,
   addProfileSucceeded,
-  deleteProfile
+  deleteProfile,
+  importFromLocalStorage
 } from '../actions/profiles'
 
-// Not happy about this, but JSON.parse does not create objects that are equal via ==
-// so to make our post-init life easier, we do a compare via JSON.stringify here.
-const initProfiles = (selectedProfileJSON, availableProfilesJSON) => {
-  let selectedProfile = JSON.parse(selectedProfileJSON)
-  const availableProfiles = JSON.parse(availableProfilesJSON) || []
-
-  availableProfiles.forEach(element => {
-    if (JSON.stringify(selectedProfile) == JSON.stringify(element)) {
-      selectedProfile = element
-    }
-  })
-
-  return {
-    selectedProfile: selectedProfile,
-    availableProfiles: availableProfiles
-  }
+const DEF_STATE = {
+  selectedProfile: null,
+  availableProfiles: []
 }
-
-const DEF_STATE = initProfiles(
-  window.localStorage.getItem('selectedProfile'),
-  window.localStorage.getItem('profiles')
-)
 
 const profiles = handleActions(
   {
@@ -85,6 +68,12 @@ const profiles = handleActions(
         ...state,
         selectedProfile: selectedProfile,
         availableProfiles: profiles
+      }
+    },
+    [importFromLocalStorage]: (state, payload) => {
+      console.log('importFromLocalStorage = ', payload.payload)
+      return {
+        ...state
       }
     }
   },

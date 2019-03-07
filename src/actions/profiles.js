@@ -20,3 +20,6 @@ export const addProfileSucceeded = createAction(ADD_PROFILE_SUCCEEDED)
 
 export const DELETE_PROFILE = 'DELETE_PROFILE'
 export const deleteProfile = createAction(DELETE_PROFILE)
+
+export const IMPORT_FROM_LOCAL_STORAGE = 'IMPORT_FROM_LOCAL_STORAGE'
+export const importFromLocalStorage = createAction(IMPORT_FROM_LOCAL_STORAGE)

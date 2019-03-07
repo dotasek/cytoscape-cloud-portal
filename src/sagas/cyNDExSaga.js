@@ -8,7 +8,8 @@ import {
   ADD_PROFILE_FAILED,
   SELECT_PROFILE_STARTED,
   SELECT_PROFILE_SUCCEEDED,
-  SELECT_PROFILE_FAILED
+  SELECT_PROFILE_FAILED,
+  IMPORT_FROM_LOCAL_STORAGE
 } from '../actions/profiles'
 
 import { SET_AUTH_HEADERS } from '../actions/search'
@@ -30,6 +31,7 @@ export default function* cyNDExSaga() {
   yield takeLatest(ADD_PROFILE_STARTED, watchLogin)
   yield takeLatest(SELECT_PROFILE_STARTED, watchProfileSelect)
   yield takeLatest(SAVE_TO_NDEX_STARTED, watchSaveToNDEx)
+  yield takeLatest(IMPORT_FROM_LOCAL_STORAGE, watchImportFromLocalStorage)
 }
 
 export const getUIState = state => state.uiState
@@ -223,6 +225,34 @@ function* watchSaveToNDEx(action) {
     yield put({ type: SAVE_TO_NDEX_SUCCEEDED, payload: {} })
     yield put({ type: SET_NDEX_IMPORT_OPEN, payload: false })
   }
+}
+
+function* watchImportFromLocalStorage(action) {
+  // Not happy about this, but JSON.parse does not create objects that are equal via ==
+  // so to make our post-init life easier, we do a compare via JSON.stringify here.
+  let selectedProfile = JSON.parse(
+    window.localStorage.getItem('selectedProfile')
+  )
+  const availableProfiles =
+    JSON.parse(window.localStorage.getItem('profiles')) || []
+
+  availableProfiles.forEach(element => {
+    if (JSON.stringify(selectedProfile) == JSON.stringify(element)) {
+      selectedProfile = element
+    }
+  })
+
+  yield put({
+    type: SELECT_PROFILE_SUCCEEDED,
+    payload: {
+      selectedProfile: selectedProfile,
+      availableProfiles: availableProfiles
+    }
+  })
+  yield put({
+    type: SET_AUTH_HEADERS,
+    payload: generateAuth(selectedProfile)
+  })
 }
 
 const generateAuth = profile => {
