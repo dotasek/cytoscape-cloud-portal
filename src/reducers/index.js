@@ -2,6 +2,7 @@ import { combineReducers } from 'redux'
 
 import search from './search'
 import uiState from './uiState'
+import ndexUiState from './ndexUiState'
 import network from './network'
 import profiles from './profiles'
 import source from './source'
@@ -12,6 +13,7 @@ const rootReducer = combineReducers({
   source,
   search,
   uiState,
+  ndexUiState,
   network,
   profiles,
   cyrest,

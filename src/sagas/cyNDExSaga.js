@@ -17,7 +17,7 @@ import {
   SET_NDEX_LOGIN_OPEN,
   SET_PROFILES_OPEN,
   SET_NDEX_IMPORT_OPEN
-} from '../actions/uiState'
+} from '../actions/ndexUiState'
 
 import {
   SAVE_TO_NDEX_STARTED,

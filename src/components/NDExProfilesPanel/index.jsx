@@ -24,8 +24,8 @@ const styles = theme => ({
 
 class NDExProfilesPanel extends React.Component {
   handlePopoverClose = () => {
-    const isOpen = this.props.uiState.isProfilesOpen
-    this.props.uiStateActions.setProfilesOpen(!isOpen)
+    const isOpen = this.props.ndexUiState.isProfilesOpen
+    this.props.ndexUiStateActions.setProfilesOpen(!isOpen)
   }
 
   handleDeleteProfile = profile => {
@@ -37,13 +37,13 @@ class NDExProfilesPanel extends React.Component {
   }
 
   handleAddProfile = () => {
-    this.props.uiStateActions.setNDExLoginOpen(true)
+    this.props.ndexUiStateActions.setNDExLoginOpen(true)
   }
 
   render() {
     const { classes, theme } = this.props
-    const isOpen = this.props.uiState.isProfilesOpen
-    const anchorEl = this.props.uiState.settingsAnchorEl
+    const isOpen = this.props.ndexUiState.isProfilesOpen
+    const anchorEl = this.props.ndexUiState.settingsAnchorEl
     const selectedProfile = this.props.profiles.selectedProfile
     const profiles = this.props.profiles.availableProfiles
     return (

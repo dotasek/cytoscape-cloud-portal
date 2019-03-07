@@ -25,7 +25,7 @@ class NDExLogin extends React.Component {
   }
 
   handleClose = () => {
-    this.props.uiStateActions.setNDExLoginOpen(false)
+    this.props.ndexUiStateActions.setNDExLoginOpen(false)
   }
 
   handleAddProfile = event => {
@@ -106,7 +106,7 @@ class NDExLogin extends React.Component {
 
   render() {
     const { classes, theme } = this.props
-    const isOpen = this.props.uiState.isNDExLoginOpen
+    const isOpen = this.props.ndexUiState.isNDExLoginOpen
     //const defaultServer = this.state.server
 
     return (

@@ -9,6 +9,7 @@ import * as networkActions from '../../actions/network'
 import * as sourceActions from '../../actions/source'
 import * as profilesActions from '../../actions/profiles'
 import * as ndexImportActions from '../../actions/ndexImport'
+import * as ndexUiStateActions from '../../actions/ndexUiState'
 
 const TopPageContainer = props => <TopPage {...props} />
 function mapStateToProps(state) {
@@ -17,8 +18,9 @@ function mapStateToProps(state) {
     uiState: state.uiState,
     network: state.network,
     source: state.source,
-    profiles: state.profiles,
-    ndexImport: state.ndexImport
+    ndexImport: state.ndexImport,
+    ndexUiState: state.ndexUiState,
+    profiles: state.profiles
   }
 }
 function mapDispatchToProps(dispatch) {
@@ -27,8 +29,9 @@ function mapDispatchToProps(dispatch) {
     uiStateActions: bindActionCreators(uiStateActions, dispatch),
     networkActions: bindActionCreators(networkActions, dispatch),
     sourceActions: bindActionCreators(sourceActions, dispatch),
-    profilesActions: bindActionCreators(profilesActions, dispatch),
-    ndexImportActions: bindActionCreators(ndexImportActions, dispatch)
+    ndexImportActions: bindActionCreators(ndexImportActions, dispatch),
+    ndexUiStateActions: bindActionCreators(ndexUiStateActions, dispatch),
+    profilesActions: bindActionCreators(profilesActions, dispatch)
   }
 }
 
