@@ -9,8 +9,7 @@ import MenuIcon from '@material-ui/icons/Menu'
 import HelpIcon from '@material-ui/icons/Help'
 import classNames from 'classnames'
 import github from '../../assets/images/github.svg'
-import AccountCircle from '@material-ui/icons/AccountCircle'
-import { Avatar } from '@material-ui/core'
+import NDExButton from '../NDExButton'
 
 const drawerWidth = 240
 
@@ -58,19 +57,10 @@ class TitleBar extends React.Component {
     )
   }
 
-  handleProfiles = event => {
-    this.props.uiStateActions.setProfilesOpen({
-     isProfilesOpen: !this.props.uiState.isProfilesOpen,
-      anchorEl: event.currentTarget
-    })
-  }
-
   render() {
-    const { classes } = this.props
+    const { classes, ...others } = this.props
     const open = this.props.uiState.isSettingsOpen
 
-    const profilesOpen = this.props.uiState.isProfilesOpen
-    const selectedProfile = this.props.profiles.selectedProfile
     return (
       <AppBar
         position="fixed"
@@ -96,26 +86,7 @@ class TitleBar extends React.Component {
               Pathway Enrichment / Gene Neighborhoods / Keywords
             </Typography>
           </div>
-          <div>
-            <IconButton
-              aria-owns={open ? 'account-popper' : undefined}
-              aria-haspopup="true"
-              color="inherit"
-              onClick={this.handleProfiles}
-            >
-              {selectedProfile ? (
-                <div>
-                  {selectedProfile.image ? (
-                    <Avatar src={selectedProfile.image} />
-                  ) : (
-                    <Avatar>{selectedProfile.firstName.substring(0, 1)}</Avatar>
-                  )}
-                </div>
-              ) : (
-                <AccountCircle />
-              )}
-            </IconButton>
-          </div>
+          <NDExButton {...others} />
           <div>
             <IconButton
               aria-haspopup="true"
