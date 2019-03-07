@@ -1,13 +1,10 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import './style.css'
 import TitleBar from './TitleBar'
 import SettingsPanel from '../SettingsPanel'
 import CssBaseline from '@material-ui/core/CssBaseline'
 import { withStyles } from '@material-ui/core/styles'
 import classNames from 'classnames'
-import ProfilesPanel from '../ProfilesPanel'
-import NDExLogin from '../NDExLogin'
-import NDExImport from '../NDExImport'
 const drawerWidth = 240
 const styles = theme => ({
   root: {
@@ -37,18 +34,8 @@ const styles = theme => ({
     marginLeft: 0
   }
 })
+
 const AppShell = props => {
-  useEffect(() => {
-    if (props.uiState.urlParams.has('suid')) {
-      props.uiStateActions.setNDExImportOpen(true)
-      console.log("Importing network.")
-    }
-
-    return () => {
-      console.log('App shell unmounted')
-    }
-  }, [])
-
   const { classes, ...others } = props
 
   const open = props.uiState.isSettingsOpen
@@ -58,9 +45,6 @@ const AppShell = props => {
       <CssBaseline />
       <TitleBar {...others} />
       <SettingsPanel {...others} />
-      <ProfilesPanel {...others} />
-      <NDExLogin {...others} />
-      <NDExImport {...others} />
 
       <div
         className={classNames(classes.content, {
@@ -71,4 +55,5 @@ const AppShell = props => {
     </div>
   )
 }
+
 export default withStyles(styles, { withTheme: true })(AppShell)
