@@ -4,7 +4,7 @@ import { withStyles } from '@material-ui/core/styles'
 import IconButton from '@material-ui/core/IconButton'
 import AccountCircle from '@material-ui/icons/AccountCircle'
 import { Avatar } from '@material-ui/core'
-import ProfilesPanel from '../ProfilesPanel'
+import NDExProfilesPanel from '../NDExProfilesPanel'
 import NDExLogin from '../NDExLogin'
 import NDExImport from '../NDExImport'
 
@@ -36,7 +36,7 @@ const NDExButton = props => {
 
   return (
     <div>
-      <ProfilesPanel {...others} />
+      <NDExProfilesPanel {...others} />
       <NDExLogin {...others} />
       <NDExImport {...others} />
       <IconButton

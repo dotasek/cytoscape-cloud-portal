@@ -22,7 +22,7 @@ const styles = theme => ({
   }
 })
 
-class ProfilesPanel extends React.Component {
+class NDExProfilesPanel extends React.Component {
   handlePopoverClose = () => {
     const isOpen = this.props.uiState.isProfilesOpen
     this.props.uiStateActions.setProfilesOpen(!isOpen)
@@ -127,9 +127,9 @@ class ProfilesPanel extends React.Component {
   }
 }
 
-ProfilesPanel.propTypes = {
+NDExProfilesPanel.propTypes = {
   classes: PropTypes.object.isRequired,
   theme: PropTypes.object.isRequired
 }
 
-export default withStyles(styles, { withTheme: true })(ProfilesPanel)
+export default withStyles(styles, { withTheme: true })(NDExProfilesPanel)
