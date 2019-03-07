@@ -13,7 +13,7 @@ import {
   setAuthHeaders
 } from '../actions/search'
 
-const defaultState = {
+const EMPTY_STATE = {
   authHeaders: {},
   isSearching: false,
   isFetching: false,
@@ -34,7 +34,8 @@ const search = handleActions(
       return { ...state, queryGenes: '', queryList: [] }
     },
     [clearAll]: (state, payload) => {
-      return { ...state, queryGenes: '', queryList: [], results: null }
+      // return { ...state, queryGenes: '', queryList: [], results: null }
+      return EMPTY_STATE
     },
     [searchStarted]: (state, payload) => {
       return {
@@ -75,7 +76,7 @@ const search = handleActions(
       return { ...state, authHeaders: payload }
     }
   },
-  defaultState
+  EMPTY_STATE
 )
 
 export default search

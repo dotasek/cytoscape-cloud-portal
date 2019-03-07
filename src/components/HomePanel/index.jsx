@@ -29,7 +29,8 @@ const HomePanel = props => {
   const onBackButtonEvent = e => {
     e.preventDefault()
     console.log('* Handling back button press')
-    // props.history.push('/')
+    props.searchActions.clearAll()
+    props.history.push('/')
   }
 
   console.log('----------------------- New Home Panel ------------------')
