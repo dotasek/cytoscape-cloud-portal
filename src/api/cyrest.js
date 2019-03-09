@@ -11,6 +11,17 @@ const status = cyRESTPort => {
   })
 }
 
+const cyNDExStatus = cyRESTPort => {
+  const cyNDExStatusUrl =
+    CYREST_BASE_URL + ':' + cyRESTPort + '/cyndex2/v1/status'
+
+  console.log('Calling CyREST API:', cyNDExStatusUrl)
+
+  return fetch(cyNDExStatusUrl, {
+    method: METHOD_GET
+  })
+}
+
 const importNetwork = (cyRESTPort, payload) => {
   const importNetworkUrl =
     CYREST_BASE_URL + ':' + cyRESTPort + '/cyndex2/v1/networks'
@@ -40,4 +51,4 @@ const cyndex2Networks = (cyRESTPort, method, suid, payload) => {
   })
 }
 
-export { status, importNetwork, cyndex2Networks }
+export { status, cyNDExStatus, importNetwork, cyndex2Networks }

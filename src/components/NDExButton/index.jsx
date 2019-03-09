@@ -16,6 +16,9 @@ const NDExButton = props => {
   useEffect(() => {
     console.log("NDEXButton useEffect.")
 
+    console.log("window.frame", window.frame)
+    console.log("window.restPort", window.restPort)
+    props.ndexUiStateActions.getCyNDExStatus()
     props.profilesActions.importFromLocalStorage()
 
     if (props.uiState.urlParams.has('suid')) {

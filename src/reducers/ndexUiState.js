@@ -2,7 +2,8 @@ import { handleActions } from 'redux-actions'
 import {
   setProfilesOpen,
   setNDExLoginOpen,
-  setNDExImportOpen
+  setNDExImportOpen,
+  getCyNDExStatus
 } from '../actions/ndexUiState'
 
 const DEF_STATE = {
@@ -36,6 +37,12 @@ const ndexUiState = handleActions(
       return {
         ...state,
         isNDExImportOpen: payload.payload
+      }
+    },
+    [getCyNDExStatus]: (state, payload) => {
+      console.log('getCyNDExStatus = ', payload.payload)
+      return {
+        ...state
       }
     }
   },

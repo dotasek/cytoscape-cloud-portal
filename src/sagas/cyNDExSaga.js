@@ -17,7 +17,8 @@ import { SET_AUTH_HEADERS } from '../actions/search'
 import {
   SET_NDEX_LOGIN_OPEN,
   SET_PROFILES_OPEN,
-  SET_NDEX_IMPORT_OPEN
+  SET_NDEX_IMPORT_OPEN,
+  GET_CYNDEX_STATUS
 } from '../actions/ndexUiState'
 
 import {
@@ -32,6 +33,7 @@ export default function* cyNDExSaga() {
   yield takeLatest(SELECT_PROFILE_STARTED, watchProfileSelect)
   yield takeLatest(SAVE_TO_NDEX_STARTED, watchSaveToNDEx)
   yield takeLatest(IMPORT_FROM_LOCAL_STORAGE, watchImportFromLocalStorage)
+  yield takeLatest(GET_CYNDEX_STATUS, watchGetCyNDExStatus)
 }
 
 export const getUIState = state => state.uiState
@@ -57,6 +59,17 @@ function* watchLogin(action) {
   window.localStorage.setItem('selectedProfile', JSON.stringify(profile))
   yield put({ type: SET_NDEX_LOGIN_OPEN, payload: false })
   yield put({ type: SET_PROFILES_OPEN, payload: { isProfilesOpen: false } })
+}
+
+function* watchGetCyNDExStatus(action) {
+  console.log('Getting CyNDEx status')
+  const uiState = yield select(getUIState)
+  const cyrestport = uiState.urlParams.has('cyrestport')
+    ? uiState.urlParams.get('cyrestport')
+    : 1234
+  const response = yield call(cyrest.cyNDExStatus, cyrestport)
+  const responseJson = yield call([response, 'json'])
+  console.log(responseJson)
 }
 
 function* watchProfileSelect(action) {
