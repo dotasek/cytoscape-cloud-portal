@@ -10,7 +10,7 @@ describe('reducers', () => {
     expect(profiles(undefined, {})).toEqual(expectedState)
   })
 
-  it('should handle GET_POST_SUCCESS', () => {
+  it('should handle ADD_PROFILE_SUCCEEDED', () => {
     const expectedState = {
       availableProfiles: [ "New profile" ],
       selectedProfile: "New profile"
