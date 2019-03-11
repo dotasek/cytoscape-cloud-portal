@@ -10,6 +10,7 @@ import HelpIcon from '@material-ui/icons/Help'
 import classNames from 'classnames'
 import github from '../../assets/images/github.svg'
 import NDExButton from '../NDExButton'
+import GeneTextBox from './GeneTextBox'
 
 const drawerWidth = 240
 
@@ -78,7 +79,7 @@ class TitleBar extends React.Component {
           >
             <MenuIcon />
           </IconButton>
-          <div className={classes.grow}>
+          <div>
             <Typography variant="h6" color="inherit">
               NDEx Network Search:
             </Typography>
@@ -87,6 +88,15 @@ class TitleBar extends React.Component {
             </Typography>
           </div>
           <NDExButton {...others} />
+
+          {this.props.search.results === null ? (
+            <div />
+          ) : (
+            <GeneTextBox {...others} />
+          )}
+
+          <div className={classes.grow} />
+
           <div>
             <IconButton
               aria-haspopup="true"

@@ -1,25 +1,4 @@
-import { METHOD_GET, METHOD_POST } from './apiConstants'
-const NDEX_BASE_URL = 'http://public.ndexbio.org/v2/'
-
-const SEARCH_BASE_URL = 'http://secret.ndexbio.org:8090/'
-const searchNetwork = (query, authHeaders) => {
-  const baseHeaders = {
-    Accept: 'application/json',
-    'Content-Type': 'application/json'
-  }
-  const headers = Object.assign(baseHeaders, authHeaders)
-
-  const body = JSON.stringify({
-    searchString: query
-  })
-  const searchUrl = NDEX_BASE_URL + 'search/network'
-
-  return fetch(searchUrl, {
-    method: METHOD_POST,
-    body,
-    headers: new Headers(headers)
-  })
-}
+import { METHOD_GET, BASE_URL } from './apiConstants'
 
 const fetchNetwork = (id, sourceUUID, networkUUID, authHeaders) => {
   const baseHeaders = {
@@ -28,7 +7,7 @@ const fetchNetwork = (id, sourceUUID, networkUUID, authHeaders) => {
   }
   const headers = Object.assign(baseHeaders, authHeaders)
   const fetchUrl =
-    SEARCH_BASE_URL +
+    BASE_URL +
     '/overlaynetwork?sourceUUID=' +
     id +
     sourceUUID +
@@ -51,4 +30,4 @@ const fetchUser = profile => {
   })
 }
 
-export { searchNetwork, fetchNetwork, fetchUser }
+export { fetchNetwork, fetchUser }
