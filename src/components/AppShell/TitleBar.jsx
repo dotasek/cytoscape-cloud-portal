@@ -87,7 +87,6 @@ class TitleBar extends React.Component {
               Pathway Enrichment / Gene Neighborhoods / Keywords
             </Typography>
           </div>
-          <NDExButton {...others} />
 
           {this.props.search.results === null ? (
             <div />
@@ -96,7 +95,7 @@ class TitleBar extends React.Component {
           )}
 
           <div className={classes.grow} />
-
+          <NDExButton {...others} />
           <div>
             <IconButton
               aria-haspopup="true"
