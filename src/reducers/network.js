@@ -25,11 +25,8 @@ const defaultState = {
   selectedEdge: null
 }
 
-
-
 const utils = new CyNetworkUtils()
 const cx2js = new CxToJs(utils)
-
 
 const PRESET_VS = vs.default[0].style
 

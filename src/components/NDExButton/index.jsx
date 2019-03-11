@@ -7,6 +7,7 @@ import { Avatar } from '@material-ui/core'
 import NDExProfilesPanel from '../NDExProfilesPanel'
 import NDExLogin from '../NDExLogin'
 import NDExImport from '../NDExImport'
+import NDExSnackbar from '../NDExSnackbar';
 
 const styles = theme => ({})
 
@@ -45,6 +46,7 @@ const NDExButton = props => {
       <NDExProfilesPanel {...others} />
       <NDExLogin {...others} />
       <NDExImport {...others} />
+      <NDExSnackbar {...others} />
       <IconButton
         aria-owns={profilesOpen ? 'account-popper' : undefined}
         aria-haspopup="true"

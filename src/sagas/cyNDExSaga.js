@@ -18,7 +18,8 @@ import {
   SET_NDEX_LOGIN_OPEN,
   SET_PROFILES_OPEN,
   SET_NDEX_IMPORT_OPEN,
-  GET_CYNDEX_STATUS
+  GET_CYNDEX_STATUS,
+  SET_NDEX_ACTION_MESSAGE
 } from '../actions/ndexUiState'
 
 import {
@@ -47,6 +48,7 @@ function* watchLogin(action) {
   //  serverAddress: 'dev.ndexbio.org',
   //  image: defaultProfilePic
   //}
+  console.log('watch login')
   yield put({
     type: ADD_PROFILE_SUCCEEDED,
     payload: profile
@@ -67,9 +69,17 @@ function* watchGetCyNDExStatus(action) {
   const cyrestport = uiState.urlParams.has('cyrestport')
     ? uiState.urlParams.get('cyrestport')
     : 1234
-  const response = yield call(cyrest.cyNDExStatus, cyrestport)
-  const responseJson = yield call([response, 'json'])
-  console.log(responseJson)
+  try {
+    const response = yield call(cyrest.cyNDExStatus, cyrestport)
+
+    const responseJson = yield call([response, 'json'])
+    console.log(responseJson)
+  } catch (error) {
+    yield put({
+      type: SET_NDEX_ACTION_MESSAGE,
+      payload: 'Unable to connect to CyNDEx App'
+    })
+  }
 }
 
 function* watchProfileSelect(action) {
@@ -107,6 +117,11 @@ function* watchProfileSelect(action) {
             }
           })
           yield put({
+            type: SET_NDEX_ACTION_MESSAGE,
+            payload:
+              'Using NDEx as ' + newProfile.userName + '@' + newProfile.serverAddress
+          })
+          yield put({
             type: SET_AUTH_HEADERS,
             payload: generateAuth(newProfile)
           })
@@ -141,6 +156,11 @@ function* watchProfileSelect(action) {
           }
         })
         yield put({
+          type: SET_NDEX_ACTION_MESSAGE,
+          payload:
+            'Using NDEx as ' + profile.userName + '@' + profile.serverAddress
+        })
+        yield put({
           type: SET_AUTH_HEADERS,
           payload: generateAuth(profile)
         })
@@ -160,6 +180,11 @@ function* watchProfileSelect(action) {
         availableProfiles: profiles.availableProfiles
       }
     })
+    yield put({
+      type: SET_NDEX_ACTION_MESSAGE,
+      payload: 'Using NDEx as ' + profile.userName + '@' + profile.serverAddress
+    })
+
     yield put({
       type: SET_AUTH_HEADERS,
       payload: generateAuth(profile)
@@ -225,7 +250,11 @@ function* watchSaveToNDEx(action) {
   )
 
   if (response.errors && response.errors.length !== 0) {
-    alert('Error saving: ' + response.errors[0].message || 'Unknown')
+    yield put({
+      type: SET_NDEX_ACTION_MESSAGE,
+      payload: 'Error saving network to NDEx.'
+    })
+    console.error(response.errors)
     yield put({ type: SAVE_TO_NDEX_FAILED, payload: response.errors[0] })
     yield put({ type: SET_NDEX_IMPORT_OPEN, payload: false })
   } else {
@@ -237,6 +266,10 @@ function* watchSaveToNDEx(action) {
     }
     yield put({ type: SAVE_TO_NDEX_SUCCEEDED, payload: {} })
     yield put({ type: SET_NDEX_IMPORT_OPEN, payload: false })
+    yield put({
+      type: SET_NDEX_ACTION_MESSAGE,
+      payload: 'Network saved to NDEx: '
+    })
   }
 }
 

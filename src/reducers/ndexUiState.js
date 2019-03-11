@@ -3,13 +3,15 @@ import {
   setProfilesOpen,
   setNDExLoginOpen,
   setNDExImportOpen,
-  getCyNDExStatus
+  getCyNDExStatus,
+  setNDExActionMessage
 } from '../actions/ndexUiState'
 
 const DEF_STATE = {
   isProfilesOpen: false,
   isNDExImportOpen: false,
   isNDExLoginOpen: false,
+  NDExActionMessage: 'It rainin sideways!',
   urlParams: new URLSearchParams(window.location.search)
 }
 
@@ -43,6 +45,13 @@ const ndexUiState = handleActions(
       console.log('getCyNDExStatus = ', payload.payload)
       return {
         ...state
+      }
+    },
+    [setNDExActionMessage]: (state, payload) => {
+      console.log('setNDExActionMessage = ', payload.payload)
+      return {
+        ...state,
+        NDExActionMessage: payload.payload
       }
     }
   },
