@@ -21,6 +21,17 @@ const styles = theme => ({
     boxShadow: theme.shadows[5],
     padding: theme.spacing.unit * 4,
     outline: 'none'
+  },
+  importRow: {
+    display: 'flex'
+  },
+  importColumn: {
+    flex: '50%',
+    padding: '1em 1em 1em 1em'
+  },
+  importFooter: {
+    display: 'flex',
+    'justify-content': 'center'
   }
 })
 
@@ -53,7 +64,7 @@ class NDExImport extends React.Component {
       this.networkData[saveType]['uuid']
     ) {
       const uuid = this.networkData[saveType]['uuid']
-      console.log("profile for validation", profile)
+      console.log('profile for validation', profile)
       const userId = profile.userId
       const ndexUrl = profile.serverAddress
       const headers = {
@@ -200,7 +211,7 @@ class NDExImport extends React.Component {
   render() {
     const { classes, theme } = this.props
     const isOpen = this.props.ndexUiState.isNDExImportOpen
-    console.log("NDExImport dialog instantiated")
+    console.log('NDExImport dialog instantiated')
     return (
       <Dialog
         open={isOpen}
@@ -210,108 +221,111 @@ class NDExImport extends React.Component {
         <DialogTitle id="simple-dialog-title">Save Network to NDEx</DialogTitle>
         <div style={getModalStyle()} className={classes.loginModalPaper}>
           <form className={classes.container} noValidate>
-            <div className="form-group">
-              <TextField
-                name="author"
-                label="Author"
-                onChange={this.handleFieldChange}
-              />
-            </div>
-            <div className="form-group">
-              <TextField
-                name="organism"
-                label="Organism"
-                onChange={this.handleFieldChange}
-              />
-            </div>
-            <div className="form-group">
-              <TextField
-                name="disease"
-                label="Disease"
-                onChange={this.handleFieldChange}
-              />
-            </div>
-            <div className="form-group">
-              <TextField
-                name="tissue"
-                label="Tissue"
-                onChange={this.handleFieldChange}
-              />
-            </div>
-            <div className="form-group">
-              <TextField
-                name="rightsHolder"
-                label="Rights Holder"
-                onChange={this.handleFieldChange}
-              />
-            </div>
-            <div className="form-group">
-              <TextField
-                name="version"
-                label="Version"
-                onChange={this.handleFieldChange}
-              />
-            </div>
-            <div className="form-group">
-              <TextField
-                name="reference"
-                label="Reference"
-                onChange={this.handleFieldChange}
-              />
-            </div>
-            <div className="form-group">
-              <TextField
-                name="description"
-                label="Description"
-                multiline
-                rows="4"
-                onChange={this.handleFieldChange}
-                required={this.state.public}
-              />
-            </div>
-            <FormGroup row>
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    onChange={this.handleChangeVisibility}
-                    checked={this.state.public}
+            <div className={classes.importRow}>
+              <div className={classes.importColumn}>
+                <div className="form-group">
+                  <TextField
+                    name="author"
+                    label="Author"
+                    onChange={this.handleFieldChange}
                   />
-                }
-                label="SAVE AS PUBLIC"
-              />
-            </FormGroup>
-            <FormGroup row>
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    onChange={this.handleChangeOverwrite}
-                    checked={this.state.overwrite}
+                </div>
+                <div className="form-group">
+                  <TextField
+                    name="organism"
+                    label="Organism"
+                    onChange={this.handleFieldChange}
                   />
-                }
-                label="UPDATE EXISTING NETWORK"
-              />
-            </FormGroup>
-            <div className="form-group">
+                </div>
+                <div className="form-group">
+                  <TextField
+                    name="disease"
+                    label="Disease"
+                    onChange={this.handleFieldChange}
+                  />
+                </div>
+                <div className="form-group">
+                  <TextField
+                    name="tissue"
+                    label="Tissue"
+                    onChange={this.handleFieldChange}
+                  />
+                </div>
+                <div className="form-group">
+                  <TextField
+                    name="rightsHolder"
+                    label="Rights Holder"
+                    onChange={this.handleFieldChange}
+                  />
+                </div>
+                <div className="form-group">
+                  <TextField
+                    name="version"
+                    label="Version"
+                    onChange={this.handleFieldChange}
+                  />
+                </div>
+                <div className="form-group">
+                  <TextField
+                    name="reference"
+                    label="Reference"
+                    onChange={this.handleFieldChange}
+                  />
+                </div>
+              </div>
+              <div className={classes.importColumn}>
+                <div className="form-group">
+                  <TextField
+                    name="description"
+                    label="Description"
+                    multiline
+                    rows="11"
+                    onChange={this.handleFieldChange}
+                    required={this.state.public}
+                  />
+                </div>
+                <FormGroup row>
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        onChange={this.handleChangeVisibility}
+                        checked={this.state.public}
+                      />
+                    }
+                    label="SAVE AS PUBLIC"
+                  />
+                </FormGroup>
+                <FormGroup row>
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        onChange={this.handleChangeOverwrite}
+                        checked={this.state.overwrite}
+                      />
+                    }
+                    label="UPDATE EXISTING NETWORK"
+                  />
+                </FormGroup>
+              </div>
+            </div>
+            <div className={classes.importRow}>
+              {this.state.error && (
+                <div ng-if="errors" className="text-danger">
+                  <br />
+                  <strong>
+                    <span />
+                    {this.state.error}
+                  </strong>
+                </div>
+              )}
+            </div>
+            <div className={classes.importFooter}>
               <TextField
                 name="name"
                 label="Network Name"
+                fullWidth
                 onChange={this.handleFieldChange}
               />
-            </div>
-            {this.state.error && (
-              <div ng-if="errors" className="text-danger">
-                <br />
-                <strong>
-                  <span />
-                  {this.state.error}
-                </strong>
-              </div>
-            )}
-
-            <div
-              className="AlignRight"
-              // style="margin-top:1em"
-            >
               <Button
                 variant="contained"
                 className={classes.button}
