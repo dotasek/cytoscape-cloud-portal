@@ -27,7 +27,8 @@ import {
 import {
   SAVE_TO_NDEX_STARTED,
   SAVE_TO_NDEX_SUCCEEDED,
-  SAVE_TO_NDEX_FAILED
+  SAVE_TO_NDEX_FAILED,
+  SAVE_TO_NDEX_CANCELLED
 } from '../actions/ndexImport'
 
 export default function* cyNDExSaga() {
@@ -38,6 +39,7 @@ export default function* cyNDExSaga() {
   yield takeLatest(IMPORT_FROM_LOCAL_STORAGE, watchImportFromLocalStorage)
   yield takeLatest(GET_CYNDEX_STATUS, watchGetCyNDExStatus)
   yield takeLatest(DELETE_PROFILE_STARTED, watchProfileDelete)
+  yield takeLatest(SAVE_TO_NDEX_CANCELLED, watchSaveToNDExCancelled)
 }
 
 export const getUIState = state => state.uiState
@@ -338,6 +340,17 @@ function* watchProfileDelete(action) {
       action.payload.userName +
       '@' +
       action.payload.serverAddress
+  })
+}
+
+function* watchSaveToNDExCancelled(action) {
+  yield put({
+    type: SET_NDEX_IMPORT_OPEN,
+    payload: false
+  })
+  yield put({
+    type: SET_NDEX_ACTION_MESSAGE,
+    payload: 'Save to NDEx cancelled'
   })
 }
 

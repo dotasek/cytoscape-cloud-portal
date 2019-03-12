@@ -179,7 +179,7 @@ class NDExImport extends React.Component {
   }
 
   handleClose = () => {
-    this.props.ndexUiStateActions.setNDExImportOpen(false)
+    this.props.ndexImportActions.saveToNDExCancelled()
   }
 
   handleImport = () => {

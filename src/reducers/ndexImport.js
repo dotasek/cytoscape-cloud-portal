@@ -2,7 +2,8 @@ import { handleActions } from 'redux-actions'
 import {
   saveToNDExFailed,
   saveToNDExStarted,
-  saveToNDExSucceeded
+  saveToNDExSucceeded,
+  saveToNDExCancelled
 } from '../actions/ndexImport'
 
 const defaultState = {
@@ -32,6 +33,11 @@ const source = handleActions(
         ...state,
         isImportingNetwork: false,
         error: payload.error
+      }
+    },
+    [saveToNDExCancelled]: (state, payload) => {
+      return {
+        ...state
       }
     }
   },
