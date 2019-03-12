@@ -8,6 +8,7 @@ import Divider from '@material-ui/core/Divider'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemAvatar from '@material-ui/core/ListItemAvatar'
 import ListItemText from '@material-ui/core/ListItemText'
+import Typography from '@material-ui/core/Typography'
 import './style.css'
 import { Avatar } from '@material-ui/core'
 
@@ -18,6 +19,26 @@ const styles = theme => ({
   },
   accountPopoverPaper: {
     //width: '240px'
+  },
+  ndexAvatar: {},
+  ndexSelectedAvatar: {
+    width: 80,
+    height: 80
+  },
+  selectedProfile: {
+    'align-items': 'center'
+  },
+  ndexProfileAvatar: {
+    display: 'inline-block',
+    'vertical-align': 'middle'
+  },
+  ndexProfileText: {
+    display: 'inline-block',
+    padding: '1em 1em 1em 1em',
+    'vertical-align': 'middle'
+  },
+  ndexProfilesFooter: {
+    padding: '.5em 1em .5em 1em'
   }
 })
 
@@ -66,14 +87,30 @@ class NDExProfilesPanel extends React.Component {
         }}
       >
         {selectedProfile && (
-          <div>
-            {selectedProfile.image ? (
-              <Avatar src={selectedProfile.image} />
-            ) : (
-              <Avatar>{selectedProfile.firstName.substring(0, 1)}</Avatar>
-            )}
-            {selectedProfile.userName}
-            {selectedProfile.serverAddress}
+          <div className={classes.selectedProfile}>
+            <div className={classes.ndexProfileAvatar}>
+              {selectedProfile.image ? (
+                <Avatar
+                  src={selectedProfile.image}
+                  className={classes.ndexSelectedAvatar}
+                />
+              ) : (
+                <Avatar className={classes.ndexSelectedAvatar}>
+                  {selectedProfile.firstName.substring(0, 1)}
+                </Avatar>
+              )}
+            </div>
+            <div className={classes.ndexProfileText}>
+              <Typography variant="subtitle1" gutterBottom>
+                {selectedProfile.userName}
+              </Typography>
+              <Typography variant="subtitle2" gutterBottom>
+                {selectedProfile.serverAddress}
+              </Typography>
+              <Typography variant="caption" gutterBottom>
+                Active
+              </Typography>
+            </div>
             <Button
               variant="contained"
               className={classes.button}
@@ -102,8 +139,17 @@ class NDExProfilesPanel extends React.Component {
                     <Avatar>{profile.firstName.substring(0, 1)}</Avatar>
                   )}
                 </ListItemAvatar>
-                <ListItemText primary={profile.userName} />
-                {profile.serverAddress}
+                <div className={classes.ndexProfileText}>
+                  <Typography variant="body1" gutterBottom>
+                    {profile.userName}
+                  </Typography>
+                  <Typography variant="body2" gutterBottom>
+                    {profile.serverAddress}
+                  </Typography>
+                  <Typography variant="caption" gutterBottom>
+                    Inactive
+                  </Typography>
+                </div>
                 <Button
                   variant="contained"
                   className={classes.button}
@@ -115,7 +161,7 @@ class NDExProfilesPanel extends React.Component {
             ))}
         </List>
         <Divider />
-        <div>
+        <div className={classes.ndexProfilesFooter}>
           <Button
             variant="contained"
             className={classes.button}
