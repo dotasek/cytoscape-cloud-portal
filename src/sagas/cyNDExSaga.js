@@ -64,6 +64,11 @@ function* watchLogin(action) {
   window.localStorage.setItem('selectedProfile', JSON.stringify(profile))
   yield put({ type: SET_NDEX_LOGIN_OPEN, payload: false })
   yield put({ type: SET_PROFILES_OPEN, payload: { isProfilesOpen: false } })
+  yield put({
+    type: SET_NDEX_ACTION_MESSAGE,
+    payload:
+      'Added NDEx user: ' + profile.userName + '@' + profile.serverAddress
+  })
 }
 
 function* watchGetCyNDExStatus(action) {
@@ -330,6 +335,14 @@ function* watchProfileDelete(action) {
     'selectedProfile',
     JSON.stringify(selectedProfile)
   )
+  yield put({
+    type: SET_NDEX_ACTION_MESSAGE,
+    payload:
+      'Removed NDEx user: ' +
+      action.payload.userName +
+      '@' +
+      action.payload.serverAddress
+  })
 }
 
 const generateAuth = profile => {
