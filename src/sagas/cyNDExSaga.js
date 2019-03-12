@@ -210,9 +210,7 @@ function* watchSaveToNDEx(action) {
     : 1234
 
   const profiles = yield select(getProfiles)
-  console.log('Profiles: ', profiles)
   const selectedProfile = profiles.selectedProfile
-  console.log('Selected profile: ', selectedProfile)
 
   const { serverAddress, userName, password } = selectedProfile
 
@@ -242,8 +240,6 @@ function* watchSaveToNDEx(action) {
     payloadObj.isPublic = action.payload.state.public
   }
   const payload = JSON.stringify(payloadObj)
-
-  console.log('action.payload.networkData', action.payload.networkData)
 
   const suid = action.payload.networkData[action.payload.state.saveType]['suid']
 
