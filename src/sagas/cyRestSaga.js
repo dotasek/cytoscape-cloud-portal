@@ -15,6 +15,12 @@ export default function* cyrestSaga() {
 export const getUIState = state => state.uiState
 export const getProfiles = state => state.profiles
 
+const DEFAULT_PROFILE = {
+  userName: undefined,
+  password: undefined,
+  serverAddress: 'http://dev.ndexbio.org'
+}
+
 /**
  * Calling CyREST network import
  *
@@ -27,19 +33,22 @@ function* watchImportNetwork(action) {
   //Note: the accessKey value was formerly extracted from a share URL
   //the relevant code can be located at:
   //https://github.com/idekerlab/ndex-web/blob/e84b16d19175c439ed6f6b6ef483d55ec0a57fff/src/containers/Choose.js#L51
-  const accessKey = null
+  const accessKey = undefined
 
   console.log('watchImportNetwork', action.payload)
 
   const profiles = yield select(getProfiles)
-  const profile = profiles.selectedProfile
+  const profile =
+    profiles && profiles.selectedProfile
+      ? profiles.selectedProfile
+      : DEFAULT_PROFILE
 
-  const serverAddress =
-    profile && profile.serverAddress
-      ? profile.serverAddress
-      : 'http://ndexbio.org'
+  //const serverAddress =
+  //  profile && profile.serverAddress
+  //    ? profile.serverAddress
+  //    : 'http://ndexbio.org'
 
-  let { userName, password } = profile
+  const { userName, password, serverAddress } = profile
 
   const payload = {
     username: userName,
