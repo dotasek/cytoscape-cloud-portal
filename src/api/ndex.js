@@ -5,11 +5,11 @@ const fetchNetwork = (id, sourceUUID, networkUUID, authHeaders) => {
     Accept: 'application/json',
     'Content-Type': 'application/json'
   }
-  const headers = Object.assign(baseHeaders, authHeaders)
+  const headers = baseHeaders //Object.assign(baseHeaders, authHeaders)
   const fetchUrl =
     BASE_URL +
-    '/overlaynetwork?sourceUUID=' +
     id +
+    '/overlaynetwork?sourceUUID=' +
     sourceUUID +
     '&networkUUID=' +
     networkUUID

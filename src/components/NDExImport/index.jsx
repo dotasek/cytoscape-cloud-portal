@@ -47,6 +47,7 @@ class NDExImport extends React.Component {
     const main = this
     saveType = saveType || this.state.saveType
     if (
+      profile &&
       profile.userId &&
       this.networkData[saveType] &&
       this.networkData[saveType]['uuid']

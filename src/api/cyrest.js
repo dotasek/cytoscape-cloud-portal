@@ -28,7 +28,7 @@ const importNetwork = (cyRESTPort, payload) => {
   console.log('Calling CyREST POST:', importNetworkUrl, payload)
 
   return fetch(importNetworkUrl, {
-    method: 'POST',
+    method: METHOD_POST,
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json'

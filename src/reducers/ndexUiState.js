@@ -11,7 +11,7 @@ const DEF_STATE = {
   isProfilesOpen: false,
   isNDExImportOpen: false,
   isNDExLoginOpen: false,
-  NDExActionMessage: 'It rainin sideways!',
+  NDExActionMessage: undefined,
   urlParams: new URLSearchParams(window.location.search)
 }
 
