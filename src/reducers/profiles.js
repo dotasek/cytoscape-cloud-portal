@@ -6,7 +6,9 @@ import {
   addProfileStarted,
   addProfileFailed,
   addProfileSucceeded,
-  deleteProfile,
+  deleteProfileStarted,
+  deleteProfileSucceeded,
+  deleteProfileFailed,
   importFromLocalStorage
 } from '../actions/profiles'
 
@@ -55,19 +57,20 @@ const profiles = handleActions(
       console.log('selectProfileFailed = ', payload.payload)
       return { ...state }
     },
-    [deleteProfile]: (state, payload) => {
-      let selectedProfile = state.selectedProfile
-      const profiles = state.availableProfiles.filter(
-        p => p !== payload.payload
-      )
-      if (selectedProfile == payload.payload) {
-        console.log('Deleting selectedProfile')
-        selectedProfile = profiles.length > 0 ? profiles[0] : null
-      }
+    [deleteProfileStarted]: (state, payload) => {
+      console.log('deleteProfileStarted = ', payload.payload)
+      return { ...state }
+    },
+    [deleteProfileFailed]: (state, payload) => {
+      console.log('deleteProfileFailed = ', payload.payload)
+      return { ...state }
+    },
+    [deleteProfileSucceeded]: (state, payload) => {
+      console.log('deleteProfileSucceeded = ', payload.payload)
       return {
         ...state,
-        selectedProfile: selectedProfile,
-        availableProfiles: profiles
+        selectedProfile: payload.payload.selectedProfile,
+        availableProfiles: payload.payload.availableProfiles
       }
     },
     [importFromLocalStorage]: (state, payload) => {

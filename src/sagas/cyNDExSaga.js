@@ -9,6 +9,8 @@ import {
   SELECT_PROFILE_STARTED,
   SELECT_PROFILE_SUCCEEDED,
   SELECT_PROFILE_FAILED,
+  DELETE_PROFILE_STARTED,
+  DELETE_PROFILE_SUCCEEDED,
   IMPORT_FROM_LOCAL_STORAGE
 } from '../actions/profiles'
 
@@ -35,6 +37,7 @@ export default function* cyNDExSaga() {
   yield takeLatest(SAVE_TO_NDEX_STARTED, watchSaveToNDEx)
   yield takeLatest(IMPORT_FROM_LOCAL_STORAGE, watchImportFromLocalStorage)
   yield takeLatest(GET_CYNDEX_STATUS, watchGetCyNDExStatus)
+  yield takeLatest(DELETE_PROFILE_STARTED, watchProfileDelete)
 }
 
 export const getUIState = state => state.uiState
@@ -119,7 +122,10 @@ function* watchProfileSelect(action) {
           yield put({
             type: SET_NDEX_ACTION_MESSAGE,
             payload:
-              'Using NDEx as ' + newProfile.userName + '@' + newProfile.serverAddress
+              'Using NDEx as ' +
+              newProfile.userName +
+              '@' +
+              newProfile.serverAddress
           })
           yield put({
             type: SET_AUTH_HEADERS,
@@ -299,6 +305,31 @@ function* watchImportFromLocalStorage(action) {
     type: SET_AUTH_HEADERS,
     payload: generateAuth(selectedProfile)
   })
+}
+
+function* watchProfileDelete(action) {
+  let profiles = yield select(getProfiles)
+  let selectedProfile = profiles.selectedProfile
+
+  const availableProfiles = profiles.availableProfiles.filter(
+    p => p !== action.payload
+  )
+  if (selectedProfile == action.payload) {
+    console.log('Deleting selectedProfile')
+    selectedProfile = availableProfiles.length > 0 ? availableProfiles[0] : null
+  }
+  yield put({
+    type: DELETE_PROFILE_SUCCEEDED,
+    payload: {
+      selectedProfile: selectedProfile,
+      availableProfiles: availableProfiles
+    }
+  })
+  window.localStorage.setItem('profiles', JSON.stringify(availableProfiles))
+  window.localStorage.setItem(
+    'selectedProfile',
+    JSON.stringify(selectedProfile)
+  )
 }
 
 const generateAuth = profile => {

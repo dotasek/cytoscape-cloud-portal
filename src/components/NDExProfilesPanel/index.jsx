@@ -27,8 +27,9 @@ class NDExProfilesPanel extends React.Component {
     this.props.ndexUiStateActions.setProfilesOpen(!isOpen)
   }
 
-  handleDeleteProfile = profile => {
-    this.props.profilesActions.deleteProfile(profile)
+  handleDeleteProfile = (event, profile) => {
+    event.stopPropagation()
+    this.props.profilesActions.deleteProfileStarted(profile)
   }
 
   handleSelectProfile = profile => {
@@ -76,7 +77,9 @@ class NDExProfilesPanel extends React.Component {
             <Button
               variant="contained"
               className={classes.button}
-              onClick={() => this.handleDeleteProfile(selectedProfile)}
+              onClick={event =>
+                this.handleDeleteProfile(event, selectedProfile)
+              }
             >
               Remove
             </Button>
@@ -104,7 +107,7 @@ class NDExProfilesPanel extends React.Component {
                 <Button
                   variant="contained"
                   className={classes.button}
-                  onClick={() => this.handleDeleteProfile(profile)}
+                  onClick={event => this.handleDeleteProfile(event, profile)}
                 >
                   Remove
                 </Button>
