@@ -10,11 +10,12 @@ import Typography from '@material-ui/core/Typography'
 import deepOrange from '@material-ui/core/colors/deepOrange'
 
 import MenuList from '@material-ui/core/MenuList'
-import MenuItem from '@material-ui/core/MenuItem'
 
 import * as cyRESTApi from '../../../api/cyrest'
 import './style.css'
 import Sorter from './Sorter'
+import ListItem from '@material-ui/core/ListItem'
+import MenuItem from "@material-ui/core/MenuItem";
 
 const NETWORK_SIZE_TH = 5000
 
@@ -161,7 +162,7 @@ const NetworkList = props => {
               background: 'lightGreen',
               color: 'white',
               height: '2em',
-              width: percentOverlap + '%'
+              width: percentOverlap * 3 + 'px'
             }}
           >
             <Typography variant="h6">{percentOverlap + '%'}</Typography>
