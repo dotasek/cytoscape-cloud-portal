@@ -11,7 +11,6 @@ const HomePanel = props => {
 
     if (props.search.results !== null) {
       const jobId = props.search.results.jobId
-      console.log('Fetching res')
       props.searchActions.fetchResultStarted({ jobId })
     }
 
@@ -21,19 +20,14 @@ const HomePanel = props => {
     }
 
     window.onpopstate = onBackButtonEvent
-    return () => {
-      console.log('Result home Page unmounted')
-    }
+    return () => {}
   }, [])
 
   const onBackButtonEvent = e => {
     e.preventDefault()
-    console.log('* Handling back button press')
     props.searchActions.clearAll()
     props.history.push('/')
   }
-
-  console.log('----------------------- New Home Panel ------------------')
 
   if (props.search.isFetching) {
     return <LoadingPanel title="Loading Search Results" />
