@@ -28,7 +28,6 @@ function* watchImportNetwork(action) {
     type: SET_NDEX_ACTION_MESSAGE,
     payload: 'Opening Network in Cytoscape'
   })
-  const networkId = action.payload
 
   console.log('watchImportNetwork', action.payload)
 
@@ -38,12 +37,20 @@ function* watchImportNetwork(action) {
       ? uiState.urlParams.get('cyrestport')
       : 1234
 
+    let addNumberVerification = true
+
+    originalCX.forEach(aspect => {
+      if (aspect['numberVerification']) {
+        addNumberVerification = false
+      }
+    })
     // Add number verification to fool old versions of CyNDEx-2
     // remove this step if numberVerification is added elsewhere
     // or ignored in later versions of CyNDEx-2
-    const patchedCX = [
-      { numberVerification: [{ longNumber: 281474976710655 }] }
-    ].concat(originalCX)
+    const patchedCX = (addNumberVerification
+      ? [{ numberVerification: [{ longNumber: 281474976710655 }] }]
+      : []
+    ).concat(originalCX)
 
     //console.log('CX', patchedCX)
 
