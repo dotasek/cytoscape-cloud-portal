@@ -1,6 +1,6 @@
 import React from 'react'
-import TopPageContainer from './containers/TopPageContainer'
+import NDExTopPageContainer from './containers/NDExTopPageContainer'
 
-const NDExApp = props => <TopPageContainer {...props} />
+const NDExApp = props => <NDExTopPageContainer {...props} />
 
 export { NDExApp }

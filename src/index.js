@@ -35,10 +35,10 @@ const Root = ({ store }) => (
     <Router basename={process.env.PUBLIC_URL}>
       <Switch>
         <Route exact path="/" component={Top} />
+        <Route exact path="/myAccount/" component={NDExApp} />
         <Route path="/:jobid/:sourceId/:networkId" component={App} />
         <Route path="/:jobid/:sourceId" component={App} />
         <Route path="/:jobid" component={App} />
-        <Route path='/myAccount/' component={NDExApp} />
       </Switch>
     </Router>
   </Provider>
