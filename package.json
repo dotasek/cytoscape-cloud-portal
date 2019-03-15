@@ -2,6 +2,7 @@
   "name": "search-portal",
   "version": "0.2.0",
   "private": true,
+  "homepage": "http://cyndex-staging.ndexbio.org/cloud-demo/",
   "dependencies": {
     "@material-ui/core": "^3.9.2",
     "@material-ui/icons": "^3.0.2",
