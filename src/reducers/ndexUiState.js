@@ -4,7 +4,10 @@ import {
   setNDExLoginOpen,
   setNDExImportOpen,
   getCyNDExStatus,
-  setNDExActionMessage
+  setNDExActionMessage,
+  getMyNetworksStarted,
+  getMyNetworksSucceeded,
+  getMyNetworksFailed
 } from '../actions/ndexUiState'
 
 const DEF_STATE = {
@@ -12,6 +15,7 @@ const DEF_STATE = {
   isNDExImportOpen: false,
   isNDExLoginOpen: false,
   NDExActionMessage: undefined,
+  myNetworks: undefined,
   urlParams: new URLSearchParams(window.location.search)
 }
 
@@ -52,6 +56,24 @@ const ndexUiState = handleActions(
       return {
         ...state,
         NDExActionMessage: payload.payload
+      }
+    },
+    [getMyNetworksStarted]: (state, payload) => {
+      console.log('getMyNetworksStarted', payload.payload)
+      return {
+        ...state
+      }
+    },
+    [getMyNetworksSucceeded]: (state, payload) => {
+      console.log('getMyNetworksSucceeded', payload.payload)
+      return {
+        ...state
+      }
+    },
+    [getMyNetworksFailed]: (state, payload) => {
+      console.log('getMyNetworksFailed', payload.payload)
+      return {
+        ...state
       }
     }
   },

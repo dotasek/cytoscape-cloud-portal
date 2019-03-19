@@ -5,6 +5,8 @@ import { Typography } from '@material-ui/core'
 
 const StartPanel = props => {
   useEffect(() => {
+    
+    
     return () => {
       console.log('Page unmounted')
     }

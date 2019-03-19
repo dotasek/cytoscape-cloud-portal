@@ -30,4 +30,12 @@ const fetchUser = profile => {
   })
 }
 
-export { fetchNetwork, fetchUser }
+const fetchUserNetworks = profile => {
+  return fetch(profile.serverAddress + '/v2/user/' + profile.id + '/network/', {
+    headers: new Headers({
+      Authorization: 'Basic ' + btoa(profile.userName + ':' + profile.password)
+    })
+  })
+}
+
+export { fetchNetwork, fetchUser, fetchUserNetworks }
