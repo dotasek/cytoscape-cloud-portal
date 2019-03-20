@@ -17,6 +17,11 @@ import {
 import { SET_AUTH_HEADERS } from '../actions/search'
 
 import {
+  NETWORK_FETCH_SUCCEEDED,
+  NETWORK_FETCH_FAILED
+} from '../actions/network'
+
+import {
   SET_NDEX_LOGIN_OPEN,
   SET_PROFILES_OPEN,
   SET_NDEX_IMPORT_OPEN,
@@ -24,7 +29,8 @@ import {
   SET_NDEX_ACTION_MESSAGE,
   GET_MY_NETWORKS_STARTED,
   GET_MY_NETWORKS_SUCCEEDED,
-  GET_MY_NETWORKS_FAILED
+  GET_MY_NETWORKS_FAILED,
+  NDEX_NETWORK_FETCH_STARTED
 } from '../actions/ndexUiState'
 
 import {
@@ -44,10 +50,13 @@ export default function* cyNDExSaga() {
   yield takeLatest(DELETE_PROFILE_STARTED, watchProfileDelete)
   yield takeLatest(SAVE_TO_NDEX_CANCELLED, watchSaveToNDExCancelled)
   yield takeLatest(GET_MY_NETWORKS_STARTED, watchGetMyNetworks)
+  yield takeLatest(NDEX_NETWORK_FETCH_STARTED, watchNDExNetworkFetch)
 }
 
 export const getUIState = state => state.uiState
 export const getProfiles = state => state.profiles
+export const getAuthHeaders = state => state.search.authHeaders
+
 
 function* watchLogin(action) {
   const profile = action.payload
@@ -370,6 +379,31 @@ function* watchGetMyNetworks(action) {
     type: GET_MY_NETWORKS_SUCCEEDED,
     payload: responseJson
   })
+}
+
+function* watchNDExNetworkFetch(action) {
+  try {
+    let profiles = yield select(getProfiles)
+    let selectedProfile = profiles.selectedProfile
+
+    const authHeaders = yield select(getAuthHeaders)
+    console.log('watchNDExNetworkFetch authHeaders', authHeaders)
+
+    const params = action.payload
+    const networkUUID = params.networkUUID
+
+    const cx = yield call(
+      cyrest.ndexNetworkFetch,
+      selectedProfile,
+      networkUUID,
+      authHeaders.payload
+    )
+    const json = yield call([cx, 'json'])
+
+    yield put({ type: NETWORK_FETCH_SUCCEEDED, cx: json })
+  } catch (error) {
+    yield put({ type: NETWORK_FETCH_FAILED, error })
+  }
 }
 
 const generateAuth = profile => {

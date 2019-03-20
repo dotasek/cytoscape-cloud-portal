@@ -87,7 +87,7 @@ const NetworkList = props => {
 
   const id = 0 //props.search.results.jobId
 
-  const handleFetch = (networkUUID, networkName, nodeCount, edgeCount) => {
+  const handleFetch = (networkUUID, nodeCount, edgeCount) => {
     props.networkActions.setNetworkSize({
       nodeCount,
       edgeCount
@@ -101,12 +101,8 @@ const NetworkList = props => {
     }
 
     checkCytoscapeConnection(props)
-    props.networkActions.networkFetchStarted({
-      id,
-      sourceUUID,
-      networkUUID,
-      networkName,
-      geneList
+    props.ndexUiStateActions.ndexNetworkFetchStarted({
+      networkUUID: networkUUID
     })
   }
 
@@ -127,7 +123,7 @@ const NetworkList = props => {
         className={classes.menuItem}
         alignItems="flex-start"
         key={externalId}
-        onClick={val => handleFetch(externalId, name, nodeCount, edgeCount)}
+        onClick={val => handleFetch(externalId, nodeCount, edgeCount)}
       >
         <ListItemAvatar>
           <Avatar

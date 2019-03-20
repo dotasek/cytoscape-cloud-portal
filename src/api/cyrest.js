@@ -38,6 +38,18 @@ const importNetwork = (cyRESTPort, payload) => {
   })
 }
 
+const ndexNetworkFetch = (profile, networkUUID, authHeaders) => {
+  const baseHeaders = {
+    'Content-Type': 'application/json'
+  }
+  const headers = Object.assign(baseHeaders, authHeaders)
+  console.log('ndexNetworkFetch headers', headers)
+  return fetch(profile.serverAddress + '/v2/network/' + networkUUID, {
+    method: METHOD_GET,
+    headers: new Headers(headers)
+  })
+}
+
 const cyndex2Networks = (cyRESTPort, method, suid, payload) => {
   const currentNetworkUrl =
     CYREST_BASE_URL + ':' + cyRESTPort + '/cyndex2/v1/networks/' + suid
@@ -52,4 +64,10 @@ const cyndex2Networks = (cyRESTPort, method, suid, payload) => {
   })
 }
 
-export { status, cyNDExStatus, importNetwork, cyndex2Networks }
+export {
+  status,
+  cyNDExStatus,
+  importNetwork,
+  cyndex2Networks,
+  ndexNetworkFetch
+}

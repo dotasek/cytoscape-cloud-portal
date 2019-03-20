@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import NDExTopPage from '../../components/NDExTopPage'
 import { withRouter } from 'react-router-dom'
+import * as cyrestActions from '../../actions/cyrest'
 import * as searchActions from '../../actions/search'
 import * as uiStateActions from '../../actions/uiState'
 import * as networkActions from '../../actions/network'
@@ -25,6 +26,7 @@ function mapStateToProps(state) {
 }
 function mapDispatchToProps(dispatch) {
   return {
+    cyrestActions: bindActionCreators(cyrestActions, dispatch),
     searchActions: bindActionCreators(searchActions, dispatch),
     uiStateActions: bindActionCreators(uiStateActions, dispatch),
     networkActions: bindActionCreators(networkActions, dispatch),
