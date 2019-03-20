@@ -7,3 +7,9 @@
   align-items: center;
   padding-top: 10em;
 }
+
+.ndex-base {
+  background-color: #ffffff;
+  display: flex;
+  height: 100vmin;
+}

@@ -11,7 +11,7 @@ import {
   SELECT_PROFILE_FAILED,
   DELETE_PROFILE_STARTED,
   DELETE_PROFILE_SUCCEEDED,
-  IMPORT_FROM_LOCAL_STORAGE
+  IMPORT_FROM_LOCAL_STORAGE,
 } from '../actions/profiles'
 
 import { SET_AUTH_HEADERS } from '../actions/search'
@@ -21,7 +21,10 @@ import {
   SET_PROFILES_OPEN,
   SET_NDEX_IMPORT_OPEN,
   GET_CYNDEX_STATUS,
-  SET_NDEX_ACTION_MESSAGE
+  SET_NDEX_ACTION_MESSAGE,
+  GET_MY_NETWORKS_STARTED,
+  GET_MY_NETWORKS_SUCCEEDED,
+  GET_MY_NETWORKS_FAILED
 } from '../actions/ndexUiState'
 
 import {
@@ -40,6 +43,7 @@ export default function* cyNDExSaga() {
   yield takeLatest(GET_CYNDEX_STATUS, watchGetCyNDExStatus)
   yield takeLatest(DELETE_PROFILE_STARTED, watchProfileDelete)
   yield takeLatest(SAVE_TO_NDEX_CANCELLED, watchSaveToNDExCancelled)
+  yield takeLatest(GET_MY_NETWORKS_STARTED, watchGetMyNetworks)
 }
 
 export const getUIState = state => state.uiState
@@ -351,6 +355,20 @@ function* watchSaveToNDExCancelled(action) {
   yield put({
     type: SET_NDEX_ACTION_MESSAGE,
     payload: 'Save to NDEx cancelled'
+  })
+}
+
+function* watchGetMyNetworks(action) {
+  let profiles = yield select(getProfiles)
+  let selectedProfile = profiles.selectedProfile
+  const response = yield call(api.fetchUserNetworks, selectedProfile)
+
+  const responseJson = yield call([response, 'json'])
+  console.log('My networks', responseJson)
+
+  yield put({
+    type: GET_MY_NETWORKS_SUCCEEDED,
+    payload: responseJson
   })
 }
 

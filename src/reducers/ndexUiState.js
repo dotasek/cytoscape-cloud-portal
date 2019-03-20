@@ -67,7 +67,8 @@ const ndexUiState = handleActions(
     [getMyNetworksSucceeded]: (state, payload) => {
       console.log('getMyNetworksSucceeded', payload.payload)
       return {
-        ...state
+        ...state,
+        myNetworks: payload.payload
       }
     },
     [getMyNetworksFailed]: (state, payload) => {
