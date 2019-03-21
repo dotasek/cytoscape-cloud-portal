@@ -52,7 +52,7 @@ const styles = theme => ({
 })
 
 const checkCytoscapeConnection = props => {
-  console.log(props.uiState.urlParams)
+  //console.log(props.uiState.urlParams)
   cyRESTApi
     .status(
       props.uiState.urlParams.has('cyrestport')
@@ -72,7 +72,7 @@ const checkCytoscapeConnection = props => {
 }
 
 const handleErrors = res => {
-  console.log('Calling!!', res)
+  //console.log('Calling!!', res)
   if (res !== undefined) {
     return true
   }

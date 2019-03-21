@@ -70,7 +70,7 @@ class NDExLogin extends React.Component {
           if (response.errorCode) {
             throw Error(response.message)
           }
-          console.log(response)
+          //console.log(response)
           return response
         })
         .then(blob => {
@@ -87,7 +87,7 @@ class NDExLogin extends React.Component {
           if (error.message === 'Failed to fetch')
             message =
               'Could not connect to NDEx server ' + profile.serverAddress
-          console.log(message)
+          //console.log(message)
           this.setState({ error: message })
         })
     } else {

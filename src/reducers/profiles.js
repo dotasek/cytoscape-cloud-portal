@@ -20,19 +20,19 @@ const DEF_STATE = {
 const profiles = handleActions(
   {
     [addProfileStarted]: (state, payload) => {
-      console.log('addProfileStarted = ', payload.payload)
+      //('addProfileStarted = ', payload.payload)
       return {
         ...state
       }
     },
     [addProfileFailed]: (state, payload) => {
-      console.log('addProfileFailed = ', payload.payload)
+      //console.log('addProfileFailed = ', payload.payload)
       return {
         ...state
       }
     },
     [addProfileSucceeded]: (state, payload) => {
-      console.log('addProfileSucceeded = ', payload.payload)
+      //console.log('addProfileSucceeded = ', payload.payload)
       return {
         ...state,
         selectedProfile: payload.payload,
@@ -42,11 +42,11 @@ const profiles = handleActions(
       }
     },
     [selectProfileStarted]: (state, payload) => {
-      console.log('selectProfileStarted = ', payload.payload)
+      //console.log('selectProfileStarted = ', payload.payload)
       return { ...state }
     },
     [selectProfileSucceeded]: (state, payload) => {
-      console.log('selectProfileSucceeded = ', payload.payload)
+      //console.log('selectProfileSucceeded = ', payload.payload)
       return {
         ...state,
         selectedProfile: payload.payload.selectedProfile,
@@ -54,19 +54,19 @@ const profiles = handleActions(
       }
     },
     [selectProfileFailed]: (state, payload) => {
-      console.log('selectProfileFailed = ', payload.payload)
+      //console.log('selectProfileFailed = ', payload.payload)
       return { ...state }
     },
     [deleteProfileStarted]: (state, payload) => {
-      console.log('deleteProfileStarted = ', payload.payload)
+      //console.log('deleteProfileStarted = ', payload.payload)
       return { ...state }
     },
     [deleteProfileFailed]: (state, payload) => {
-      console.log('deleteProfileFailed = ', payload.payload)
+      //console.log('deleteProfileFailed = ', payload.payload)
       return { ...state }
     },
     [deleteProfileSucceeded]: (state, payload) => {
-      console.log('deleteProfileSucceeded = ', payload.payload)
+      //console.log('deleteProfileSucceeded = ', payload.payload)
       return {
         ...state,
         selectedProfile: payload.payload.selectedProfile,
@@ -74,7 +74,7 @@ const profiles = handleActions(
       }
     },
     [importFromLocalStorage]: (state, payload) => {
-      console.log('importFromLocalStorage = ', payload.payload)
+      //console.log('importFromLocalStorage = ', payload.payload)
       return {
         ...state
       }

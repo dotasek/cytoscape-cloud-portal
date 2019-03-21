@@ -64,7 +64,7 @@ class NDExImport extends React.Component {
       this.networkData[saveType]['uuid']
     ) {
       const uuid = this.networkData[saveType]['uuid']
-      console.log('profile for validation', profile)
+      //console.log('profile for validation', profile)
       const userId = profile.userId
       const ndexUrl = profile.serverAddress
       const headers = {
@@ -96,10 +96,10 @@ class NDExImport extends React.Component {
   }
 
   getAttributes = saveType => {
-    console.log('networkData', this.networkData)
+    //console.log('networkData', this.networkData)
     saveType = saveType || this.state.saveType
     if (!this.networkData.hasOwnProperty(saveType)) {
-      console.log('no save type')
+      //console.log('no save type')
       return {}
     }
     const net = this.networkData[saveType]
@@ -129,7 +129,7 @@ class NDExImport extends React.Component {
             component: 'error'
           })
         } else {
-          console.log(resp.data.parameters)
+          //console.log(resp.data.parameters)
           //this.setState({
           //  component: window.cyndexMode || resp.data.widget,
           //  parameters: resp.data.parameters
@@ -144,7 +144,7 @@ class NDExImport extends React.Component {
 
   loadData() {
     this.loadComponentConfig()
-    console.log('loadData')
+    //('loadData')
     const main = this
     fetch(
       'http://localhost:' +
@@ -156,7 +156,7 @@ class NDExImport extends React.Component {
         let newData = {
           collection: resp['data']['currentRootNetwork']
         }
-        console.log('resp:', resp)
+        //console.log('resp:', resp)
         if (resp['data']['members']) {
           resp['data']['members'].forEach(member => {
             if (member['suid'] === resp['data']['currentNetworkSuid']) {
@@ -204,14 +204,14 @@ class NDExImport extends React.Component {
   }
 
   handleChangeVisibility = evt => {
-    console.log(evt.target.checked)
+    //console.log(evt.target.checked)
     this.setState({ public: evt.target.checked })
   }
 
   render() {
     const { classes, theme } = this.props
     const isOpen = this.props.ndexUiState.isNDExImportOpen
-    console.log('NDExImport dialog instantiated')
+    //console.log('NDExImport dialog instantiated')
     return (
       <Dialog
         open={isOpen}

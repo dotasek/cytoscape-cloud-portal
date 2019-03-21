@@ -66,7 +66,7 @@ function* watchLogin(action) {
   //  serverAddress: 'dev.ndexbio.org',
   //  image: defaultProfilePic
   //}
-  console.log('watch login')
+  //console.log('watch login')
   yield put({
     type: ADD_PROFILE_SUCCEEDED,
     payload: profile
@@ -87,7 +87,7 @@ function* watchLogin(action) {
 }
 
 function* watchGetCyNDExStatus(action) {
-  console.log('Getting CyNDEx status')
+  //console.log('Getting CyNDEx status')
   const uiState = yield select(getUIState)
   const cyrestport = uiState.urlParams.has('cyrestport')
     ? uiState.urlParams.get('cyrestport')
@@ -96,7 +96,7 @@ function* watchGetCyNDExStatus(action) {
     const response = yield call(cyrest.cyNDExStatus, cyrestport)
 
     const responseJson = yield call([response, 'json'])
-    console.log(responseJson)
+    //console.log(responseJson)
   } catch (error) {
     yield put({
       type: SET_NDEX_ACTION_MESSAGE,
@@ -138,6 +138,10 @@ function* watchProfileSelect(action) {
               profile: newProfile,
               availableProfiles: availableProfiles
             }
+          })
+          yield put({
+            type: GET_MY_NETWORKS_SUCCEEDED,
+            payload: undefined
           })
           yield put({
             type: SET_NDEX_ACTION_MESSAGE,
@@ -182,6 +186,10 @@ function* watchProfileSelect(action) {
           }
         })
         yield put({
+          type: GET_MY_NETWORKS_SUCCEEDED,
+          payload: undefined
+        })
+        yield put({
           type: SET_NDEX_ACTION_MESSAGE,
           payload:
             'Using NDEx as ' + profile.userName + '@' + profile.serverAddress
@@ -206,6 +214,11 @@ function* watchProfileSelect(action) {
         availableProfiles: profiles.availableProfiles
       }
     })
+    yield put({
+      type: GET_MY_NETWORKS_SUCCEEDED,
+      payload: undefined
+    })
+
     yield put({
       type: SET_NDEX_ACTION_MESSAGE,
       payload: 'Using NDEx as ' + profile.userName + '@' + profile.serverAddress
@@ -318,6 +331,10 @@ function* watchImportFromLocalStorage(action) {
     }
   })
   yield put({
+    type: GET_MY_NETWORKS_SUCCEEDED,
+    payload: undefined
+  })
+  yield put({
     type: SET_AUTH_HEADERS,
     payload: generateAuth(selectedProfile)
   })
@@ -331,8 +348,12 @@ function* watchProfileDelete(action) {
     p => p !== action.payload
   )
   if (selectedProfile == action.payload) {
-    console.log('Deleting selectedProfile')
+    //console.log('Deleting selectedProfile')
     selectedProfile = availableProfiles.length > 0 ? availableProfiles[0] : null
+    yield put({
+      type: GET_MY_NETWORKS_SUCCEEDED,
+      payload: undefined
+    })
   }
   yield put({
     type: DELETE_PROFILE_SUCCEEDED,
@@ -373,7 +394,7 @@ function* watchGetMyNetworks(action) {
   const response = yield call(api.fetchUserNetworks, selectedProfile)
 
   const responseJson = yield call([response, 'json'])
-  console.log('My networks', responseJson)
+  //console.log('My networks', responseJson)
 
   yield put({
     type: GET_MY_NETWORKS_SUCCEEDED,
@@ -387,7 +408,7 @@ function* watchNDExNetworkFetch(action) {
     let selectedProfile = profiles.selectedProfile
 
     const authHeaders = yield select(getAuthHeaders)
-    console.log('watchNDExNetworkFetch authHeaders', authHeaders)
+    //console.log('watchNDExNetworkFetch authHeaders', authHeaders)
 
     const params = action.payload
     const networkUUID = params.networkUUID

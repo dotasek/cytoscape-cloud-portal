@@ -19,7 +19,7 @@ const NetworkView = props => {
   const [resized, setResize] = useState(null)
 
   const handleResizeEnd = e => {
-    console.log('+++++++!!!!! resizeE', e)
+    //console.log('+++++++!!!!! resizeE', e)
     setResize(e)
   }
 
