@@ -29,7 +29,6 @@ const API_CALL_INTERVAL = 1000
 export const getAuthHeaders = state => state.search.authHeaders
 
 export default function* rootSaga() {
-  console.log('rootSaga reporting for duty')
   yield takeLatest(SEARCH_STARTED, watchSearch)
   yield takeLatest(FETCH_RESULT_STARTED, watchSearchResult)
   yield takeLatest(NETWORK_FETCH_STARTED, fetchNetwork)
@@ -43,8 +42,6 @@ export default function* rootSaga() {
  * @returns {IterableIterator<*>}
  */
 function* watchSearch(action) {
-  console.log('## Search started.', action)
-
   const geneList = action.payload.geneList
   let sourceNames = action.payload.sourceNames
 
@@ -52,15 +49,10 @@ function* watchSearch(action) {
   if (sourceNames === undefined) {
     const sources = yield call(cySearchApi.getSource, null)
     const sourceJson = yield call([sources, 'json'])
-
     const sourceList = sourceJson.results
     sourceNames = sourceList.map(source => source.name)
-    console.log('* Fetched sources:', sourceNames)
   }
-
   const geneListString = geneList.join()
-
-  console.log('## genes and sources:', geneList, sourceNames)
 
   try {
     // Call 1: Send query and get JobID w/ gene props from MyGene
@@ -73,10 +65,7 @@ function* watchSearch(action) {
     const resultLocation = searchRes.headers.get('Location')
     const parts = resultLocation.split('/')
     const jobId = parts[parts.length - 1]
-
     const filtered = filterGenes(geneJson)
-
-    console.log('## Filtered genes:', filtered)
 
     yield put({
       type: SEARCH_SUCCEEDED,
@@ -101,8 +90,6 @@ function* watchSearch(action) {
 }
 
 const checkStatus = statusJson => {
-  console.log("Status check:", statusJson)
-
   const { progress } = statusJson
   if (progress === 100) {
     return true
@@ -135,8 +122,6 @@ function* watchSearchResult(action) {
 
     const resultRes = yield call(cySearchApi.getResult, jobId)
     const resultJson = yield call([resultRes, 'json'])
-
-    console.log('## Result fetch:', statusJson, resultJson)
 
     yield put({
       type: FETCH_RESULT_SUCCEEDED,

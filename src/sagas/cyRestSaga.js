@@ -10,7 +10,6 @@ import {
 import { SET_NDEX_ACTION_MESSAGE } from '../actions/ndexUiState'
 
 export default function* cyrestSaga() {
-  console.log('cyrestSaga reporting for duty')
   yield takeLatest(IMPORT_NETWORK_STARTED, watchImportNetwork)
 }
 
