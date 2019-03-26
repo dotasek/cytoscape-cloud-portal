@@ -101,7 +101,7 @@ const NetworkList = props => {
     }
 
     checkCytoscapeConnection(props)
-    props.ndexUiStateActions.ndexNetworkFetchStarted({
+    props.networkActions.ndexNetworkFetchStarted({
       networkUUID: networkUUID
     })
   }

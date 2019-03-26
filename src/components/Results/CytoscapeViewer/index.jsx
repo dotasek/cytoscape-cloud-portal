@@ -116,11 +116,13 @@ const CytoscapeViewer = props => {
     cyInstance.resize()
   }
 
+  const style = props.network.useOriginalStyle ? { width: '100%', height: '100%', background: 'rgba(0,0,0,0)' } : BASE_STYLE
+
   return (
     <CytoscapeComponent
       elements={cyjs.elements}
       layout={layout}
-      style={BASE_STYLE}
+      style={style}
       stylesheet={cyjs.style}
       cy={cy => (cyInstance = cy)}
     />

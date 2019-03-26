@@ -24,7 +24,7 @@ const StartPanel = props => {
   return (
     <div className="ndex-container">
       {console.log('NDEx StartPanel render')}
-      <Typography>My Networks</Typography>
+      <Typography variant="h3" align="left">My Networks</Typography>
       <Ndex hits={results} sourceUUID={sourceUUID} {...props} />
     </div>
   )

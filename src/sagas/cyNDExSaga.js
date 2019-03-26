@@ -11,12 +11,13 @@ import {
   SELECT_PROFILE_FAILED,
   DELETE_PROFILE_STARTED,
   DELETE_PROFILE_SUCCEEDED,
-  IMPORT_FROM_LOCAL_STORAGE,
+  IMPORT_FROM_LOCAL_STORAGE
 } from '../actions/profiles'
 
 import { SET_AUTH_HEADERS } from '../actions/search'
 
 import {
+  NDEX_NETWORK_FETCH_STARTED,
   NETWORK_FETCH_SUCCEEDED,
   NETWORK_FETCH_FAILED
 } from '../actions/network'
@@ -29,8 +30,7 @@ import {
   SET_NDEX_ACTION_MESSAGE,
   GET_MY_NETWORKS_STARTED,
   GET_MY_NETWORKS_SUCCEEDED,
-  GET_MY_NETWORKS_FAILED,
-  NDEX_NETWORK_FETCH_STARTED
+  GET_MY_NETWORKS_FAILED
 } from '../actions/ndexUiState'
 
 import {
@@ -423,6 +423,7 @@ function* watchNDExNetworkFetch(action) {
 
     yield put({ type: NETWORK_FETCH_SUCCEEDED, cx: json })
   } catch (error) {
+    console.log(error)
     yield put({ type: NETWORK_FETCH_FAILED, error })
   }
 }

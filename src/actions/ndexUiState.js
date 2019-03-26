@@ -23,5 +23,3 @@ export const getMyNetworksSucceeded = createAction(GET_MY_NETWORKS_SUCCEEDED)
 export const GET_MY_NETWORKS_FAILED = 'GET_MY_NETWORKS_FAILED'
 export const getMyNetworksFailed = createAction(GET_MY_NETWORKS_FAILED)
 
-export const NDEX_NETWORK_FETCH_STARTED = 'NDEX_NETWORK_FETCH_STARTED'
-export const ndexNetworkFetchStarted = createAction(NDEX_NETWORK_FETCH_STARTED)

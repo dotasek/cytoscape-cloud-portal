@@ -4,6 +4,7 @@ import { CxToJs, CyNetworkUtils } from 'cytoscape-cx2js'
 import * as vs from '../assets/data/styles.json'
 
 import {
+  ndexNetworkFetchStarted,
   networkFetchStarted,
   networkFetchFailed,
   networkFetchSucceeded,
@@ -28,7 +29,8 @@ const defaultState = {
   edgeCount: 0,
   isLayoutComplete: false,
   selectedNode: null,
-  selectedEdge: null
+  selectedEdge: null,
+  useOriginalStyle: false
 }
 
 const utils = new CyNetworkUtils()
@@ -53,6 +55,24 @@ PRESET_VS.push({
 
 const network = handleActions(
   {
+    [ndexNetworkFetchStarted]: (state, payload) => {
+      console.log('ndexNetworkFetchStarted', payload.payload)
+      return {
+        ...state,
+        isFetching: true,
+        nodeCount: 0,
+        edgeCount: 0,
+        jobId: null,
+        sourceId: null,
+        uuid: payload.payload.networkUUID,
+        networkName: payload.payload.networkName,
+        queryGenes: [],
+        originalCX: null,
+        network: null,
+        isLayoutComplete: false,
+        useOriginalStyle: true
+      }
+    },
     [networkFetchStarted]: (state, payload) => {
       console.log('Query start: genes = ', payload)
       return {
@@ -67,14 +87,15 @@ const network = handleActions(
         queryGenes: payload.payload.geneList,
         originalCX: null,
         network: null,
-        isLayoutComplete: false
+        isLayoutComplete: false,
+        useOriginalStyle: false
       }
     },
     [networkFetchSucceeded]: (state, payload) => {
       return {
         ...state,
         originalCX: payload.cx,
-        network: convertCx2cyjs(payload.cx, state.queryGenes),
+        network: convertCx2cyjs(payload.cx, state.queryGenes, state.useOriginalStyle),
         isFetching: false
       }
     },
@@ -108,15 +129,15 @@ const network = handleActions(
   defaultState
 )
 
-const convertCx2cyjs = (cx, queryGenes) => {
+const convertCx2cyjs = (cx, queryGenes, useOriginalStyle) => {
   const niceCX = utils.rawCXtoNiceCX(cx)
   const attributeNameMap = {}
   const elementsObj = cx2js.cyElementsFromNiceCX(niceCX, attributeNameMap)
 
   // This contains original style.
-  // const style = cx2js.cyStyleFromNiceCX(niceCX, attributeNameMap)
+  const style = cx2js.cyStyleFromNiceCX(niceCX, attributeNameMap)
 
-  const updatedStyle = styleUpdater(PRESET_VS, queryGenes)
+  const updatedStyle = useOriginalStyle ? style : styleUpdater(PRESET_VS, queryGenes)
   const updatedNodes = adjustLayout(elementsObj.nodes, queryGenes)
   const elements = [...updatedNodes, ...elementsObj.edges]
   return {
@@ -136,7 +157,7 @@ const adjustLayout = (nodes, queryGenes) => {
     const node = nodes[len]
     const position = node.position
 
-    const name = node.data.name.toUpperCase()
+    const name = node.data.name && node.data.name.toUpperCase()
     if (upperQuery.has(name)) {
       node.data['query'] = 'true'
     }

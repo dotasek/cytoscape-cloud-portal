@@ -7,8 +7,7 @@ import {
   setNDExActionMessage,
   getMyNetworksStarted,
   getMyNetworksSucceeded,
-  getMyNetworksFailed,
-  ndexNetworkFetchStarted
+  getMyNetworksFailed
 } from '../actions/ndexUiState'
 
 const DEF_STATE = {
@@ -74,12 +73,6 @@ const ndexUiState = handleActions(
     },
     [getMyNetworksFailed]: (state, payload) => {
       //console.log('getMyNetworksFailed', payload.payload)
-      return {
-        ...state
-      }
-    },
-    [ndexNetworkFetchStarted]: (state, payload) => {
-      //console.log('ndexNetworkFetchStarted', payload.payload)
       return {
         ...state
       }
