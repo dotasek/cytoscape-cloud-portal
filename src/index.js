@@ -10,6 +10,7 @@ import { composeWithDevTools } from 'redux-devtools-extension'
 
 import './index.css'
 import { App, Top } from './App'
+import { NDExApp } from './NDExApp'
 import * as serviceWorker from './serviceWorker'
 
 // Import root reducers
@@ -34,6 +35,7 @@ const Root = ({ store }) => (
     <Router basename={process.env.PUBLIC_URL}>
       <Switch>
         <Route exact path="/" component={Top} />
+        <Route exact path="/myAccount/" component={NDExApp} />
         <Route path="/:jobid/:sourceId/:networkId" component={App} />
         <Route path="/:jobid/:sourceId" component={App} />
         <Route path="/:jobid" component={App} />
@@ -43,7 +45,6 @@ const Root = ({ store }) => (
 )
 
 render(<Root store={store} />, document.getElementById('root'))
-
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.

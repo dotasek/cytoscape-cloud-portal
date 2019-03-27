@@ -3,6 +3,8 @@ import PropTypes from 'prop-types'
 import { withStyles } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button'
 import Popover from '@material-ui/core/Popover'
+import Link from '@material-ui/core/Link'
+import { Link as RouterLink } from 'react-router-dom'
 import List from '@material-ui/core/List'
 import Divider from '@material-ui/core/Divider'
 import ListItem from '@material-ui/core/ListItem'
@@ -39,6 +41,9 @@ const styles = theme => ({
   },
   ndexProfilesFooter: {
     padding: '.5em 1em .5em 1em'
+  },
+  link: {
+    margin: theme.spacing.unit
   }
 })
 
@@ -62,6 +67,13 @@ class NDExProfilesPanel extends React.Component {
   }
 
   render() {
+    const MyLink = props => (
+      <RouterLink
+        to="/myAccount"
+        onClick={() => this.handlePopoverClose()}
+        {...props}
+      />
+    )
     const { classes, theme } = this.props
     const isOpen = this.props.ndexUiState.isProfilesOpen
     const anchorEl = this.props.ndexUiState.settingsAnchorEl
@@ -109,6 +121,9 @@ class NDExProfilesPanel extends React.Component {
               </Typography>
               <Typography variant="caption" gutterBottom>
                 Active
+              </Typography>
+              <Typography variant="subtitle2" gutterBottom>
+                <Link component={MyLink}>My Networks</Link>
               </Typography>
             </div>
             <Button

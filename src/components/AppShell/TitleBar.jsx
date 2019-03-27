@@ -4,11 +4,13 @@ import { withStyles } from '@material-ui/core/styles'
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
 import Typography from '@material-ui/core/Typography'
+import Button from '@material-ui/core/Button'
 import IconButton from '@material-ui/core/IconButton'
 import MenuIcon from '@material-ui/icons/Menu'
 import HelpIcon from '@material-ui/icons/Help'
 import classNames from 'classnames'
 import github from '../../assets/images/github.svg'
+import logo from '../../assets/images/ndex-logo.svg'
 import NDExButton from '../NDExButton'
 import GeneTextBox from './GeneTextBox'
 
@@ -27,6 +29,11 @@ const styles = theme => ({
   menuButton: {
     marginLeft: 12,
     marginRight: 10
+  },
+  homeButton: {
+    height: '2.5em',
+    paddingLeft: '0.5em',
+    paddingRight: '0.5em'
   },
   appBar: {
     transition: theme.transitions.create(['margin', 'width'], {
@@ -58,6 +65,11 @@ class TitleBar extends React.Component {
     )
   }
 
+  handleHomeButton = () => {
+    this.props.searchActions.clearAll()
+    this.props.history.push('/')
+  }
+
   render() {
     const { classes, ...others } = this.props
     const open = this.props.uiState.isSettingsOpen
@@ -79,6 +91,13 @@ class TitleBar extends React.Component {
           >
             <MenuIcon />
           </IconButton>
+          <Button
+            color="inherit"
+            aria-label="Home"
+            onClick={this.handleHomeButton}
+          >
+            <img alt="NDEx logo" src={logo} className={classes.homeButton} />
+          </Button>
           <div>
             <Typography variant="h6" color="inherit">
               NDEx Network Search:

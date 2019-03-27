@@ -15,10 +15,10 @@ const NDExButton = props => {
   const { classes, ...others } = props
 
   useEffect(() => {
-    console.log("NDEXButton useEffect.")
+    //console.log("NDEXButton useEffect.")
 
-    console.log("window.frame", window.frame)
-    console.log("window.restPort", window.restPort)
+    //console.log("window.frame", window.frame)
+    //console.log("window.restPort", window.restPort)
     props.ndexUiStateActions.getCyNDExStatus()
     props.profilesActions.importFromLocalStorage()
 
@@ -27,7 +27,7 @@ const NDExButton = props => {
     }
 
     return () => {
-      console.log('NDExButton unmounted')
+      //console.log('NDExButton unmounted')
     }
   }, [])
 

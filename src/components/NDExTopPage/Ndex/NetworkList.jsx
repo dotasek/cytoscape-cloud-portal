@@ -12,8 +12,8 @@ import MenuList from '@material-ui/core/MenuList'
 import * as cyRESTApi from '../../../api/cyrest'
 import './style.css'
 import Sorter from './Sorter'
-import ListItem from '@material-ui/core/ListItem'
 import MenuItem from '@material-ui/core/MenuItem'
+import no_image from '../../../assets/images/no_image.png'
 
 const NETWORK_SIZE_TH = 5000
 
@@ -52,7 +52,7 @@ const styles = theme => ({
 })
 
 const checkCytoscapeConnection = props => {
-  console.log(props.uiState.urlParams)
+  //console.log(props.uiState.urlParams)
   cyRESTApi
     .status(
       props.uiState.urlParams.has('cyrestport')
@@ -72,7 +72,7 @@ const checkCytoscapeConnection = props => {
 }
 
 const handleErrors = res => {
-  console.log('Calling!!', res)
+  //console.log('Calling!!', res)
   if (res !== undefined) {
     return true
   }
@@ -85,9 +85,9 @@ const NetworkList = props => {
 
   const geneList = props.search.queryList
 
-  const id = props.search.results.jobId
+  const id = 0 //props.search.results.jobId
 
-  const handleFetch = (networkUUID, networkName, nodeCount, edgeCount) => {
+  const handleFetch = (networkUUID, nodeCount, edgeCount) => {
     props.networkActions.setNetworkSize({
       nodeCount,
       edgeCount
@@ -101,38 +101,48 @@ const NetworkList = props => {
     }
 
     checkCytoscapeConnection(props)
-    props.networkActions.networkFetchStarted({
-      id,
-      sourceUUID,
-      networkUUID,
-      networkName,
-      geneList
+    props.networkActions.ndexNetworkFetchStarted({
+      networkUUID: networkUUID
     })
   }
 
   const getListItem = (networkEntry, classes) => {
     const {
-      description,
-      networkUUID,
+      name,
+      externalId,
       percentOverlap,
-      nodes,
-      edges,
-      imageURL
+      nodeCount,
+      edgeCount
     } = networkEntry
+
+    const imageURL =
+      'http://v1.storage.cytoscape.io/images/' + externalId + '.png'
 
     return (
       <MenuItem
         className={classes.menuItem}
         alignItems="flex-start"
-        key={networkUUID}
-        onClick={val => handleFetch(networkUUID, description, nodes, edges)}
+        key={externalId}
+        onClick={val => handleFetch(externalId, nodeCount, edgeCount)}
       >
         <ListItemAvatar>
-          <Avatar className={classes.networkAvatar} src={imageURL} />
+          <Avatar
+            className={classes.networkAvatar}
+            src={imageURL}
+            onError={err => {
+              if (err.target.src === no_image) {
+                err.target.src = no_image
+                err.target.onError = null
+              } else {
+                err.target.src = no_image
+                err.target.onError = "this.src=''"
+              }
+            }}
+          />
         </ListItemAvatar>
         <ListItemText
           className={classes.menuText}
-          primary={description}
+          primary={name}
           secondary={
             <React.Fragment>
               <Typography
@@ -140,27 +150,29 @@ const NetworkList = props => {
                 className={classes.inline}
                 color="textPrimary"
               >
-                {'Nodes: ' + nodes + ', Edges: ' + edges}
+                {'Nodes: ' + nodeCount + ', Edges: ' + edgeCount}
               </Typography>
-              <Typography variant="caption">
-                {'UUID: ' + networkUUID}
-              </Typography>
+              <Typography variant="caption">{'UUID: ' + externalId}</Typography>
             </React.Fragment>
           }
         />
 
-        <ListItemSecondaryAction className={classes.secondary}>
-          <div
-            style={{
-              background: 'teal',
-              color: 'white',
-              height: '2em',
-              width: percentOverlap * 3 + 'px'
-            }}
-          >
-            <Typography variant="body2" style={{color: '#AAAAAA'}}>{percentOverlap + '%'}</Typography>
-          </div>
-        </ListItemSecondaryAction>
+        {percentOverlap && (
+          <ListItemSecondaryAction className={classes.secondary}>
+            <div
+              style={{
+                background: 'teal',
+                color: 'white',
+                height: '2em',
+                width: percentOverlap * 3 + 'px'
+              }}
+            >
+              <Typography variant="body2" style={{ color: '#AAAAAA' }}>
+                {percentOverlap + '%'}
+              </Typography>
+            </div>
+          </ListItemSecondaryAction>
+        )}
       </MenuItem>
     )
   }

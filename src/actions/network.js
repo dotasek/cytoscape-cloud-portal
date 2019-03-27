@@ -10,6 +10,9 @@ export const SELECT_NODE = 'SELECT_NODE'
 export const SELECT_EDGE = 'SELECT_EDGE'
 export const DESELECT_ALL = 'DESELECT_ALL'
 
+export const NDEX_NETWORK_FETCH_STARTED = 'NDEX_NETWORK_FETCH_STARTED'
+export const ndexNetworkFetchStarted = createAction(NDEX_NETWORK_FETCH_STARTED)
+
 export const networkFetchStarted = createAction(NETWORK_FETCH_STARTED)
 export const networkFetchSucceeded = createAction(NETWORK_FETCH_SUCCEEDED)
 export const networkFetchFailed = createAction(NETWORK_FETCH_FAILED)
