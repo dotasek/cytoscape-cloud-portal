@@ -1,4 +1,5 @@
 import { handleActions } from 'redux-actions'
+import { CxToCyCanvas } from 'cyannotation-cx2js'
 import { CxToJs, CyNetworkUtils } from 'cytoscape-cx2js'
 
 import * as vs from '../assets/data/styles.json'
@@ -112,15 +113,17 @@ const convertCx2cyjs = (cx, queryGenes) => {
   const niceCX = utils.rawCXtoNiceCX(cx)
   const attributeNameMap = {}
   const elementsObj = cx2js.cyElementsFromNiceCX(niceCX, attributeNameMap)
-
+  const annotations = new CxToCyCanvas(cx2js)
   // This contains original style.
   // const style = cx2js.cyStyleFromNiceCX(niceCX, attributeNameMap)
 
   const updatedStyle = styleUpdater(PRESET_VS, queryGenes)
   const updatedNodes = adjustLayout(elementsObj.nodes, queryGenes)
   const elements = [...updatedNodes, ...elementsObj.edges]
+
   return {
     elements,
+    annotations,
     style: updatedStyle,
     isLayout: checkLayout(elementsObj.nodes)
   }

@@ -1,11 +1,17 @@
 import React, { useEffect, useState } from 'react'
 import CytoscapeComponent from 'react-cytoscapejs'
+import Cytoscape from 'cytoscape'
+import CyCanvas from 'cytoscape-canvas'
+//import { CxToCyCanvas } from 'cyannotation-cx2js'
 
 import './style.css'
 import Warning from './Warning'
+
+Cytoscape.use(CyCanvas)
+
 let cyInstance = null
 
-const BASE_STYLE = { width: '100%', height: '100%', background: '#222233' }
+const BASE_STYLE = { width: '100%', height: '100%', background: 'rgba(0,0,0,0)' }
 
 const PRESET_LAYOUT = {
   name: 'preset',
@@ -40,6 +46,7 @@ const COSE_SETTING = {
  */
 const CytoscapeViewer = props => {
   useEffect(() => {
+    
     if (cyInstance === undefined || cyInstance === null) {
       return
     }
@@ -112,9 +119,13 @@ const CytoscapeViewer = props => {
 
   console.log('%%%%%%%%%%resize:', resized)
 
-  if(cyInstance !== null) {
+  if (cyInstance !== null) {
     cyInstance.resize()
   }
+
+  var cxBGColor = '#222233'
+  //cx2js.cyBackgroundColorFromNiceCX(niceCX)
+  //cyjs.annotations.drawAnnotationsFromNiceCX(cyInstance, niceCX)
 
   return (
     <CytoscapeComponent
@@ -122,7 +133,24 @@ const CytoscapeViewer = props => {
       layout={layout}
       style={BASE_STYLE}
       stylesheet={cyjs.style}
-      cy={cy => (cyInstance = cy)}
+      cy={cy => {
+        cyInstance = cy
+        console.log(cyInstance)
+        if (cxBGColor) {
+          var backgroundLayer = cyInstance.cyCanvas({
+            zIndex: -2
+          })
+
+          var canvas = backgroundLayer.getCanvas()
+          var ctx = backgroundLayer.getCanvas().getContext('2d')
+
+          cyInstance.on('render cyCanvas.resize', function() {
+            console.log('resize CyCanvas', cxBGColor)
+            ctx.fillStyle = cxBGColor
+            ctx.fillRect(0, 0, canvas.width, canvas.height)
+          })
+        }
+      }}
     />
   )
 }
