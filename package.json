@@ -32,7 +32,8 @@
     "prettier": "^1.16.4",
     "react-scripts": "^2.1.5",
     "redux-devtools-extension": "^2.13.8",
-    "webpack": "4.28.3"
+    "webpack": "4.28.3",
+    "webpack-cli": "^3.3.0"
   },
   "scripts": {
     "start": "react-scripts start",
