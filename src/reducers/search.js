@@ -23,7 +23,6 @@ const EMPTY_STATE = {
   selectedGenes: []
 }
 
-
 const search = handleActions(
   {
     [setQuery]: (state, payload) => {

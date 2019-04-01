@@ -46,7 +46,6 @@ const COSE_SETTING = {
  */
 const CytoscapeViewer = props => {
   useEffect(() => {
-    
     if (cyInstance === undefined || cyInstance === null) {
       return
     }
