@@ -187,6 +187,10 @@ class NDExImport extends React.Component {
       state: this.state,
       networkData: this.networkData
     })
+    let urlSearchParams = new URLSearchParams(window.location.search)
+    urlSearchParams.delete('suid')
+    window.location.search = urlSearchParams.toString()
+    this.props.history.push('/myAccount')
   }
 
   handleFieldChange = e => {
