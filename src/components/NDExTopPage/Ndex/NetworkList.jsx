@@ -11,7 +11,7 @@ import MenuList from '@material-ui/core/MenuList'
 
 import * as cyRESTApi from '../../../api/cyrest'
 import './style.css'
-import Sorter from './Sorter'
+import Sorter from '../../Results/Ndex/Sorter'
 import MenuItem from '@material-ui/core/MenuItem'
 import no_image from '../../../assets/images/no_image.png'
 

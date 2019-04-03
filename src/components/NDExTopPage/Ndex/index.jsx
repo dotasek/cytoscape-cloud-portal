@@ -2,7 +2,7 @@ import React from 'react'
 import './style.css'
 
 import Split from 'react-split'
-import NetworkView from './NetworkView'
+import NetworkView from '../../Results/Ndex/NetworkView'
 import NetworkList from './NetworkList'
 
 /**
