@@ -1,21 +1,10 @@
 import React from 'react'
 import { withStyles } from '@material-ui/core/styles'
-import ListItemText from '@material-ui/core/ListItemText'
-import ListItemAvatar from '@material-ui/core/ListItemAvatar'
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction'
-
-import Avatar from '@material-ui/core/Avatar'
-import Typography from '@material-ui/core/Typography'
 
 import MenuList from '@material-ui/core/MenuList'
 
-import * as cyRESTApi from '../../../api/cyrest'
 import './style.css'
 import Sorter from './Sorter'
-import ListItem from '@material-ui/core/ListItem'
-import MenuItem from '@material-ui/core/MenuItem'
-
-const NETWORK_SIZE_TH = 5000
 
 const styles = theme => ({
   inline: {
@@ -51,119 +40,8 @@ const styles = theme => ({
   }
 })
 
-const checkCytoscapeConnection = props => {
-  console.log(props.uiState.urlParams)
-  cyRESTApi
-    .status(
-      props.uiState.urlParams.has('cyrestport')
-        ? props.uiState.urlParams.get('cyrestport')
-        : 1234
-    )
-    .catch(e => {
-      throw Error(e)
-    })
-    .then(res => handleErrors(res))
-    .then(running => {
-      props.uiStateActions.setCytoscapeStatus(true)
-    })
-    .catch(error => {
-      props.uiStateActions.setCytoscapeStatus(false)
-    })
-}
-
-const handleErrors = res => {
-  console.log('Calling!!', res)
-  if (res !== undefined) {
-    return true
-  }
-
-  return false
-}
-
 const NetworkList = props => {
-  const { classes, hits, sourceUUID } = props
-
-  const geneList = props.search.queryList
-
-  const id = props.search.results.jobId
-
-  const handleFetch = (networkUUID, networkName, nodeCount, edgeCount) => {
-    props.networkActions.setNetworkSize({
-      nodeCount,
-      edgeCount
-    })
-
-    const networkSize = nodeCount + edgeCount
-
-    // Do not load if size is too big to render!
-    if (networkSize > NETWORK_SIZE_TH) {
-      return
-    }
-
-    checkCytoscapeConnection(props)
-    props.networkActions.networkFetchStarted({
-      id,
-      sourceUUID,
-      networkUUID,
-      networkName,
-      geneList
-    })
-  }
-
-  const getListItem = (networkEntry, classes) => {
-    const {
-      description,
-      networkUUID,
-      percentOverlap,
-      nodes,
-      edges,
-      imageURL
-    } = networkEntry
-
-    return (
-      <MenuItem
-        className={classes.menuItem}
-        alignItems="flex-start"
-        key={networkUUID}
-        onClick={val => handleFetch(networkUUID, description, nodes, edges)}
-      >
-        <ListItemAvatar>
-          <Avatar className={classes.networkAvatar} src={imageURL} />
-        </ListItemAvatar>
-        <ListItemText
-          className={classes.menuText}
-          primary={description}
-          secondary={
-            <React.Fragment>
-              <Typography
-                component="span"
-                className={classes.inline}
-                color="textPrimary"
-              >
-                {'Nodes: ' + nodes + ', Edges: ' + edges}
-              </Typography>
-              <Typography variant="caption">
-                {'UUID: ' + networkUUID}
-              </Typography>
-            </React.Fragment>
-          }
-        />
-
-        <ListItemSecondaryAction className={classes.secondary}>
-          <div
-            style={{
-              background: 'teal',
-              color: 'white',
-              height: '2em',
-              width: percentOverlap * 3 + 'px'
-            }}
-          >
-            <Typography variant="body2" style={{color: '#AAAAAA'}}>{percentOverlap + '%'}</Typography>
-          </div>
-        </ListItemSecondaryAction>
-      </MenuItem>
-    )
-  }
+  const { classes, hits, getListItem } = props
 
   if (!hits) {
     return <div className="network-list-wrapper" />
