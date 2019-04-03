@@ -69,7 +69,7 @@ class NDExProfilesPanel extends React.Component {
   render() {
     const MyLink = props => (
       <RouterLink
-        to="/myAccount"
+        to="/ndexAccount"
         onClick={() => this.handlePopoverClose()}
         {...props}
       />

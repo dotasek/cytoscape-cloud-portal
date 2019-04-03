@@ -23,7 +23,7 @@ import no_image from '../../../assets/images/no_image.png'
  * @constructor
  */
 
-const Ndex = props => {
+const MyNetworks = props => {
   const NETWORK_SIZE_TH = 5000
 
   const handleErrors = res => {
@@ -151,4 +151,4 @@ const Ndex = props => {
     </Split>
   )
 }
-export default Ndex
+export default MyNetworks

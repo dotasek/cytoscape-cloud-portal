@@ -190,7 +190,7 @@ class NDExImport extends React.Component {
     let urlSearchParams = new URLSearchParams(window.location.search)
     urlSearchParams.delete('suid')
     window.location.search = urlSearchParams.toString()
-    this.props.history.push('/myAccount')
+    this.props.history.push('/ndexAccount')
   }
 
   handleFieldChange = e => {

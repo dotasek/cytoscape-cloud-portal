@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
-import Split from 'react-split'
+
 import './style.css'
-import Ndex from './Ndex'
+import MyNetworks from './MyNetworks'
 import { Typography } from '@material-ui/core'
 
 const StartPanel = props => {
@@ -25,7 +25,7 @@ const StartPanel = props => {
     <div className="ndex-container">
       {console.log('NDEx StartPanel render')}
       <Typography variant="h3" align="left">My Networks</Typography>
-      <Ndex hits={results} sourceUUID={sourceUUID} {...props} />
+      <MyNetworks hits={results} sourceUUID={sourceUUID} {...props} />
     </div>
   )
 }
