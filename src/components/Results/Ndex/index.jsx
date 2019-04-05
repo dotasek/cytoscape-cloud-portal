@@ -12,7 +12,6 @@ import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction'
 import Avatar from '@material-ui/core/Avatar'
 import Typography from '@material-ui/core/Typography'
 
-import ListItem from '@material-ui/core/ListItem'
 import MenuItem from '@material-ui/core/MenuItem'
 
 import * as cyRESTApi from '../../../api/cyrest'
@@ -132,7 +131,9 @@ const Ndex = props => {
               width: percentOverlap * 3 + 'px'
             }}
           >
-            <Typography variant="body2" style={{color: '#AAAAAA'}}>{percentOverlap + '%'}</Typography>
+            <Typography variant="body2" style={{ color: '#AAAAAA' }}>
+              {percentOverlap + '%'}
+            </Typography>
           </div>
         </ListItemSecondaryAction>
       </MenuItem>

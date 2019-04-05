@@ -57,7 +57,6 @@ export const getUIState = state => state.uiState
 export const getProfiles = state => state.profiles
 export const getAuthHeaders = state => state.search.authHeaders
 
-
 function* watchLogin(action) {
   const profile = action.payload
   //const profile = {
@@ -404,8 +403,8 @@ function* watchGetMyNetworks(action) {
 
 function* watchNDExNetworkFetch(action) {
   try {
-    let profiles = yield select(getProfiles)
-    let selectedProfile = profiles.selectedProfile
+    const profiles = yield select(getProfiles)
+    const selectedProfile = profiles.selectedProfile
 
     const authHeaders = yield select(getAuthHeaders)
     //console.log('watchNDExNetworkFetch authHeaders', authHeaders)
@@ -421,7 +420,10 @@ function* watchNDExNetworkFetch(action) {
     )
     const json = yield call([cx, 'json'])
 
-    yield put({ type: NETWORK_FETCH_SUCCEEDED, cx: json })
+    yield put({
+      type: NETWORK_FETCH_SUCCEEDED,
+      cx: json
+    })
   } catch (error) {
     console.log(error)
     yield put({ type: NETWORK_FETCH_FAILED, error })
