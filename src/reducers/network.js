@@ -135,6 +135,7 @@ const network = handleActions(
       return {
         ...state,
         originalCX: payload.cx,
+        niceCX: cytoscapeJSData.niceCX,
         network: cytoscapeJSData.elements,
         style: cytoscapeJSData.style,
         layout: layout,
