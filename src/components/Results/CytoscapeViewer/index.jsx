@@ -3,7 +3,7 @@ import CytoscapeComponent from 'react-cytoscapejs'
 import Cytoscape from 'cytoscape'
 import CyCanvas from 'cytoscape-canvas'
 import { CxToCyCanvas } from 'cyannotation-cx2js'
-import { CxToJs, CyNetworkUtils } from 'cytoscape-cx2js'
+import { CxToJs } from 'cytoscape-cx2js'
 import './style.css'
 import Warning from './Warning'
 
@@ -119,9 +119,7 @@ const CytoscapeViewer = props => {
         }
 
         if (props.network.niceCX) {
-          const utils = new CyNetworkUtils()
-          const cx2js = new CxToJs(utils)
-          const annotations = new CxToCyCanvas(cx2js)
+          const annotations = new CxToCyCanvas(CxToJs)
           annotations.drawAnnotationsFromNiceCX(cyInstance, props.network.niceCX)
         }
       }}
