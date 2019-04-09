@@ -34,10 +34,14 @@ const NDExButton = props => {
   }, [])
 
   const handleProfiles = event => {
-    props.ndexUiStateActions.setProfilesOpen({
-      isProfilesOpen: !props.uiState.isProfilesOpen,
-      anchorEl: event.currentTarget
-    })
+    if (props.profiles.availableProfiles.length > 0) {
+      props.ndexUiStateActions.setProfilesOpen({
+        isProfilesOpen: !props.uiState.isProfilesOpen,
+        anchorEl: event.currentTarget
+      })
+    } else {
+      props.ndexUiStateActions.setNDExLoginOpen(true)
+    }
   }
 
   const profilesOpen = props.ndexUiState.isProfilesOpen

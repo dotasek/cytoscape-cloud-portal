@@ -137,7 +137,7 @@ class NDExProfilesPanel extends React.Component {
             </Button>
           </div>
         )}
-        <Divider />
+        {profiles.length > 1 && <Divider />}
         <List>
           {profiles
             .filter(p => p !== selectedProfile)
@@ -175,6 +175,7 @@ class NDExProfilesPanel extends React.Component {
               </ListItem>
             ))}
         </List>
+
         <Divider />
         <div className={classes.ndexProfilesFooter}>
           <Button
