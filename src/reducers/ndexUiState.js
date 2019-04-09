@@ -5,6 +5,7 @@ import {
   setNDExImportOpen,
   getCyNDExStatus,
   setNDExActionMessage,
+  setNDExSignInHintOpen,
   getMyNetworksStarted,
   getMyNetworksSucceeded,
   getMyNetworksFailed
@@ -15,6 +16,7 @@ const DEF_STATE = {
   isNDExImportOpen: false,
   isNDExLoginOpen: false,
   NDExActionMessage: undefined,
+  NDExSignInHintOpen: undefined,
   myNetworks: undefined,
   urlParams: new URLSearchParams(window.location.search)
 }
@@ -56,6 +58,12 @@ const ndexUiState = handleActions(
       return {
         ...state,
         NDExActionMessage: payload.payload
+      }
+    },
+    [setNDExSignInHintOpen]: (state, payload) => {
+      return {
+        ...state,
+        NDExSignInHintOpen: payload.payload
       }
     },
     [getMyNetworksStarted]: (state, payload) => {

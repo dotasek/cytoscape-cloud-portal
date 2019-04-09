@@ -28,6 +28,7 @@ import {
   SET_NDEX_IMPORT_OPEN,
   GET_CYNDEX_STATUS,
   SET_NDEX_ACTION_MESSAGE,
+  SET_NDEX_SIGN_IN_HINT_OPEN,
   GET_MY_NETWORKS_STARTED,
   GET_MY_NETWORKS_SUCCEEDED,
   GET_MY_NETWORKS_FAILED
@@ -97,10 +98,13 @@ function* watchGetCyNDExStatus(action) {
     const responseJson = yield call([response, 'json'])
     //console.log(responseJson)
   } catch (error) {
-    yield put({
-      type: SET_NDEX_ACTION_MESSAGE,
-      payload: 'Unable to connect to CyNDEx App'
-    })
+    if (!window.sessionStorage.getItem('cyndexUnconnectedWarningDisplayed')) {
+      window.sessionStorage.setItem('cyndexUnconnectedWarningDisplayed', true)
+      yield put({
+        type: SET_NDEX_ACTION_MESSAGE,
+        payload: 'Unable to connect to CyNDEx App'
+      })
+    }
   }
 }
 
@@ -321,6 +325,15 @@ function* watchImportFromLocalStorage(action) {
       selectedProfile = element
     }
   })
+
+  if (
+    availableProfiles.length == 0 &&
+    !window.sessionStorage.getItem('ndexSignInHintOpened')
+  ) {
+    console.log('no profiles available')
+    sessionStorage.setItem('ndexSignInHintOpened', true)
+    yield put({ type: SET_NDEX_SIGN_IN_HINT_OPEN, payload: true })
+  }
 
   yield put({
     type: SELECT_PROFILE_SUCCEEDED,

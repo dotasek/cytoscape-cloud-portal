@@ -7,7 +7,8 @@ import { Avatar } from '@material-ui/core'
 import NDExProfilesPanel from '../NDExProfilesPanel'
 import NDExLogin from '../NDExLogin'
 import NDExImport from '../NDExImport'
-import NDExSnackbar from '../NDExSnackbar';
+import NDExActionMessage from '../NDExActionMessage'
+import NDExSignInHint from '../NDExSignInHint';
 
 const styles = theme => ({})
 
@@ -19,6 +20,7 @@ const NDExButton = props => {
 
     //console.log("window.frame", window.frame)
     //console.log("window.restPort", window.restPort)
+
     props.ndexUiStateActions.getCyNDExStatus()
     props.profilesActions.importFromLocalStorage()
 
@@ -46,7 +48,8 @@ const NDExButton = props => {
       <NDExProfilesPanel {...others} />
       <NDExLogin {...others} />
       <NDExImport {...others} />
-      <NDExSnackbar {...others} />
+      <NDExActionMessage {...others} />
+      <NDExSignInHint {...others} />
       <IconButton
         aria-owns={profilesOpen ? 'account-popper' : undefined}
         aria-haspopup="true"
