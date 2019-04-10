@@ -297,16 +297,16 @@ function* watchSaveToNDEx(action) {
     yield put({ type: SET_NDEX_IMPORT_OPEN, payload: false })
   } else {
     //this.saveImage(resp.data.suid, resp.data.uuid)
-    var shareURL = null
-    if (action.payload.state.public) {
-      shareURL =
-        selectedProfile.serverAddress + '/#/network/' + response.data.uuid
-    }
+    const shareURL = action.payload.state.public
+      ? selectedProfile.serverAddress + '/#/network/' + response.data.uuid
+      : null
     yield put({ type: SAVE_TO_NDEX_SUCCEEDED, payload: {} })
     yield put({ type: SET_NDEX_IMPORT_OPEN, payload: false })
     yield put({
       type: SET_NDEX_ACTION_MESSAGE,
-      payload: 'Network saved to NDEx: '
+      payload: shareURL
+        ? 'Network saved to NDEx:' + shareURL
+        : 'Network saved to NDEx'
     })
   }
 }

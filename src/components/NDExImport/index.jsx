@@ -38,21 +38,33 @@ const styles = theme => ({
 function getModalStyle() {}
 
 class NDExImport extends React.Component {
-  state = {
-    name: '',
-    author: '',
-    organism: '',
-    disease: '',
-    tissue: '',
-    rightsHolder: '',
-    version: '',
-    reference: '',
-    description: '',
-    public: false,
-    overwrite: false
-  }
+  constructor(props) {
+    super(props)
 
-  networkData = null
+    this.loadData()
+    const hydrate = field => this.props[field] || ''
+    this.state = {
+      name: hydrate('name'),
+      uuid: hydrate('uuid'),
+      author: hydrate('author'),
+      organism: hydrate('organism'),
+      disease: hydrate('disease'),
+      tissue: hydrate('tissue'),
+      rightsHolder: hydrate('rightsHolder'),
+      version: hydrate('version'),
+      reference: hydrate('reference'),
+      description: hydrate('description'),
+      saveType: hydrate('saveType'),
+      saving: false,
+      public: false,
+      updatable: false,
+      overwrite: false,
+      success: false,
+      shareURL: null,
+      errorMessage: null
+    }
+    this.networkData = {}
+  }
 
   checkPermissions = (profile, saveType) => {
     const main = this
@@ -129,7 +141,6 @@ class NDExImport extends React.Component {
             component: 'error'
           })
         } else {
-          //console.log(resp.data.parameters)
           //this.setState({
           //  component: window.cyndexMode || resp.data.widget,
           //  parameters: resp.data.parameters
@@ -138,7 +149,7 @@ class NDExImport extends React.Component {
         }
       })
       .catch(exc => {
-        //this.setState({component: 'cyrestError'})
+        this.setState({ component: 'cyrestError' })
       })
   }
 
@@ -153,6 +164,7 @@ class NDExImport extends React.Component {
     )
       .then(resp => resp.json())
       .then(resp => {
+        console.log('component config', resp.data)
         let newData = {
           collection: resp['data']['currentRootNetwork']
         }
@@ -163,19 +175,14 @@ class NDExImport extends React.Component {
               newData['network'] = member
             }
           })
-          main.networkData = newData
-        } else {
-          main.networkData = {}
         }
+        main.networkData = newData
+        console.log('main.networkData', main.networkData)
       })
       .then(() => {
         main.getAttributes()
         main.checkPermissions(this.props.profiles.selectedProfile)
       })
-  }
-
-  componentDidMount() {
-    this.loadData()
   }
 
   handleClose = () => {
@@ -187,10 +194,6 @@ class NDExImport extends React.Component {
       state: this.state,
       networkData: this.networkData
     })
-    let urlSearchParams = new URLSearchParams(window.location.search)
-    urlSearchParams.delete('suid')
-    window.location.search = urlSearchParams.toString()
-    this.props.history.push('/ndexAccount')
   }
 
   handleFieldChange = e => {
@@ -231,6 +234,7 @@ class NDExImport extends React.Component {
                   <TextField
                     name="author"
                     label="Author"
+                    value={this.state.author}
                     onChange={this.handleFieldChange}
                   />
                 </div>
@@ -238,6 +242,7 @@ class NDExImport extends React.Component {
                   <TextField
                     name="organism"
                     label="Organism"
+                    value={this.state.organism}
                     onChange={this.handleFieldChange}
                   />
                 </div>
@@ -245,6 +250,7 @@ class NDExImport extends React.Component {
                   <TextField
                     name="disease"
                     label="Disease"
+                    value={this.state.disease}
                     onChange={this.handleFieldChange}
                   />
                 </div>
@@ -252,6 +258,7 @@ class NDExImport extends React.Component {
                   <TextField
                     name="tissue"
                     label="Tissue"
+                    value={this.state.tissue}
                     onChange={this.handleFieldChange}
                   />
                 </div>
@@ -259,6 +266,7 @@ class NDExImport extends React.Component {
                   <TextField
                     name="rightsHolder"
                     label="Rights Holder"
+                    value={this.state.rightsHolder}
                     onChange={this.handleFieldChange}
                   />
                 </div>
@@ -266,6 +274,7 @@ class NDExImport extends React.Component {
                   <TextField
                     name="version"
                     label="Version"
+                    value={this.state.version}
                     onChange={this.handleFieldChange}
                   />
                 </div>
@@ -273,6 +282,7 @@ class NDExImport extends React.Component {
                   <TextField
                     name="reference"
                     label="Reference"
+                    value={this.state.reference}
                     onChange={this.handleFieldChange}
                   />
                 </div>
@@ -285,6 +295,7 @@ class NDExImport extends React.Component {
                     multiline
                     rows="11"
                     onChange={this.handleFieldChange}
+                    value={this.state.description}
                     required={this.state.public}
                   />
                 </div>
@@ -329,6 +340,7 @@ class NDExImport extends React.Component {
                 label="Network Name"
                 fullWidth
                 onChange={this.handleFieldChange}
+                value={this.state.name}
               />
               <Button
                 variant="contained"
