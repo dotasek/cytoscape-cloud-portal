@@ -114,6 +114,7 @@ class NDExLogin extends React.Component {
         open={isOpen}
         onClose={this.handleClose}
         aria-labelledby="import-dialog-title"
+        disableRestoreFocus={true}
       >
         <DialogTitle id="simple-dialog-title">Add NDEx Account</DialogTitle>
         <div style={getModalStyle()} className={classes.loginModalPaper}>

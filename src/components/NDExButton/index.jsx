@@ -4,6 +4,7 @@ import { withStyles } from '@material-ui/core/styles'
 import IconButton from '@material-ui/core/IconButton'
 import AccountCircle from '@material-ui/icons/AccountCircle'
 import { Avatar } from '@material-ui/core'
+import Tooltip from '@material-ui/core/Tooltip'
 import NDExProfilesPanel from '../NDExProfilesPanel'
 import NDExLogin from '../NDExLogin'
 import NDExImport from '../NDExImport'
@@ -54,6 +55,7 @@ const NDExButton = props => {
       <NDExImport {...others} />
       <NDExActionMessage {...others} />
       <NDExSignInHint {...others} />
+      <Tooltip title={ selectedProfile ? "Manage NDEx Accounts" : "Sign in to NDEx" } placement="bottom">
       <IconButton
         aria-owns={profilesOpen ? 'account-popper' : undefined}
         aria-haspopup="true"
@@ -72,6 +74,7 @@ const NDExButton = props => {
           <AccountCircle />
         )}
       </IconButton>
+      </Tooltip>
     </div>
   )
 }

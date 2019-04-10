@@ -94,6 +94,7 @@ class NDExProfilesPanel extends React.Component {
         }}
         anchorEl={anchorEl}
         open={isOpen}
+        disableRestoreFocus={true}
         classes={{
           paper: classes.accountPopoverPaper
         }}
