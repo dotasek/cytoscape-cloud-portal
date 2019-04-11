@@ -27,9 +27,8 @@ const MyNetworks = props => {
   useEffect(() => {
     if (!props.profiles.selectedProfile) {
       props.history.replace('/')
-      
     }
-  }, [])
+  }, [props.profiles.selectedProfile])
 
   const NETWORK_SIZE_TH = 5000
 
