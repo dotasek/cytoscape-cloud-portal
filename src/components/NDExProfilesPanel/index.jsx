@@ -75,10 +75,11 @@ class NDExProfilesPanel extends React.Component {
       />
     )
     const { classes, theme } = this.props
-    const isOpen = this.props.ndexUiState.isProfilesOpen
+
     const anchorEl = this.props.ndexUiState.settingsAnchorEl
     const selectedProfile = this.props.profiles.selectedProfile
     const profiles = this.props.profiles.availableProfiles
+    const isOpen = this.props.ndexUiState.isProfilesOpen && profiles.length > 0
     return (
       <Popover
         id="account-popper"

@@ -11,7 +11,7 @@ import HelpIcon from '@material-ui/icons/Help'
 import classNames from 'classnames'
 import github from '../../assets/images/github.svg'
 import logo from '../../assets/images/ndex-logo.svg'
-import NDExButton from '../NDExButton'
+import NDExComponent from '../NDExComponent'
 import GeneTextBox from './GeneTextBox'
 
 const drawerWidth = 240
@@ -114,7 +114,7 @@ class TitleBar extends React.Component {
           )}
 
           <div className={classes.grow} />
-          <NDExButton {...others} />
+          <NDExComponent {...others} />
           <div>
             <IconButton
               aria-haspopup="true"

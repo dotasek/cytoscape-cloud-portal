@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import './style.css'
 
 import Split from 'react-split'
@@ -24,6 +24,13 @@ import no_image from '../../../assets/images/no_image.png'
  */
 
 const MyNetworks = props => {
+  useEffect(() => {
+    if (!props.profiles.selectedProfile) {
+      props.history.replace('/')
+      
+    }
+  }, [])
+
   const NETWORK_SIZE_TH = 5000
 
   const handleErrors = res => {

@@ -16,7 +16,7 @@ const DEF_STATE = {
   isNDExImportOpen: false,
   isNDExLoginOpen: false,
   NDExActionMessage: undefined,
-  NDExSignInHintOpen: undefined,
+  NDExSignInHintOpen: true,
   myNetworks: undefined,
   urlParams: new URLSearchParams(window.location.search)
 }

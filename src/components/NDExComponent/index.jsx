@@ -9,20 +9,16 @@ import NDExProfilesPanel from '../NDExProfilesPanel'
 import NDExLogin from '../NDExLogin'
 import NDExImport from '../NDExImport'
 import NDExActionMessage from '../NDExActionMessage'
-import NDExSignInHint from '../NDExSignInHint';
+import NDExSignInHint from '../NDExSignInHint'
 
 const styles = theme => ({})
 
-const NDExButton = props => {
+const NDExComponent = props => {
   const { classes, ...others } = props
 
   useEffect(() => {
-    //console.log("NDEXButton useEffect.")
-
-    //console.log("window.frame", window.frame)
-    //console.log("window.restPort", window.restPort)
-
     props.ndexUiStateActions.getCyNDExStatus()
+
     props.profilesActions.importFromLocalStorage()
 
     if (props.uiState.urlParams.has('suid')) {
@@ -30,7 +26,7 @@ const NDExButton = props => {
     }
 
     return () => {
-      //console.log('NDExButton unmounted')
+      //console.log('NDExComponent unmounted')
     }
   }, [])
 
@@ -55,32 +51,35 @@ const NDExButton = props => {
       <NDExImport {...others} />
       <NDExActionMessage {...others} />
       <NDExSignInHint {...others} />
-      <Tooltip title={ selectedProfile ? "Manage NDEx Accounts" : "Sign in to NDEx" } placement="bottom">
-      <IconButton
-        aria-owns={profilesOpen ? 'account-popper' : undefined}
-        aria-haspopup="true"
-        color="inherit"
-        onClick={handleProfiles}
+      <Tooltip
+        title={selectedProfile ? 'Manage NDEx Accounts' : 'Sign in to NDEx'}
+        placement="bottom"
       >
-        {selectedProfile ? (
-          <div>
-            {selectedProfile.image ? (
-              <Avatar src={selectedProfile.image} />
-            ) : (
-              <Avatar>{selectedProfile.firstName.substring(0, 1)}</Avatar>
-            )}
-          </div>
-        ) : (
-          <AccountCircle />
-        )}
-      </IconButton>
+        <IconButton
+          aria-owns={profilesOpen ? 'account-popper' : undefined}
+          aria-haspopup="true"
+          color="inherit"
+          onClick={handleProfiles}
+        >
+          {selectedProfile ? (
+            <div>
+              {selectedProfile.image ? (
+                <Avatar src={selectedProfile.image} />
+              ) : (
+                <Avatar>{selectedProfile.firstName.substring(0, 1)}</Avatar>
+              )}
+            </div>
+          ) : (
+            <AccountCircle />
+          )}
+        </IconButton>
       </Tooltip>
     </div>
   )
 }
 
-NDExButton.propTypes = {
+NDExComponent.propTypes = {
   classes: PropTypes.object.isRequired
 }
 
-export default withStyles(styles)(NDExButton)
+export default withStyles(styles)(NDExComponent)

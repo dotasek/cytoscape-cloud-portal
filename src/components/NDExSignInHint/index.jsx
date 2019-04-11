@@ -27,7 +27,7 @@ const NDExSnackbar = props => {
           vertical: 'top',
           horizontal: 'right'
         }}
-        open={props.ndexUiState.NDExSignInHintOpen}
+        open={props.ndexUiState.NDExSignInHintOpen && props.profiles.availableProfiles.length == 0}
         autoHideDuration={6000}
         onClose={handleClose}
         ContentProps={{

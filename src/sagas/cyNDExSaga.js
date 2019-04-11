@@ -312,42 +312,8 @@ function* watchSaveToNDEx(action) {
 }
 
 function* watchImportFromLocalStorage(action) {
-  console.log("Importing from local storage")
-  let selectedProfile = JSON.parse(
-    window.localStorage.getItem('selectedProfile')
-  )
-  const availableProfiles =
-    JSON.parse(window.localStorage.getItem('profiles')) || []
+  const { availableProfiles, selectedProfile } = yield select(getProfiles)
 
-  // Not happy about this, but JSON.parse does not create objects that are equal via ==
-  // so to make our post-init life easier, we do a compare via JSON.stringify here.
-  availableProfiles.forEach(element => {
-    if (JSON.stringify(selectedProfile) == JSON.stringify(element)) {
-      selectedProfile = element
-    }
-  })
-
-  if (
-    availableProfiles.length == 0 &&
-    !window.sessionStorage.getItem('ndexSignInHintOpened')
-  ) {
-    console.log('no profiles available')
-    sessionStorage.setItem('ndexSignInHintOpened', true)
-    yield put({ type: SET_NDEX_SIGN_IN_HINT_OPEN, payload: true })
-  }
-
-  yield put({
-    type: SELECT_PROFILE_SUCCEEDED,
-    payload: {
-      selectedProfile: selectedProfile,
-      availableProfiles: availableProfiles
-    }
-  })
-
-  yield put({
-    type: GET_MY_NETWORKS_SUCCEEDED,
-    payload: undefined
-  })
   yield put({
     type: SET_AUTH_HEADERS,
     payload: generateAuth(selectedProfile)
@@ -405,15 +371,22 @@ function* watchSaveToNDExCancelled(action) {
 function* watchGetMyNetworks(action) {
   let profiles = yield select(getProfiles)
   let selectedProfile = profiles.selectedProfile
-  const response = yield call(api.fetchUserNetworks, selectedProfile)
 
-  const responseJson = yield call([response, 'json'])
-  //console.log('My networks', responseJson)
+  if (selectedProfile) {
+    const response = yield call(api.fetchUserNetworks, selectedProfile)
+    const responseJson = yield call([response, 'json'])
+    //console.log('My networks', responseJson)
 
-  yield put({
-    type: GET_MY_NETWORKS_SUCCEEDED,
-    payload: responseJson
-  })
+    yield put({
+      type: GET_MY_NETWORKS_SUCCEEDED,
+      payload: responseJson
+    })
+  } else {
+    yield put({
+      type: GET_MY_NETWORKS_FAILED,
+      payload: 'No profile available'
+    })
+  }
 }
 
 function* watchNDExNetworkFetch(action) {
