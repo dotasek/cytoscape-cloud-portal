@@ -312,14 +312,15 @@ function* watchSaveToNDEx(action) {
 }
 
 function* watchImportFromLocalStorage(action) {
-  // Not happy about this, but JSON.parse does not create objects that are equal via ==
-  // so to make our post-init life easier, we do a compare via JSON.stringify here.
+  console.log("Importing from local storage")
   let selectedProfile = JSON.parse(
     window.localStorage.getItem('selectedProfile')
   )
   const availableProfiles =
     JSON.parse(window.localStorage.getItem('profiles')) || []
 
+  // Not happy about this, but JSON.parse does not create objects that are equal via ==
+  // so to make our post-init life easier, we do a compare via JSON.stringify here.
   availableProfiles.forEach(element => {
     if (JSON.stringify(selectedProfile) == JSON.stringify(element)) {
       selectedProfile = element
@@ -342,6 +343,7 @@ function* watchImportFromLocalStorage(action) {
       availableProfiles: availableProfiles
     }
   })
+
   yield put({
     type: GET_MY_NETWORKS_SUCCEEDED,
     payload: undefined
