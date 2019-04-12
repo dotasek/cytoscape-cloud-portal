@@ -27,5 +27,5 @@ export const getMyNetworksSucceeded = createAction(GET_MY_NETWORKS_SUCCEEDED)
 export const GET_MY_NETWORKS_FAILED = 'GET_MY_NETWORKS_FAILED'
 export const getMyNetworksFailed = createAction(GET_MY_NETWORKS_FAILED)
 
-
-
+export const CLEAR_MY_NETWORKS = 'CLEAR_MY_NETWORKS'
+export const clearMyNetworks = createAction(CLEAR_MY_NETWORKS)

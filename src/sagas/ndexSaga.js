@@ -21,7 +21,8 @@ import {
 import {
   NETWORK_FETCH_STARTED,
   NETWORK_FETCH_SUCCEEDED,
-  NETWORK_FETCH_FAILED
+  NETWORK_FETCH_FAILED,
+  NETWORK_CLEAR
 } from '../actions/network'
 
 const API_CALL_INTERVAL = 1000
@@ -42,6 +43,8 @@ export default function* rootSaga() {
  * @returns {IterableIterator<*>}
  */
 function* watchSearch(action) {
+  yield put({ type: NETWORK_CLEAR, payload: undefined })
+
   const geneList = action.payload.geneList
   let sourceNames = action.payload.sourceNames
 

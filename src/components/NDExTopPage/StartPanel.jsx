@@ -14,7 +14,8 @@ const StartPanel = props => {
     }
 
     return () => {
-      console.log('Page unmounted')
+      console.log('My Networks unmounted')
+      props.networkActions.networkClear()
     }
   }, [props.ndexUiState.myNetworks])
 

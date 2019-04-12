@@ -19,7 +19,8 @@ import { SET_AUTH_HEADERS } from '../actions/search'
 import {
   NDEX_NETWORK_FETCH_STARTED,
   NETWORK_FETCH_SUCCEEDED,
-  NETWORK_FETCH_FAILED
+  NETWORK_FETCH_FAILED,
+  NETWORK_CLEAR
 } from '../actions/network'
 
 import {
@@ -31,7 +32,8 @@ import {
   SET_NDEX_SIGN_IN_HINT_OPEN,
   GET_MY_NETWORKS_STARTED,
   GET_MY_NETWORKS_SUCCEEDED,
-  GET_MY_NETWORKS_FAILED
+  GET_MY_NETWORKS_FAILED,
+  CLEAR_MY_NETWORKS
 } from '../actions/ndexUiState'
 
 import {
@@ -142,10 +144,8 @@ function* watchProfileSelect(action) {
               availableProfiles: availableProfiles
             }
           })
-          yield put({
-            type: GET_MY_NETWORKS_SUCCEEDED,
-            payload: undefined
-          })
+          yield put({ type: CLEAR_MY_NETWORKS, payload: undefined })
+          yield put({ type: NETWORK_CLEAR, payload: undefined })
           yield put({
             type: SET_NDEX_ACTION_MESSAGE,
             payload:
@@ -188,10 +188,8 @@ function* watchProfileSelect(action) {
             availableProfiles: availableProfiles
           }
         })
-        yield put({
-          type: GET_MY_NETWORKS_SUCCEEDED,
-          payload: undefined
-        })
+        yield put({ type: CLEAR_MY_NETWORKS, payload: undefined })
+        yield put({ type: NETWORK_CLEAR, payload: undefined })
         yield put({
           type: SET_NDEX_ACTION_MESSAGE,
           payload:
@@ -217,10 +215,8 @@ function* watchProfileSelect(action) {
         availableProfiles: profiles.availableProfiles
       }
     })
-    yield put({
-      type: GET_MY_NETWORKS_SUCCEEDED,
-      payload: undefined
-    })
+    yield put({ type: CLEAR_MY_NETWORKS, payload: undefined })
+    yield put({ type: NETWORK_CLEAR, payload: undefined })
 
     yield put({
       type: SET_NDEX_ACTION_MESSAGE,
@@ -297,6 +293,7 @@ function* watchSaveToNDEx(action) {
     yield put({ type: SET_NDEX_IMPORT_OPEN, payload: false })
   } else {
     //this.saveImage(resp.data.suid, resp.data.uuid)
+    console.log('response data: ', response)
     const shareURL = action.payload.state.public
       ? selectedProfile.serverAddress + '/#/network/' + response.data.uuid
       : null
@@ -371,6 +368,8 @@ function* watchSaveToNDExCancelled(action) {
 function* watchGetMyNetworks(action) {
   let profiles = yield select(getProfiles)
   let selectedProfile = profiles.selectedProfile
+
+  yield put({ type: NETWORK_CLEAR, payload: undefined })
 
   if (selectedProfile) {
     const response = yield call(api.fetchUserNetworks, selectedProfile)

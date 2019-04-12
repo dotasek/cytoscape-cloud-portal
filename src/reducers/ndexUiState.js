@@ -8,7 +8,8 @@ import {
   setNDExSignInHintOpen,
   getMyNetworksStarted,
   getMyNetworksSucceeded,
-  getMyNetworksFailed
+  getMyNetworksFailed,
+  clearMyNetworks
 } from '../actions/ndexUiState'
 
 const DEF_STATE = {
@@ -90,6 +91,12 @@ const ndexUiState = handleActions(
       //console.log('getMyNetworksFailed', payload.payload)
       return {
         ...state
+      }
+    },
+    [clearMyNetworks]: (state, payload) => {
+      return {
+        ...state,
+        myNetworks: null
       }
     }
   },
