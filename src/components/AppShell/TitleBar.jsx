@@ -114,7 +114,6 @@ class TitleBar extends React.Component {
           )}
 
           <div className={classes.grow} />
-          <NDExComponent {...others} />
           <div>
             <IconButton
               aria-haspopup="true"
@@ -124,6 +123,7 @@ class TitleBar extends React.Component {
               <HelpIcon fontSize="medium" />
             </IconButton>
           </div>
+          <NDExComponent {...others} />
         </Toolbar>
       </AppBar>
     )
