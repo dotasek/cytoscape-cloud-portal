@@ -115,9 +115,6 @@ const Ndex = props => {
               >
                 {'Nodes: ' + nodes + ', Edges: ' + edges}
               </Typography>
-              <Typography variant="caption">
-                {'UUID: ' + networkUUID}
-              </Typography>
             </React.Fragment>
           }
         />
@@ -127,7 +124,7 @@ const Ndex = props => {
             style={{
               background: 'teal',
               color: 'white',
-              height: '2em',
+              height: '1.5em',
               width: percentOverlap * 3 + 'px'
             }}
           >

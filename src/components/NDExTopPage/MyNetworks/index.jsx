@@ -125,27 +125,9 @@ const MyNetworks = props => {
               >
                 {'Nodes: ' + nodeCount + ', Edges: ' + edgeCount}
               </Typography>
-              <Typography variant="caption">{'UUID: ' + externalId}</Typography>
             </React.Fragment>
           }
         />
-
-        {percentOverlap && (
-          <ListItemSecondaryAction className={classes.secondary}>
-            <div
-              style={{
-                background: 'teal',
-                color: 'white',
-                height: '2em',
-                width: percentOverlap * 3 + 'px'
-              }}
-            >
-              <Typography variant="body2" style={{ color: '#AAAAAA' }}>
-                {percentOverlap + '%'}
-              </Typography>
-            </div>
-          </ListItemSecondaryAction>
-        )}
       </MenuItem>
     )
   }
