@@ -3,7 +3,10 @@ import {
   saveToNDExFailed,
   saveToNDExStarted,
   saveToNDExSucceeded,
-  saveToNDExCancelled
+  saveToNDExCancelled,
+  importFromNDExStarted,
+  importFromNDExSucceeded,
+  importFromNDExFailed
 } from '../actions/ndexImport'
 
 const defaultState = {
@@ -39,8 +42,25 @@ const source = handleActions(
       return {
         ...state
       }
+    },
+    [importFromNDExStarted]: (state, payload) => {
+      return {
+        ...state
+      }
+    },
+    [importFromNDExSucceeded]: (state, payload) => {
+      return {
+        ...state
+      }
+    },
+    [importFromNDExFailed]: (state, payload) => {
+      console.warn('Error:', payload.error)
+      return {
+        ...state
+      }
     }
   },
+
   defaultState
 )
 

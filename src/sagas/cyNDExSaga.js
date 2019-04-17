@@ -40,7 +40,10 @@ import {
   SAVE_TO_NDEX_STARTED,
   SAVE_TO_NDEX_SUCCEEDED,
   SAVE_TO_NDEX_FAILED,
-  SAVE_TO_NDEX_CANCELLED
+  SAVE_TO_NDEX_CANCELLED,
+  IMPORT_FROM_NDEX_STARTED,
+  IMPORT_FROM_NDEX_SUCCEEDED,
+  IMPORT_FROM_NDEX_FAILED
 } from '../actions/ndexImport'
 
 export default function* cyNDExSaga() {
@@ -54,6 +57,7 @@ export default function* cyNDExSaga() {
   yield takeLatest(SAVE_TO_NDEX_CANCELLED, watchSaveToNDExCancelled)
   yield takeLatest(GET_MY_NETWORKS_STARTED, watchGetMyNetworks)
   yield takeLatest(NDEX_NETWORK_FETCH_STARTED, watchNDExNetworkFetch)
+  yield takeLatest(IMPORT_FROM_NDEX_STARTED, watchImportNDExNetwork)
 }
 
 export const getUIState = state => state.uiState
@@ -407,13 +411,66 @@ function* watchNDExNetworkFetch(action) {
     )
     const json = yield call([cx, 'json'])
 
+    const ndexData = {
+      username: selectedProfile.userName,
+      password: selectedProfile.password,
+      serverUrl: selectedProfile.serverAddress + '/v2',
+      uuid: networkUUID
+    }
+
+    if (authHeaders.payload) {
+      //ndexData['accessKey'] = authHeaders.payload
+      //delete ndexData['username']
+      //delete ndexData['password']
+    }
+
     yield put({
       type: NETWORK_FETCH_SUCCEEDED,
-      cx: json
+      cx: json,
+      ndexData: ndexData
     })
   } catch (error) {
     console.log(error)
     yield put({ type: NETWORK_FETCH_FAILED, error })
+  }
+}
+
+function* watchImportNDExNetwork(action) {
+  const ndexData = action.payload
+  yield put({
+    type: SET_NDEX_ACTION_MESSAGE,
+    payload: 'Opening Network in Cytoscape'
+  })
+
+  console.log('watchImportNDExNetwork', action.payload)
+
+  try {
+    const uiState = yield select(getUIState)
+    const cyrestport = uiState.urlParams.has('cyrestport')
+      ? uiState.urlParams.get('cyrestport')
+      : 1234
+
+    const response = yield call(api.importNDExNetwork, cyrestport, ndexData)
+
+    console.log('CyREST response:', response)
+
+    yield put({
+      type: IMPORT_FROM_NDEX_SUCCEEDED,
+      payload: {}
+    })
+    yield put({
+      type: SET_NDEX_ACTION_MESSAGE,
+      payload: 'Network Opened in Cytoscape'
+    })
+  } catch (e) {
+    console.warn('CyREST import network error:', e)
+    yield put({
+      type: IMPORT_FROM_NDEX_FAILED,
+      payload: {
+        message: 'CyREST import network error',
+        error: e.message
+      }
+    })
   }
 }
 

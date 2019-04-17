@@ -18,7 +18,11 @@ const OpenInButton = (props) => {
   console.log('OpenInButton props', props)
 
   const handleImportNetwork = () => {
-    props.cyrestActions.importNetworkStarted(network.originalCX)
+    if (!network.ndexData) {
+      props.cyrestActions.importNetworkStarted(network.originalCX)
+    } else {
+      props.ndexImportActions.importFromNDExStarted(network.ndexData)
+    }
   }
 
   return (
