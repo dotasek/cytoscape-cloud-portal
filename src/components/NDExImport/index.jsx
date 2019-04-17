@@ -40,21 +40,19 @@ function getModalStyle() {}
 class NDExImport extends React.Component {
   constructor(props) {
     super(props)
-
     this.loadData()
-    const hydrate = field => this.props[field] || ''
     this.state = {
-      name: hydrate('name'),
-      uuid: hydrate('uuid'),
-      author: hydrate('author'),
-      organism: hydrate('organism'),
-      disease: hydrate('disease'),
-      tissue: hydrate('tissue'),
-      rightsHolder: hydrate('rightsHolder'),
-      version: hydrate('version'),
-      reference: hydrate('reference'),
-      description: hydrate('description'),
-      saveType: hydrate('saveType'),
+      name: this.hydrate('name'),
+      uuid: this.hydrate('uuid'),
+      author: this.hydrate('author'),
+      organism: this.hydrate('organism'),
+      disease: this.hydrate('disease'),
+      tissue: this.hydrate('tissue'),
+      rightsHolder: this.hydrate('rightsHolder'),
+      version: this.hydrate('version'),
+      reference: this.hydrate('reference'),
+      description: this.hydrate('description'),
+      saveType: this.hydrate('saveType'),
       saving: false,
       public: false,
       updatable: false,
@@ -64,6 +62,13 @@ class NDExImport extends React.Component {
       errorMessage: null
     }
     this.networkData = {}
+  }
+
+  hydrate = field => this.props[field] || ''
+
+  componentDidMount() {
+    console.log('NDExImport did mount')
+    this.loadData()
   }
 
   checkPermissions = (profile, saveType) => {
@@ -111,7 +116,7 @@ class NDExImport extends React.Component {
     //console.log('networkData', this.networkData)
     saveType = saveType || this.state.saveType
     if (!this.networkData.hasOwnProperty(saveType)) {
-      //console.log('no save type')
+      console.log('no save type')
       return {}
     }
     const net = this.networkData[saveType]
