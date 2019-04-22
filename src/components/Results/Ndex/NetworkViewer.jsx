@@ -5,7 +5,6 @@ import LoadingPanel from '../../LoadingPanel'
 
 const NetworkViewer = props => (
   <div className="network-view">
-
     {props.network.isFetching ? (
       <LoadingPanel
         title="Loading Network..."

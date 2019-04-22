@@ -18,6 +18,8 @@ const DEFAULT_RATIO = [60, 40]
 const NetworkView = props => {
   const [resized, setResize] = useState(null)
 
+  const { handleImportNetwork } = props
+
   const handleResizeEnd = e => {
     console.log('+++++++!!!!! resizeE', e)
     setResize(e)
@@ -25,7 +27,7 @@ const NetworkView = props => {
 
   return (
     <div className={'network-view-top'}>
-      <NetworkToolbar {...props} />
+      <NetworkToolbar handleImportNetwork={handleImportNetwork} {...props} />
       <Split
         sizes={DEFAULT_RATIO}
         direction="vertical"
