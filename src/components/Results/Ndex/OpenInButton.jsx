@@ -13,13 +13,9 @@ const styles = theme => ({
 })
 
 const OpenInButton = (props) => {
-  const { classes, uiState, network } = props
+  const { classes, uiState, handleImportNetwork } = props
 
   console.log('OpenInButton props', props)
-
-  const handleImportNetwork = () => {
-    props.cyrestActions.importNetworkStarted(network.originalCX)
-  }
 
   return (
     <Button

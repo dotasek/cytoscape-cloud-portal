@@ -83,7 +83,11 @@ const Ndex = props => {
     })
   }
 
-  const getListItem = (networkEntry, classes) => {
+  const handleImportNetwork = () => {
+    props.cyrestActions.importNetworkStarted(props.network.originalCX)
+  }
+
+  const renderNetworkListItem = (networkEntry, classes) => {
     const {
       description,
       networkUUID,
@@ -139,8 +143,8 @@ const Ndex = props => {
 
   return (
     <Split sizes={[50, 50]} gutterSize={7} className="ndex-base">
-      <NetworkList getListItem={getListItem} {...props} />
-      <NetworkView {...props} />
+      <NetworkList renderNetworkListItem={renderNetworkListItem} {...props} />
+      <NetworkView handleImportNetwork={handleImportNetwork} {...props} />
     </Split>
   )
 }

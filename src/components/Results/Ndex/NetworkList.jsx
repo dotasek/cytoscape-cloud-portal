@@ -41,7 +41,7 @@ const styles = theme => ({
 })
 
 const NetworkList = props => {
-  const { classes, hits, getListItem } = props
+  const { classes, hits, renderNetworkListItem } = props
 
   if (!hits) {
     return <div className="network-list-wrapper" />
@@ -51,7 +51,7 @@ const NetworkList = props => {
     <div className="network-list-wrapper">
       <Sorter />
       <div className="network-list">
-        <MenuList>{hits.map(entry => getListItem(entry, classes))}</MenuList>
+        <MenuList>{hits.map(entry => renderNetworkListItem(entry, classes))}</MenuList>
       </div>
     </div>
   )

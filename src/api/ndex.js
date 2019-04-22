@@ -1,4 +1,4 @@
-import { METHOD_GET, BASE_URL } from './apiConstants'
+import { METHOD_GET, METHOD_POST, BASE_URL, CYREST_BASE_URL } from './apiConstants'
 
 const fetchNetwork = (id, sourceUUID, networkUUID, authHeaders) => {
   const baseHeaders = {
@@ -42,4 +42,19 @@ const fetchUserNetworks = profile => {
   )
 }
 
-export { fetchNetwork, fetchUser, fetchUserNetworks }
+const importNDExNetwork = (cyRESTPort, payload) => {
+  const importNetworkUrl =
+    CYREST_BASE_URL + ':' + cyRESTPort + '/cyndex2/v1/networks'
+  //console.log('Calling CyREST POST:', importNetworkUrl)
+
+  return fetch(importNetworkUrl, {
+    method: METHOD_POST,
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(payload)
+  })
+}
+
+export { fetchNetwork, fetchUser, fetchUserNetworks, importNDExNetwork }

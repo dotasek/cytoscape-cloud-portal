@@ -79,7 +79,11 @@ const MyNetworks = props => {
     })
   }
 
-  const getListItem = (networkEntry, classes) => {
+  const handleImportNetwork = () => {
+    props.ndexImportActions.importFromNDExStarted(props.network.ndexData)
+  }
+
+  const renderNetworkListItem = (networkEntry, classes) => {
     const {
       name,
       externalId,
@@ -134,8 +138,8 @@ const MyNetworks = props => {
 
   return (
     <Split sizes={[50, 50]} gutterSize={7} className="ndex-base">
-      <NetworkList getListItem={getListItem} {...props} />
-      <NetworkView {...props} />
+      <NetworkList renderNetworkListItem={renderNetworkListItem} {...props} />
+      <NetworkView handleImportNetwork={handleImportNetwork} {...props} />
     </Split>
   )
 }

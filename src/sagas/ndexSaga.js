@@ -164,7 +164,7 @@ function* fetchNetwork(action) {
     )
     const json = yield call([cx, 'json'])
 
-    yield put({ type: NETWORK_FETCH_SUCCEEDED, cx: json })
+    yield put({ type: NETWORK_FETCH_SUCCEEDED, cx: json, ndexData: null })
   } catch (error) {
     yield put({ type: NETWORK_FETCH_FAILED, error })
   }
