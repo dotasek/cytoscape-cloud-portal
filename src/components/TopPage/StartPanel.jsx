@@ -2,6 +2,7 @@ import React, { useEffect } from 'react'
 import './style.css'
 import SearchTextBox from './SearchTextBox'
 import Footer from './Footer'
+import RecentNetworkGrid from './RecentNetworkGrid'
 
 import ndex from '../../assets/images/ndex-logo.svg'
 import LoadingPanel from '../LoadingPanel'
@@ -43,6 +44,7 @@ const StartPanel = props => {
         <img className="start-logo-main" src={ndex} alt="logo" />
       </div>
       <SearchTextBox {...props} />
+      <RecentNetworkGrid {...props} />
       <Footer />
     </div>
   )
