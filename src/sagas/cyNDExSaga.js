@@ -58,6 +58,7 @@ export default function* cyNDExSaga() {
   yield takeLatest(GET_MY_NETWORKS_STARTED, watchGetMyNetworks)
   yield takeLatest(NDEX_NETWORK_FETCH_STARTED, watchNDExNetworkFetch)
   yield takeLatest(IMPORT_FROM_NDEX_STARTED, watchImportNDExNetwork)
+  yield takeLatest(SELECT_PROFILE_SUCCEEDED, watchProfileSelectSucceeded)
 }
 
 export const getUIState = state => state.uiState
@@ -83,13 +84,17 @@ function* watchLogin(action) {
     JSON.stringify(profiles.availableProfiles)
   )
   window.localStorage.setItem('selectedProfile', JSON.stringify(profile))
-  yield put({ type: SET_NDEX_LOGIN_OPEN, payload: false })
-  yield put({ type: SET_PROFILES_OPEN, payload: { isProfilesOpen: false } })
+
   yield put({
     type: SET_NDEX_ACTION_MESSAGE,
     payload:
       'Added NDEx user: ' + profile.userName + '@' + profile.serverAddress
   })
+
+  yield put({ type: SET_NDEX_LOGIN_OPEN, payload: false })
+  yield put({ type: SET_PROFILES_OPEN, payload: { isProfilesOpen: false } })
+
+  yield put({ type: SELECT_PROFILE_STARTED, payload: profile })
 }
 
 function* watchGetCyNDExStatus(action) {
@@ -112,6 +117,30 @@ function* watchGetCyNDExStatus(action) {
       })
     }
   }
+}
+
+function* watchProfileSelectSucceeded(action) {
+  const { selectedProfile, availableProfiles } = action.payload
+
+  yield put({
+    type: SET_AUTH_HEADERS,
+    payload: generateAuth(selectedProfile)
+  })
+  window.localStorage.setItem('profiles', JSON.stringify(availableProfiles))
+  window.localStorage.setItem(
+    'selectedProfile',
+    JSON.stringify(selectedProfile)
+  )
+  yield put({ type: CLEAR_MY_NETWORKS, payload: undefined })
+  yield put({ type: NETWORK_CLEAR, payload: undefined })
+  yield put({
+    type: SET_NDEX_ACTION_MESSAGE,
+    payload:
+      'Using NDEx as ' +
+      selectedProfile.userName +
+      '@' +
+      selectedProfile.serverAddress
+  })
 }
 
 function* watchProfileSelect(action) {
@@ -144,32 +173,10 @@ function* watchProfileSelect(action) {
           yield put({
             type: SELECT_PROFILE_SUCCEEDED,
             payload: {
-              profile: newProfile,
+              selectedProfile: newProfile,
               availableProfiles: availableProfiles
             }
           })
-          yield put({ type: CLEAR_MY_NETWORKS, payload: undefined })
-          yield put({ type: NETWORK_CLEAR, payload: undefined })
-          yield put({
-            type: SET_NDEX_ACTION_MESSAGE,
-            payload:
-              'Using NDEx as ' +
-              newProfile.userName +
-              '@' +
-              newProfile.serverAddress
-          })
-          yield put({
-            type: SET_AUTH_HEADERS,
-            payload: generateAuth(newProfile)
-          })
-          window.localStorage.setItem(
-            'profiles',
-            JSON.stringify(availableProfiles)
-          )
-          window.localStorage.setItem(
-            'selectedProfile',
-            JSON.stringify(newProfile)
-          )
         } catch (error) {
           yield put({ type: SELECT_PROFILE_FAILED, payload: error })
           //  alert(
@@ -192,22 +199,6 @@ function* watchProfileSelect(action) {
             availableProfiles: availableProfiles
           }
         })
-        yield put({ type: CLEAR_MY_NETWORKS, payload: undefined })
-        yield put({ type: NETWORK_CLEAR, payload: undefined })
-        yield put({
-          type: SET_NDEX_ACTION_MESSAGE,
-          payload:
-            'Using NDEx as ' + profile.userName + '@' + profile.serverAddress
-        })
-        yield put({
-          type: SET_AUTH_HEADERS,
-          payload: generateAuth(profile)
-        })
-        window.localStorage.setItem(
-          'profiles',
-          JSON.stringify(availableProfiles)
-        )
-        window.localStorage.setItem('selectedProfile', JSON.stringify(profile))
       }
     }
   } else {
@@ -218,18 +209,6 @@ function* watchProfileSelect(action) {
         selectedProfile: profile,
         availableProfiles: profiles.availableProfiles
       }
-    })
-    yield put({ type: CLEAR_MY_NETWORKS, payload: undefined })
-    yield put({ type: NETWORK_CLEAR, payload: undefined })
-
-    yield put({
-      type: SET_NDEX_ACTION_MESSAGE,
-      payload: 'Using NDEx as ' + profile.userName + '@' + profile.serverAddress
-    })
-
-    yield put({
-      type: SET_AUTH_HEADERS,
-      payload: generateAuth(profile)
     })
   }
 }

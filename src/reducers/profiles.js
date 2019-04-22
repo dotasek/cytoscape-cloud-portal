@@ -53,7 +53,6 @@ const profiles = handleActions(
       //console.log('addProfileSucceeded = ', payload.payload)
       return {
         ...state,
-        selectedProfile: payload.payload,
         availableProfiles: state.availableProfiles
           ? state.availableProfiles.concat([payload.payload])
           : [payload.payload]
