@@ -93,7 +93,6 @@ function* watchLogin(action) {
 
   yield put({ type: SET_NDEX_LOGIN_OPEN, payload: false })
   yield put({ type: SET_PROFILES_OPEN, payload: { isProfilesOpen: false } })
-
   yield put({ type: SELECT_PROFILE_STARTED, payload: profile })
 }
 
@@ -310,10 +309,6 @@ function* watchProfileDelete(action) {
   if (selectedProfile == action.payload) {
     //console.log('Deleting selectedProfile')
     selectedProfile = availableProfiles.length > 0 ? availableProfiles[0] : null
-    yield put({
-      type: GET_MY_NETWORKS_SUCCEEDED,
-      payload: undefined
-    })
   }
   yield put({
     type: DELETE_PROFILE_SUCCEEDED,
@@ -322,11 +317,7 @@ function* watchProfileDelete(action) {
       availableProfiles: availableProfiles
     }
   })
-  window.localStorage.setItem('profiles', JSON.stringify(availableProfiles))
-  window.localStorage.setItem(
-    'selectedProfile',
-    JSON.stringify(selectedProfile)
-  )
+
   yield put({
     type: SET_NDEX_ACTION_MESSAGE,
     payload:
@@ -334,6 +325,11 @@ function* watchProfileDelete(action) {
       action.payload.userName +
       '@' +
       action.payload.serverAddress
+  })
+
+  yield put({
+    type: SELECT_PROFILE_STARTED,
+    payload: selectedProfile
   })
 }
 
