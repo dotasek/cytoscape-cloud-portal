@@ -83,7 +83,6 @@ function* watchLogin(action) {
     'profiles',
     JSON.stringify(profiles.availableProfiles)
   )
-  window.localStorage.setItem('selectedProfile', JSON.stringify(profile))
 
   yield put({
     type: SET_NDEX_ACTION_MESSAGE,
@@ -119,33 +118,35 @@ function* watchGetCyNDExStatus(action) {
 }
 
 function* watchProfileSelectSucceeded(action) {
-  const { selectedProfile, availableProfiles } = action.payload
+  const { selectedProfile } = action.payload
 
   yield put({
     type: SET_AUTH_HEADERS,
     payload: generateAuth(selectedProfile)
   })
-  window.localStorage.setItem('profiles', JSON.stringify(availableProfiles))
   window.localStorage.setItem(
     'selectedProfile',
     JSON.stringify(selectedProfile)
   )
   yield put({ type: CLEAR_MY_NETWORKS, payload: undefined })
   yield put({ type: NETWORK_CLEAR, payload: undefined })
-  yield put({
-    type: SET_NDEX_ACTION_MESSAGE,
-    payload:
-      'Using NDEx as ' +
-      selectedProfile.userName +
-      '@' +
-      selectedProfile.serverAddress
-  })
+  if (selectedProfile) {
+    yield put({
+      type: SET_NDEX_ACTION_MESSAGE,
+      payload:
+        'Using NDEx as ' +
+        selectedProfile.userName +
+        '@' +
+        selectedProfile.serverAddress
+    })
+  }
 }
 
 function* watchProfileSelect(action) {
   window.localStorage.setItem('selectedProfile', JSON.stringify(action.payload))
   const profile = action.payload
-  if (!profile.hasOwnProperty('userId')) {
+
+  if (profile && !profile.hasOwnProperty('userId')) {
     if (
       profile.hasOwnProperty('serverAddress') &&
       profile.hasOwnProperty('userName') &&
@@ -306,10 +307,9 @@ function* watchProfileDelete(action) {
   const availableProfiles = profiles.availableProfiles.filter(
     p => p !== action.payload
   )
-  if (selectedProfile == action.payload) {
-    //console.log('Deleting selectedProfile')
-    selectedProfile = availableProfiles.length > 0 ? availableProfiles[0] : null
-  }
+
+  window.localStorage.setItem('profiles', JSON.stringify(availableProfiles))
+
   yield put({
     type: DELETE_PROFILE_SUCCEEDED,
     payload: {
@@ -327,10 +327,14 @@ function* watchProfileDelete(action) {
       action.payload.serverAddress
   })
 
-  yield put({
-    type: SELECT_PROFILE_STARTED,
-    payload: selectedProfile
-  })
+  if (selectedProfile == action.payload) {
+    //console.log('Deleting selectedProfile')
+    selectedProfile = availableProfiles.length > 0 ? availableProfiles[0] : null
+    yield put({
+      type: SELECT_PROFILE_STARTED,
+      payload: selectedProfile
+    })
+  }
 }
 
 function* watchSaveToNDExCancelled(action) {
