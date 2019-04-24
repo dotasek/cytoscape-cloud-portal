@@ -16,7 +16,7 @@ const HomePanel = props => {
 
     if (props.uiState.urlParams.has('suid')) {
       props.uiStateActions.setNDExImportOpen(true)
-      console.log("Importing network.")
+      //console.log("Importing network.")
     }
 
     window.onpopstate = onBackButtonEvent

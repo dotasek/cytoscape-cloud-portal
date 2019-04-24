@@ -67,7 +67,6 @@ class NDExImport extends React.Component {
   hydrate = field => this.props[field] || ''
 
   componentDidMount() {
-    console.log('NDExImport did mount')
     this.loadData()
   }
 

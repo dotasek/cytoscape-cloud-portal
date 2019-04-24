@@ -16,7 +16,7 @@ const NDExSnackbar = props => {
   }
 
   const handleSignIn = event => {
-    console.log('handleSignIn')
+    //console.log('handleSignIn')
     props.ndexUiStateActions.setNDExLoginOpen(true)
   }
 
