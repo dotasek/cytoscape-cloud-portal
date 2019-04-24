@@ -50,8 +50,9 @@ const NetworkList = props => {
   return (
     <div className="network-list-wrapper">
       <Sorter />
+
       <div className="network-list">
-        <MenuList value={network ? network.networkUUID : undefined}>
+        <MenuList>
           {hits.map(entry => renderNetworkListItem(entry, classes))}
         </MenuList>
       </div>

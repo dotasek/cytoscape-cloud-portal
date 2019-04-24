@@ -35,7 +35,7 @@ const MyNetworks = props => {
     }
 
     if (props.location.hash && props.ndexUiState.myNetworks) {
-      if (props.ndexUI) checkCytoscapeConnection(props)
+      checkCytoscapeConnection(props)
       props.networkActions.ndexNetworkFetchStarted({
         networkUUID: props.location.hash.substring(1)
       })
@@ -57,7 +57,6 @@ const MyNetworks = props => {
   }
 
   const checkCytoscapeConnection = props => {
-    //console.log(props.uiState.urlParams)
     cyRESTApi
       .status(
         props.uiState.urlParams.has('cyrestport')
@@ -117,6 +116,7 @@ const MyNetworks = props => {
         alignItems="flex-start"
         key={externalId}
         onClick={val => handleFetch(externalId, nodeCount, edgeCount)}
+        selected={externalId == props.network.uuid}
       >
         <ListItemAvatar>
           <Avatar
