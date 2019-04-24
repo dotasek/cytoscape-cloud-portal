@@ -27,13 +27,29 @@ const MyNetworks = props => {
   useEffect(() => {
     if (!props.profiles.selectedProfile) {
       props.history.replace('/')
+      return
     }
-  }, [props.profiles.selectedProfile])
+
+    if (props.ndexUiState.myNetworks == undefined) {
+      props.ndexUiStateActions.getMyNetworksStarted()
+    }
+
+    if (props.location.hash && props.ndexUiState.myNetworks) {
+      if (props.ndexUI) checkCytoscapeConnection(props)
+      props.networkActions.ndexNetworkFetchStarted({
+        networkUUID: props.location.hash.substring(1)
+      })
+      props.history.replace('/ndexAccount')
+    }
+
+    return () => {
+      props.networkActions.networkClear()
+    }
+  }, [props.profiles.selectedProfile, props.ndexUiState.myNetworks])
 
   const NETWORK_SIZE_TH = 5000
 
   const handleErrors = res => {
-    console.log('Calling!!', res)
     if (res !== undefined) {
       return true
     }
@@ -41,7 +57,7 @@ const MyNetworks = props => {
   }
 
   const checkCytoscapeConnection = props => {
-    console.log(props.uiState.urlParams)
+    //console.log(props.uiState.urlParams)
     cyRESTApi
       .status(
         props.uiState.urlParams.has('cyrestport')

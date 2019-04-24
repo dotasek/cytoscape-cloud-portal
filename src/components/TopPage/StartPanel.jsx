@@ -44,7 +44,7 @@ const StartPanel = props => {
         <img className="start-logo-main" src={ndex} alt="logo" />
       </div>
       <SearchTextBox {...props} />
-      <RecentNetworkGrid {...props} />
+      {props.ndexUiState.myNetworks && <RecentNetworkGrid {...props} />}
       <Footer />
     </div>
   )

@@ -28,7 +28,7 @@ function* watchImportNetwork(action) {
     payload: 'Opening Network in Cytoscape'
   })
 
-  console.log('watchImportNetwork', action.payload)
+  //console.log('watchImportNetwork', action.payload)
 
   try {
     const uiState = yield select(getUIState)
