@@ -5,12 +5,6 @@ import MyNetworks from './MyNetworks'
 import { Typography } from '@material-ui/core'
 
 const StartPanel = props => {
-  useEffect(() => {
-   
-
-    
-  }, [props.ndexUiState.myNetworks])
-
   const results = props.ndexUiState.myNetworks
   const sourceUUID = '0'
 
