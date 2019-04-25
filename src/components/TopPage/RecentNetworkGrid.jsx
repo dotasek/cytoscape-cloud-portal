@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import './style.css'
 
 import { withStyles } from '@material-ui/core/styles'
@@ -30,11 +30,18 @@ const styles = theme => ({
 })
 
 const RecentNetworkGrid = props => {
-  const { classes } = props
+  useEffect(() => {
+    if (props.profiles.selectedProfile && props.ndexUiState.myNetworks == undefined) {
+      props.ndexUiStateActions.getMyNetworksStarted()
+    }
+    return () => {}
+  }, [props.profiles.selectedProfile, props.ndexUiState.myNetworks])
 
+  const { classes, ndexUiState } = props
+  const { myNetworks } = ndexUiState
   const tileData = []
 
-  return (
+  return myNetworks ? (
     <GridList cellHeight={180} className={classes.gridList}>
       <GridListTile key="Subheader" cols={2} style={{ height: 'auto' }}>
         <ListSubheader component="div">Recent Networks</ListSubheader>
@@ -54,6 +61,6 @@ const RecentNetworkGrid = props => {
         </GridListTile>
       ))}
     </GridList>
-  )
+  ) : null
 }
 export default withStyles(styles)(RecentNetworkGrid)
