@@ -122,12 +122,18 @@ const network = handleActions(
       }
     },
     [networkFetchSucceeded]: (state, payload) => {
-      const cytoscapeJSData = convertCx2cyjs(state, payload.cx)
-
-      const isLayoutAvailable = cytoscapeJSData.isLayout
-
+      let network = {}
+      try {
+        const cytoscapeJSData = convertCx2cyjs(state, payload.cx)
+        network = cytoscapeJSData
+      } catch (err) {
+        // This is an error state
+        console.warn('Could not convert given CX to CYJS:', err)
+        throw new Error('Could not convert given CX to CYJS:', err)
+      }
+      const isLayoutAvailable = network.isLayout
       let layout = PRESET_LAYOUT
-      if (!isLayoutAvailable && cytoscapeJSData.elements.length < 500) {
+      if (!isLayoutAvailable && network.elements && network.elements.length < 500) {
         layout = COSE_SETTING
       } else if (!isLayoutAvailable) {
         layout = COCENTRIC_LAYOUT
@@ -137,9 +143,9 @@ const network = handleActions(
         ...state,
         originalCX: payload.cx,
         ndexData: payload.ndexData,
-        niceCX: cytoscapeJSData.niceCX,
-        network: cytoscapeJSData.elements,
-        style: cytoscapeJSData.style,
+        niceCX: network.niceCX,
+        network: network.elements,
+        style: network.style,
         layout: layout,
         backgroundColor: state.backgroundColor
           ? state.backgroundColor

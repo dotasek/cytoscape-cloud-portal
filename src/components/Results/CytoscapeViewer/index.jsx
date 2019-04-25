@@ -26,6 +26,7 @@ const BASE_STYLE = {
  * @constructor
  */
 const CytoscapeViewer = props => {
+
   useEffect(() => {
     if (cyInstance === undefined || cyInstance === null) {
       return
@@ -73,6 +74,8 @@ const CytoscapeViewer = props => {
       console.log('unmount')
     }
   }, [])
+
+  console.log('** Network rendering start:', props)
 
   const numObjects = props.network.nodeCount + props.network.edgeCount
   if (numObjects > 5000) {
