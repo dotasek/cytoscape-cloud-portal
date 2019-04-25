@@ -4,8 +4,9 @@
   flex-direction: column;
   width: 100%;
   justify-content: flex-start;
-  align-items: center;
+  align-items: left;
   padding-top: 5em;
+  padding-left: 0.5em;
 }
 
 .ndex-base {

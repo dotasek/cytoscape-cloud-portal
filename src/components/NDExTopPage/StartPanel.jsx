@@ -16,7 +16,7 @@ const StartPanel = props => {
 
   return (
     <div className="ndex-container">
-      <Typography variant="h5" align="left">My Networks</Typography>
+      <Typography variant="h5" align="left" gutterBottom="true">My Networks</Typography>
       <MyNetworks hits={results} sourceUUID={sourceUUID} {...props} />
     </div>
   )
