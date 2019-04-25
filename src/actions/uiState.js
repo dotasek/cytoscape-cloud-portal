@@ -1,6 +1,5 @@
 import { createAction } from 'redux-actions'
 
-
 /**
  * Global state for the application UI
  *

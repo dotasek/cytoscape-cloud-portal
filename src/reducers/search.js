@@ -9,10 +9,12 @@ import {
   setSelectedGenes,
   fetchResultStarted,
   fetchResultSucceeded,
-  fetchResultFailed
+  fetchResultFailed,
+  setAuthHeaders
 } from '../actions/search'
 
 const EMPTY_STATE = {
+  authHeaders: {},
   isSearching: false,
   isFetching: false,
   queryGenes: '',
@@ -22,7 +24,6 @@ const EMPTY_STATE = {
   searchResults: null,
   selectedGenes: []
 }
-
 
 const search = handleActions(
   {
@@ -70,6 +71,9 @@ const search = handleActions(
     },
     [fetchResultFailed]: (state, payload) => {
       return { ...state, isFetching: false }
+    },
+    [setAuthHeaders]: (state, payload) => {
+      return { ...state, authHeaders: payload }
     }
   },
   EMPTY_STATE

@@ -10,12 +10,14 @@ import { composeWithDevTools } from 'redux-devtools-extension'
 
 import './index.css'
 import { App, Top } from './App'
+import { NDExApp } from './NDExApp'
 import * as serviceWorker from './serviceWorker'
 
 // Import root reducers
 import rootReducer from './reducers'
 import rootSaga from './sagas/ndexSaga'
 import cyRestSaga from './sagas/cyRestSaga'
+import cyNDExSaga from './sagas/cyNDExSaga'
 
 const sagaMiddleware = createSagaMiddleware()
 
@@ -26,12 +28,14 @@ const store = createStore(
 
 sagaMiddleware.run(rootSaga)
 sagaMiddleware.run(cyRestSaga)
+sagaMiddleware.run(cyNDExSaga)
 
 const Root = ({ store }) => (
   <Provider store={store}>
     <Router basename={process.env.PUBLIC_URL}>
       <Switch>
         <Route exact path="/" component={Top} />
+        <Route exact path="/ndexAccount/" component={NDExApp} />
         <Route path="/:jobid/:sourceId/:networkId" component={App} />
         <Route path="/:jobid/:sourceId" component={App} />
         <Route path="/:jobid" component={App} />
@@ -41,7 +45,6 @@ const Root = ({ store }) => (
 )
 
 render(<Root store={store} />, document.getElementById('root'))
-
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.

@@ -1,0 +1,16 @@
+.ndex-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  justify-content: flex-start;
+  align-items: left;
+  padding-top: 5em;
+  padding-left: 0.5em;
+}
+
+.ndex-base {
+  background-color: #ffffff;
+  display: flex;
+  height: 100vmin;
+}

@@ -7,6 +7,8 @@ import {
   IMPORT_NETWORK_SUCCEEDED
 } from '../actions/cyrest'
 
+import { SET_NDEX_ACTION_MESSAGE } from '../actions/ndexUiState'
+
 export default function* cyrestSaga() {
   yield takeLatest(IMPORT_NETWORK_STARTED, watchImportNetwork)
 }
@@ -21,6 +23,13 @@ export const getUIState = state => state.uiState
  */
 function* watchImportNetwork(action) {
   const originalCX = action.payload
+  yield put({
+    type: SET_NDEX_ACTION_MESSAGE,
+    payload: 'Opening Network in Cytoscape'
+  })
+
+  //console.log('watchImportNetwork', action.payload)
+
   try {
     const uiState = yield select(getUIState)
     const cyrestport = uiState.urlParams.has('cyrestport')
@@ -51,6 +60,10 @@ function* watchImportNetwork(action) {
     yield put({
       type: IMPORT_NETWORK_SUCCEEDED,
       payload: {}
+    })
+    yield put({
+      type: SET_NDEX_ACTION_MESSAGE,
+      payload: 'Network Opened in Cytoscape'
     })
   } catch (e) {
     console.warn('CyREST import network error:', e)

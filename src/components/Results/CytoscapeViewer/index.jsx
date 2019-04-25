@@ -1,33 +1,20 @@
 import React, { useEffect, useState } from 'react'
 import CytoscapeComponent from 'react-cytoscapejs'
-
+import Cytoscape from 'cytoscape'
+import CyCanvas from 'cytoscape-canvas'
+import { CxToCyCanvas } from 'cyannotation-cx2js'
+import { CxToJs } from 'cytoscape-cx2js'
 import './style.css'
 import Warning from './Warning'
+
+Cytoscape.use(CyCanvas)
+
 let cyInstance = null
 
-const BASE_STYLE = { width: '100%', height: '100%', background: '#222233' }
-
-const PRESET_LAYOUT = {
-  name: 'preset',
-  padding: 6
-}
-
-const COCENTRIC_LAYOUT = {
-  name: 'concentric',
-  padding: 6,
-  minNodeSpacing: 100
-}
-
-const COSE_SETTING = {
-  name: 'cose',
-  padding: 6,
-  nodeRepulsion: function(node) {
-    return 10080000
-  },
-  nodeOverlap: 400000,
-  idealEdgeLength: function(edge) {
-    return 10
-  }
+const BASE_STYLE = {
+  width: '100%',
+  height: '100%',
+  background: 'rgba(0,0,0,0)'
 }
 
 /**
@@ -92,37 +79,50 @@ const CytoscapeViewer = props => {
     return <Warning />
   }
 
-  const cyjs = props.network.network
-  const selectedGenes = props.search.selectedGenes
-
-  if (cyjs === null || cyjs === undefined) {
+  if (
+    props.network.originalCX === null ||
+    props.network.originalCX === undefined
+  ) {
     return null
-  }
-
-  const isLayoutAvailable = cyjs.isLayout
-
-  let layout = PRESET_LAYOUT
-  if (!isLayoutAvailable && cyjs.elements.length < 500) {
-    layout = COSE_SETTING
-  } else if (!isLayoutAvailable) {
-    layout = COCENTRIC_LAYOUT
   }
 
   const { resized } = props
 
   console.log('%%%%%%%%%%resize:', resized)
 
-  if(cyInstance !== null) {
+  if (cyInstance !== null) {
     cyInstance.resize()
   }
 
   return (
     <CytoscapeComponent
-      elements={cyjs.elements}
-      layout={layout}
+      elements={props.network.network}
+      layout={props.network.layout}
       style={BASE_STYLE}
-      stylesheet={cyjs.style}
-      cy={cy => (cyInstance = cy)}
+      stylesheet={props.network.style}
+      cy={cy => {
+        cyInstance = cy
+        console.log("network background color:" + props.network.backgroundColor)
+        if (props.network.backgroundColor) {
+          var backgroundLayer = cyInstance.cyCanvas({
+            zIndex: -2
+          })
+
+          var canvas = backgroundLayer.getCanvas()
+          var ctx = backgroundLayer.getCanvas().getContext('2d')
+
+          cyInstance.on('render cyCanvas.resize', function() {
+            console.log('resize CyCanvas', props.network.backgroundColor)
+            ctx.fillStyle = props.network.backgroundColor
+            ctx.fillRect(0, 0, canvas.width, canvas.height)
+          })
+        }
+
+        if (props.network.niceCX) {
+          const annotations = new CxToCyCanvas(CxToJs)
+          annotations.drawAnnotationsFromNiceCX(cyInstance, props.network.niceCX)
+        }
+      }}
     />
   )
 }

@@ -84,7 +84,13 @@ class SettingsPanel extends React.Component {
             <List component="div">
               {sources.map(sourceEntry => (
                 <Tooltip
-                  title={'Version: ' + sourceEntry.version}
+                  title={
+                    (sourceEntry.description
+                      ? sourceEntry.description + ' '
+                      : '') +
+                    'Version: ' +
+                    sourceEntry.version
+                  }
                   placement="right"
                   key={sourceEntry.uuid}
                 >

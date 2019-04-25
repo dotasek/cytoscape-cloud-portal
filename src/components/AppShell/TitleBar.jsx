@@ -10,6 +10,7 @@ import MenuIcon from '@material-ui/icons/Menu'
 import HelpIcon from '@material-ui/icons/Help'
 import classNames from 'classnames'
 import logo from '../../assets/images/ndex-logo.svg'
+import NDExComponent from '../NDExComponent'
 import GeneTextBox from './GeneTextBox'
 import Tooltip from '@material-ui/core/Tooltip'
 
@@ -113,16 +114,16 @@ class TitleBar extends React.Component {
           )}
 
           <div className={classes.grow} />
-
           <div>
             <IconButton
               aria-haspopup="true"
               color="inherit"
               onClick={() => openLink(HELP_URL)}
             >
-              <HelpIcon fontSize="medium" />
+              <HelpIcon fontSize="default" />
             </IconButton>
           </div>
+          <NDExComponent {...others} />
         </Toolbar>
       </AppBar>
     )

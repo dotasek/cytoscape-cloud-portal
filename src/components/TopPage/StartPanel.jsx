@@ -2,6 +2,7 @@ import React, { useEffect } from 'react'
 import './style.css'
 import SearchTextBox from './SearchTextBox'
 import Footer from './Footer'
+import RecentNetworkGrid from './RecentNetworkGrid'
 
 import ndex from '../../assets/images/ndex-logo.svg'
 import LoadingPanel from '../LoadingPanel'
@@ -23,7 +24,8 @@ const StartPanel = props => {
 
     props.sourceActions.findSourceStarted()
     return () => {
-      console.log('Page unmounted')
+      console.log('TopPage StartPanel unmounted')
+      props.networkActions.networkClear()
     }
   }, [])
 
@@ -42,6 +44,7 @@ const StartPanel = props => {
         <img className="start-logo-main" src={ndex} alt="logo" />
       </div>
       <SearchTextBox {...props} />
+      {props.ndexUiState.myNetworks && <RecentNetworkGrid {...props} />}
       <Footer />
     </div>
   )

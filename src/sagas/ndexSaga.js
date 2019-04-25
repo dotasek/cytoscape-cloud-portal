@@ -1,4 +1,4 @@
-import { all, call, put, takeLatest } from 'redux-saga/effects'
+import { all, call, put, select, takeLatest } from 'redux-saga/effects'
 import * as api from '../api/ndex'
 import * as myGeneApi from '../api/mygene'
 import * as cySearchApi from '../api/search'
@@ -21,10 +21,13 @@ import {
 import {
   NETWORK_FETCH_STARTED,
   NETWORK_FETCH_SUCCEEDED,
-  NETWORK_FETCH_FAILED
+  NETWORK_FETCH_FAILED,
+  NETWORK_CLEAR
 } from '../actions/network'
 
 const API_CALL_INTERVAL = 1000
+
+export const getAuthHeaders = state => state.search.authHeaders
 
 export default function* rootSaga() {
   yield takeLatest(SEARCH_STARTED, watchSearch)
@@ -40,6 +43,8 @@ export default function* rootSaga() {
  * @returns {IterableIterator<*>}
  */
 function* watchSearch(action) {
+  yield put({ type: NETWORK_CLEAR, payload: undefined })
+
   const geneList = action.payload.geneList
   let sourceNames = action.payload.sourceNames
 
@@ -142,15 +147,24 @@ function* watchSearchResult(action) {
 
 function* fetchNetwork(action) {
   try {
+    const authHeaders = yield select(getAuthHeaders)
+    console.log('Action cont----------', action)
+
     const params = action.payload
     const id = params.id
     const sourceUUID = params.sourceUUID
     const networkUUID = params.networkUUID
 
-    const cx = yield call(api.fetchNetwork, id, sourceUUID, networkUUID)
+    const cx = yield call(
+      api.fetchNetwork,
+      id,
+      sourceUUID,
+      networkUUID,
+      authHeaders
+    )
     const json = yield call([cx, 'json'])
 
-    yield put({ type: NETWORK_FETCH_SUCCEEDED, cx: json })
+    yield put({ type: NETWORK_FETCH_SUCCEEDED, cx: json, ndexData: null })
   } catch (error) {
     yield put({ type: NETWORK_FETCH_FAILED, error })
   }

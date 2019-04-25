@@ -1,19 +1,18 @@
 import { handleActions } from 'redux-actions'
 import { CxToJs, CyNetworkUtils } from 'cytoscape-cx2js'
-
 import * as vs from '../assets/data/styles.json'
 
 import {
+  ndexNetworkFetchStarted,
   networkFetchStarted,
   networkFetchFailed,
   networkFetchSucceeded,
+  networkClear,
   selectNode,
   selectEdge,
   deselectAll,
   setNetworkSize
 } from '../actions/network'
-
-const LAYOUT_SCALING_FACTOR = 2.0
 
 const defaultState = {
   isFetching: false,
@@ -23,9 +22,13 @@ const defaultState = {
   networkName: '',
   queryGenes: [],
   originalCX: null,
-  network: null,
   nodeCount: 0,
   edgeCount: 0,
+  niceCX: null,
+  network: null,
+  style: null,
+  layoutScalingFactor: null,
+  backgroundColor: null,
   isLayoutComplete: false,
   selectedNode: null,
   selectedEdge: null
@@ -35,6 +38,29 @@ const utils = new CyNetworkUtils()
 const cx2js = new CxToJs(utils)
 
 const PRESET_VS = vs.default[0].style
+
+const PRESET_LAYOUT = {
+  name: 'preset',
+  padding: 6
+}
+
+const COCENTRIC_LAYOUT = {
+  name: 'concentric',
+  padding: 6,
+  minNodeSpacing: 100
+}
+
+const COSE_SETTING = {
+  name: 'cose',
+  padding: 6,
+  nodeRepulsion: function(node) {
+    return 10080000
+  },
+  nodeOverlap: 400000,
+  idealEdgeLength: function(edge) {
+    return 10
+  }
+}
 
 const SELECTION_COLOR = '#F2355B'
 
@@ -53,6 +79,27 @@ PRESET_VS.push({
 
 const network = handleActions(
   {
+    [ndexNetworkFetchStarted]: (state, payload) => {
+      console.log('ndexNetworkFetchStarted', payload.payload)
+      return {
+        ...state,
+        isFetching: true,
+        nodeCount: 0,
+        edgeCount: 0,
+        jobId: null,
+        sourceId: null,
+        uuid: payload.payload.networkUUID,
+        networkName: payload.payload.networkName,
+        queryGenes: [],
+        originalCX: null,
+        niceCX: null,
+        network: null,
+        style: null,
+        layoutScalingFactor: null,
+        backgroundColor: null,
+        isLayoutComplete: false
+      }
+    },
     [networkFetchStarted]: (state, payload) => {
       console.log('Query start: genes = ', payload)
       return {
@@ -66,16 +113,54 @@ const network = handleActions(
         networkName: payload.payload.networkName,
         queryGenes: payload.payload.geneList,
         originalCX: null,
+        niceCX: null,
         network: null,
+        style: PRESET_VS,
+        layoutScalingFactor: 2.0,
+        backgroundColor: '#222233',
         isLayoutComplete: false
       }
     },
     [networkFetchSucceeded]: (state, payload) => {
+      const cytoscapeJSData = convertCx2cyjs(state, payload.cx)
+
+      const isLayoutAvailable = cytoscapeJSData.isLayout
+
+      let layout = PRESET_LAYOUT
+      if (!isLayoutAvailable && cytoscapeJSData.elements.length < 500) {
+        layout = COSE_SETTING
+      } else if (!isLayoutAvailable) {
+        layout = COCENTRIC_LAYOUT
+      }
+
       return {
         ...state,
         originalCX: payload.cx,
-        network: convertCx2cyjs(payload.cx, state.queryGenes),
+        ndexData: payload.ndexData,
+        niceCX: cytoscapeJSData.niceCX,
+        network: cytoscapeJSData.elements,
+        style: cytoscapeJSData.style,
+        layout: layout,
+        backgroundColor: state.backgroundColor
+          ? state.backgroundColor
+          : payload.backgroundColor,
         isFetching: false
+      }
+    },
+    [networkClear]: (state, payload) => {
+      return {
+        ...state,
+        uuid: '',
+        network: null,
+        originalCX: null,
+        niceCX: null,
+        network: null,
+        style: null,
+        layoutScalingFactor: null,
+        backgroundColor: null,
+        isFetching: false,
+        nodeCount: 0,
+        edgeCount: 0
       }
     },
     [networkFetchFailed]: (state, payload) => {
@@ -83,6 +168,11 @@ const network = handleActions(
         ...state,
         network: null,
         originalCX: null,
+        niceCX: null,
+        network: null,
+        style: null,
+        layoutScalingFactor: null,
+        backgroundColor: null,
         isFetching: false,
         nodeCount: 0,
         edgeCount: 0
@@ -108,18 +198,25 @@ const network = handleActions(
   defaultState
 )
 
-const convertCx2cyjs = (cx, queryGenes) => {
-  const niceCX = utils.rawCXtoNiceCX(cx)
+const convertCx2cyjs = (network, originalCX) => {
   const attributeNameMap = {}
+  const niceCX = utils.rawCXtoNiceCX(originalCX)
   const elementsObj = cx2js.cyElementsFromNiceCX(niceCX, attributeNameMap)
 
-  // This contains original style.
-  // const style = cx2js.cyStyleFromNiceCX(niceCX, attributeNameMap)
-
-  const updatedStyle = styleUpdater(PRESET_VS, queryGenes)
-  const updatedNodes = adjustLayout(elementsObj.nodes, queryGenes)
+  const updatedStyle = network.style
+    ? styleUpdater(network.style, network.queryGenes)
+    : cx2js.cyStyleFromNiceCX(niceCX, attributeNameMap)
+  const updatedNodes = network.layoutScalingFactor
+    ? adjustLayout(
+        elementsObj.nodes,
+        network.queryGenes,
+        network.layoutScalingFactor
+      )
+    : elementsObj.nodes
   const elements = [...updatedNodes, ...elementsObj.edges]
+
   return {
+    niceCX,
     elements,
     style: updatedStyle,
     isLayout: checkLayout(elementsObj.nodes)
@@ -127,7 +224,7 @@ const convertCx2cyjs = (cx, queryGenes) => {
 }
 
 // Utility function to get better results
-const adjustLayout = (nodes, queryGenes) => {
+const adjustLayout = (nodes, queryGenes, layoutScalingFactor) => {
   let len = nodes.length
 
   const upperQuery = new Set(queryGenes.map(gene => gene.toUpperCase()))
@@ -136,15 +233,15 @@ const adjustLayout = (nodes, queryGenes) => {
     const node = nodes[len]
     const position = node.position
 
-    const name = node.data.name.toUpperCase()
+    const name = node.data.name ? node.data.name.toUpperCase() : null
     if (upperQuery.has(name)) {
       node.data['query'] = 'true'
     }
 
     if (position !== undefined) {
       node.position = {
-        x: position.x * LAYOUT_SCALING_FACTOR,
-        y: position.y * LAYOUT_SCALING_FACTOR
+        x: position.x * layoutScalingFactor,
+        y: position.y * layoutScalingFactor
       }
     }
   }

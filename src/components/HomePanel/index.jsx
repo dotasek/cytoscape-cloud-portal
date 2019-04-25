@@ -2,7 +2,6 @@ import React, { useEffect } from 'react'
 import './style.css'
 import InputPanel from '../InputPanel'
 import Results from '../Results'
-
 import AppShell from '../AppShell'
 import LoadingPanel from '../LoadingPanel'
 
@@ -13,6 +12,11 @@ const HomePanel = props => {
     if (props.search.results !== null) {
       const jobId = props.search.results.jobId
       props.searchActions.fetchResultStarted({ jobId })
+    }
+
+    if (props.uiState.urlParams.has('suid')) {
+      props.uiStateActions.setNDExImportOpen(true)
+      //console.log("Importing network.")
     }
 
     window.onpopstate = onBackButtonEvent
