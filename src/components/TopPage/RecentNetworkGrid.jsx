@@ -23,15 +23,24 @@ const styles = theme => ({
     backgroundColor: theme.palette.background.paper
   },
   gridList: {
+    width: '100%'
+  },
+  gridListDiv: {
     width: '100%',
-    'padding-left': '2em',
-    'padding-right': '2em',
-    'margin-top': '2em',
-    'padding-bottom': '76px'
+    'padding-left': '16px',
+    'margin-bottom': '72px',
+    'padding-right': '16px'
+  },
+  gridListTile: {
+    
+  },
+  gridListTileDiv: {
+    'background-color': 'rgba(0,0,0,0.05)',
+    'padding': '8px'
   },
   titleBar: {
     background:
-      'linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)'
+      'linear-gradient(to top, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.25) 70%, rgba(0,0,0,0) 100%)'
   },
   icon: {
     color: 'rgba(255, 255, 255, 0.54)'
@@ -57,47 +66,61 @@ const RecentNetworkGrid = props => {
   }
 
   return myNetworks ? (
-    <GridList
-      cellheight={128}
-      cellwidth={154}
-      cols={4}
-      className={classes.gridList}
-    >
-      <GridListTile key="Subheader" cols={4} style={{ height: 'auto' }}>
-        <ListSubheader component="div" align="center">Recent Networks</ListSubheader>
-      </GridListTile>
-      {myNetworks
-        .slice(0, myNetworks.length > 8 ? 8 : myNetworks.length)
-        .map(network => (
-          <GridListTile
-            key={network.externalId}
-            onClick={val => handleRecentNetworkClick(network.externalId)}
-          >
-            <Tooltip title="Click to view in 'My Networks'" placement="bottom">
-              <GridListTileBar
-                actionIcon={
-                  <IconButton className={classes.icon}>
-                    <LaunchIcon />
-                  </IconButton>
-                }
-                title=""
-                titlePosition="bottom"
-                className={classes.titleBar}
-              />
-            </Tooltip>
-            <Typography variant="subtitle1">{network.name}</Typography>
-            {network.description && (
-              <Typography variant="caption">{network.description}</Typography>
-            )}
-            <Typography variant="caption" color="inherit">
-              Nodes: {network.nodeCount} <br />
-              Edges: {network.edgeCount} <br />
-              Last Modified: {new Date(network.modificationTime).toDateString()} <br />
-              Version: {network.version}
-            </Typography>
-          </GridListTile>
-        ))}
-    </GridList>
+    <div className={classes.gridListDiv}>
+      <GridList
+        cellheight={128}
+        cellwidth={154}
+        cols={4}
+        className={classes.gridList}
+        spacing="16"
+      >
+        <GridListTile key="Subheader" cols={4} style={{ height: 'auto' }}>
+          <ListSubheader component="div" align="center">
+            Recent Networks
+          </ListSubheader>
+        </GridListTile>
+        {myNetworks
+          .slice(0, myNetworks.length > 8 ? 8 : myNetworks.length)
+          .map(network => (
+            <GridListTile
+              key={network.externalId}
+              onClick={val => handleRecentNetworkClick(network.externalId)}
+              className={classes.gridListTile}
+            >
+              <div className={classes.gridListTileDiv}>
+                <Typography variant="subtitle1">{network.name}</Typography>
+                {network.description && (
+                  <Typography variant="caption">
+                    {network.description}
+                  </Typography>
+                )}
+                <Typography variant="caption" color="inherit">
+                  Nodes: {network.nodeCount} <br />
+                  Edges: {network.edgeCount} <br />
+                  Last Modified:{' '}
+                  {new Date(network.modificationTime).toDateString()} <br />
+                  Version: {network.version}
+                </Typography>
+              </div>
+              <Tooltip
+                title="Click to view in 'My Networks'"
+                placement="bottom"
+              >
+                <GridListTileBar
+                  actionIcon={
+                    <IconButton className={classes.icon}>
+                      <LaunchIcon />
+                    </IconButton>
+                  }
+                  title=""
+                  titlePosition="bottom"
+                  className={classes.titleBar}
+                />
+              </Tooltip>
+            </GridListTile>
+          ))}
+      </GridList>
+    </div>
   ) : null
 }
 export default withStyles(styles)(RecentNetworkGrid)
