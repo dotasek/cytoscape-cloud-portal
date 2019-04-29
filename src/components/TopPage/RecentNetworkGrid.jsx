@@ -32,11 +32,11 @@ const styles = theme => ({
     'padding-right': '16px'
   },
   gridListTile: {
-    
+    overflow: 'hidden'
   },
   gridListTileDiv: {
     'background-color': 'rgba(0,0,0,0.05)',
-    'padding': '8px'
+    padding: '8px'
   },
   titleBar: {
     background:
@@ -90,16 +90,18 @@ const RecentNetworkGrid = props => {
               <div className={classes.gridListTileDiv}>
                 <Typography variant="subtitle1">{network.name}</Typography>
                 {network.description && (
-                  <Typography variant="caption">
-                    {network.description}
-                  </Typography>
+                  <Tooltip title={network.description} placement="bottom">
+                    <Typography variant="caption" noWrap={true}>
+                      {network.description}
+                    </Typography>
+                  </Tooltip>
                 )}
                 <Typography variant="caption" color="inherit">
                   Nodes: {network.nodeCount} <br />
                   Edges: {network.edgeCount} <br />
                   Last Modified:{' '}
                   {new Date(network.modificationTime).toDateString()} <br />
-                  Version: {network.version}
+                  {network.version && 'Version:' + network.version}
                 </Typography>
               </div>
               <Tooltip
