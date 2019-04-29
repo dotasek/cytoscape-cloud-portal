@@ -64,7 +64,7 @@ const RecentNetworkGrid = props => {
       className={classes.gridList}
     >
       <GridListTile key="Subheader" cols={4} style={{ height: 'auto' }}>
-        <ListSubheader component="div">Recent Networks</ListSubheader>
+        <ListSubheader component="div" align="center">Recent Networks</ListSubheader>
       </GridListTile>
       {myNetworks
         .slice(0, myNetworks.length > 8 ? 8 : myNetworks.length)
@@ -85,13 +85,14 @@ const RecentNetworkGrid = props => {
                 className={classes.titleBar}
               />
             </Tooltip>
-            <Typography variant="h6">{network.name}</Typography>
+            <Typography variant="subtitle1">{network.name}</Typography>
             {network.description && (
               <Typography variant="caption">{network.description}</Typography>
             )}
             <Typography variant="caption" color="inherit">
               Nodes: {network.nodeCount} <br />
               Edges: {network.edgeCount} <br />
+              Last Modified: {new Date(network.modificationTime).toDateString()} <br />
               Version: {network.version}
             </Typography>
           </GridListTile>
