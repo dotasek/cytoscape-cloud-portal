@@ -149,7 +149,7 @@ const network = handleActions(
         layout: layout,
         backgroundColor: state.backgroundColor
           ? state.backgroundColor
-          : payload.backgroundColor,
+          : network.backgroundColor,
         isFetching: false
       }
     },
@@ -220,11 +220,14 @@ const convertCx2cyjs = (network, originalCX) => {
     : elementsObj.nodes
   const elements = [...updatedNodes, ...elementsObj.edges]
 
+  const backgroundColor = cx2js.cyBackgroundColorFromNiceCX(niceCX)
+
   return {
     niceCX,
     elements,
     style: updatedStyle,
-    isLayout: checkLayout(elementsObj.nodes)
+    isLayout: checkLayout(elementsObj.nodes),
+    backgroundColor: backgroundColor
   }
 }
 
