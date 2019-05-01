@@ -34,14 +34,6 @@ const MyNetworks = props => {
       props.ndexUiStateActions.getMyNetworksStarted()
     }
 
-    if (props.location.hash && props.ndexUiState.myNetworks) {
-      checkCytoscapeConnection(props)
-      props.networkActions.ndexNetworkFetchStarted({
-        networkUUID: props.location.hash.substring(1)
-      })
-      props.history.replace('/ndexAccount')
-    }
-
     return () => {
       props.networkActions.networkClear()
     }

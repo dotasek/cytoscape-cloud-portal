@@ -67,7 +67,7 @@ class NDExProfilesPanel extends React.Component {
   }
 
   render() {
-    const MyLink = props => (
+    const MyNetworksLink = props => (
       <RouterLink
         to="/ndexAccount"
         onClick={() => this.handlePopoverClose()}
@@ -125,7 +125,7 @@ class NDExProfilesPanel extends React.Component {
                 Active
               </Typography>
               <Typography variant="subtitle2" gutterBottom>
-                <Link component={MyLink}>My Networks</Link>
+                <Link component={MyNetworksLink}>My Networks</Link>
               </Typography>
             </div>
             <Button

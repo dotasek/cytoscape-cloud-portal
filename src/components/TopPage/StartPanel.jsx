@@ -25,7 +25,6 @@ const StartPanel = props => {
     props.sourceActions.findSourceStarted()
     return () => {
       console.log('TopPage StartPanel unmounted')
-      props.networkActions.networkClear()
     }
   }, [])
 
