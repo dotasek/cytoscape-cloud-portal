@@ -33,7 +33,9 @@ import {
   GET_MY_NETWORKS_STARTED,
   GET_MY_NETWORKS_SUCCEEDED,
   GET_MY_NETWORKS_FAILED,
-  CLEAR_MY_NETWORKS
+  SET_CURRENT_NETWORK,
+  CLEAR_MY_NETWORKS,
+  setCurrentNetwork
 } from '../actions/ndexUiState'
 
 import {
@@ -282,6 +284,12 @@ function* watchSaveToNDEx(action) {
       : null
     yield put({ type: SAVE_TO_NDEX_SUCCEEDED, payload: {} })
     yield put({ type: SET_NDEX_IMPORT_OPEN, payload: false })
+/*
+    yield put({
+      type: SET_CURRENT_NETWORK,
+      payload: { currentNetworkUUID: response.data.uuid }
+    })
+    */
     yield put({
       type: SET_NDEX_ACTION_MESSAGE,
       payload: shareURL

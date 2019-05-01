@@ -22,6 +22,7 @@ const NDExComponent = props => {
     props.profilesActions.importFromLocalStorage()
 
     if (props.uiState.urlParams.has('suid')) {
+      props.history.push('/ndexAccount')
       props.ndexUiStateActions.setNDExImportOpen(true)
     }
 

@@ -52,8 +52,8 @@ const styles = theme => ({
 
 const RecentNetworkGrid = props => {
   const selectNetwork = networkUUID => {
-    props.networkActions.ndexNetworkFetchStarted({
-      networkUUID: networkUUID
+    props.ndexUiStateActions.setCurrentNetwork({
+      currentNetworkUUID: networkUUID
     })
   }
 
