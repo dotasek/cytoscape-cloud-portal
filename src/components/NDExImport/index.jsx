@@ -38,6 +38,8 @@ const styles = theme => ({
 function getModalStyle() {}
 
 class NDExImport extends React.Component {
+  _isMounted = false
+
   constructor(props) {
     super(props)
     this.loadData()
@@ -67,7 +69,12 @@ class NDExImport extends React.Component {
   hydrate = field => this.props[field] || ''
 
   componentDidMount() {
+    this._isMounted = true
     this.loadData()
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false
   }
 
   checkPermissions = (profile, saveType) => {
@@ -105,9 +112,10 @@ class NDExImport extends React.Component {
           })
         })
     } else {
-      this.setState({
-        updatable: false
-      })
+      this._isMounted &&
+        this.setState({
+          updatable: false
+        })
     }
   }
 
@@ -119,18 +127,19 @@ class NDExImport extends React.Component {
       return {}
     }
     const net = this.networkData[saveType]
-    this.setState({
-      author: net['props']['author'] || '',
-      organism: net['props']['organism'] || '',
-      disease: net['props']['disease'] || '',
-      tissue: net['props']['tissue'] || '',
-      rightsHolder: net['props']['rightsHolder'] || '',
-      version: net['props']['version'] || '',
-      reference: net['props']['reference'] || '',
-      description: net['props']['description'] || '',
-      name: net['name'] || '',
-      saveType: saveType
-    })
+    this._isMounted &&
+      this.setState({
+        author: net['props']['author'] || '',
+        organism: net['props']['organism'] || '',
+        disease: net['props']['disease'] || '',
+        tissue: net['props']['tissue'] || '',
+        rightsHolder: net['props']['rightsHolder'] || '',
+        version: net['props']['version'] || '',
+        reference: net['props']['reference'] || '',
+        description: net['props']['description'] || '',
+        name: net['name'] || '',
+        saveType: saveType
+      })
     this.checkPermissions(this.props.profiles.selectedProfile, saveType)
   }
 
@@ -141,19 +150,20 @@ class NDExImport extends React.Component {
       .then(blob => blob.json())
       .then(resp => {
         if (resp.errors.length !== 0) {
-          this.setState({
-            component: 'error'
-          })
+          this._isMounted &&
+            this.setState({
+              component: 'error'
+            })
         } else {
           //this.setState({
           //  component: window.cyndexMode || resp.data.widget,
           //  parameters: resp.data.parameters
           //})
-          this.setState(resp.data.parameters)
+          this._isMounted && this.setState(resp.data.parameters)
         }
       })
       .catch(exc => {
-        this.setState({ component: 'cyrestError' })
+        this._isMounted && this.setState({ component: 'cyrestError' })
       })
   }
 
@@ -320,6 +330,7 @@ class NDExImport extends React.Component {
                       <Checkbox
                         onChange={this.handleChangeOverwrite}
                         checked={this.state.overwrite}
+                        disabled={this.state.updatable}
                       />
                     }
                     label="UPDATE EXISTING NETWORK"
@@ -351,6 +362,12 @@ class NDExImport extends React.Component {
                 className={classes.button}
                 type="button"
                 onClick={this.handleImport}
+                disabled={
+                  this.state.public &&
+                  (!this.state.name ||
+                    !this.state.description ||
+                    !this.state.version)
+                }
               >
                 Import
               </Button>
