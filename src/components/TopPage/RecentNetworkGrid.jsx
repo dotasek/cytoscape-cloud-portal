@@ -29,6 +29,7 @@ const styles = theme => ({
     width: '90%',
     'padding-left': '16px',
     'margin-bottom': '72px',
+    'margin-top': '24px',
     'padding-right': '16px',
     alignItems: 'center'
   },
