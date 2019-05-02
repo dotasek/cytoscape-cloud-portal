@@ -48,7 +48,7 @@ const ndexUiState = handleActions(
       const urlParams = new URLSearchParams(window.location.search)
       if (!payload.payload) {
         urlParams.delete('suid')
-        //window.location.search = urlParams.toString()
+        window.location.search = urlParams.toString()
       }
 
       //console.log('NDExImport OPEN payload.payload= ', payload.payload)
