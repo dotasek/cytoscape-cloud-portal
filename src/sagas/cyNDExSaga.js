@@ -33,7 +33,9 @@ import {
   GET_MY_NETWORKS_STARTED,
   GET_MY_NETWORKS_SUCCEEDED,
   GET_MY_NETWORKS_FAILED,
-  CLEAR_MY_NETWORKS
+  SET_CURRENT_NETWORK,
+  CLEAR_MY_NETWORKS,
+  setCurrentNetwork
 } from '../actions/ndexUiState'
 
 import {
@@ -275,13 +277,28 @@ function* watchSaveToNDEx(action) {
     yield put({ type: SAVE_TO_NDEX_FAILED, payload: response.errors[0] })
     yield put({ type: SET_NDEX_IMPORT_OPEN, payload: false })
   } else {
-    //this.saveImage(resp.data.suid, resp.data.uuid)
-    console.log('response data: ', response)
-    const shareURL = action.payload.state.public
-      ? selectedProfile.serverAddress + '/#/network/' + response.data.uuid
-      : null
+    const json = yield call([response, 'json'])
+    const uuid = json.data ? json.data.uuid : null
+    //const response = yield call(cyrest.cyNDExStatus, cyrestport)
+
+    if (uuid) {
+      yield put({
+        type: SET_CURRENT_NETWORK,
+        payload: { currentNetworkUUID: uuid }
+      })
+    }
+
     yield put({ type: SAVE_TO_NDEX_SUCCEEDED, payload: {} })
     yield put({ type: SET_NDEX_IMPORT_OPEN, payload: false })
+
+    yield put({ type: CLEAR_MY_NETWORKS, payload: undefined })
+    const shareURL =
+      action.payload.state.public && uuid
+        ? selectedProfile.serverAddress + '/#/network/' + uuid
+        : null
+
+    console.log('shareUrl: ' + shareURL)
+
     yield put({
       type: SET_NDEX_ACTION_MESSAGE,
       payload: shareURL

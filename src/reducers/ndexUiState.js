@@ -9,6 +9,7 @@ import {
   getMyNetworksStarted,
   getMyNetworksSucceeded,
   getMyNetworksFailed,
+  setCurrentNetwork,
   clearMyNetworks
 } from '../actions/ndexUiState'
 
@@ -19,6 +20,8 @@ const DEF_STATE = {
   NDExActionMessage: undefined,
   NDExSignInHintOpen: true,
   myNetworks: undefined,
+  currentNetworkUUID: undefined,
+  currentNetworkModified: undefined,
   urlParams: new URLSearchParams(window.location.search)
 }
 
@@ -97,6 +100,13 @@ const ndexUiState = handleActions(
       return {
         ...state,
         myNetworks: null
+      }
+    },
+    [setCurrentNetwork]: (state, payload) => {
+      return {
+        ...state,
+        currentNetworkUUID: payload.payload.currentNetworkUUID,
+        currentNetworkModified: payload.payload.currentNetworkModified
       }
     }
   },

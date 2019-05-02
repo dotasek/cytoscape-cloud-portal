@@ -107,12 +107,12 @@ const CytoscapeViewer = props => {
         cyInstance = cy
         console.log("network background color:" + props.network.backgroundColor)
         if (props.network.backgroundColor) {
-          var backgroundLayer = cyInstance.cyCanvas({
+          const backgroundLayer = cyInstance.cyCanvas({
             zIndex: -2
           })
 
-          var canvas = backgroundLayer.getCanvas()
-          var ctx = backgroundLayer.getCanvas().getContext('2d')
+          const canvas = backgroundLayer.getCanvas()
+          const ctx = backgroundLayer.getCanvas().getContext('2d')
 
           cyInstance.on('render cyCanvas.resize', function() {
             console.log('resize CyCanvas', props.network.backgroundColor)

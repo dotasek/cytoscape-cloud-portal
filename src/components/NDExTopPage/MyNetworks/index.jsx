@@ -32,12 +32,22 @@ const MyNetworks = props => {
 
     if (props.ndexUiState.myNetworks == undefined) {
       props.ndexUiStateActions.getMyNetworksStarted()
+    } else {
+      if (props.ndexUiState.currentNetworkUUID != props.network.uuid) {
+        handleFetchNetwork(props.ndexUiState.currentNetworkUUID)
+      } else {
+        const ndexNetwork = props.ndexUiState.myNetworks.filter(value => value.externalId == props.ndexUiState.currentNetworkUUID)
+        if (ndexNetwork.length > 0) {
+          console.log('Network exists; compare timestamps')
+        } else {
+          console.log('Network doesnt exist, destroy it')
+        }
+      }
     }
-
     return () => {
       props.networkActions.networkClear()
     }
-  }, [props.profiles.selectedProfile, props.ndexUiState.myNetworks])
+  }, [props.profiles.selectedProfile, props.ndexUiState.myNetworks, props.ndexUiState.currentNetworkUUID])
 
   const NETWORK_SIZE_TH = 5000
 
@@ -67,7 +77,7 @@ const MyNetworks = props => {
       })
   }
 
-  const handleFetch = (networkUUID, nodeCount, edgeCount) => {
+  const handleFetchNetwork = (networkUUID, nodeCount, edgeCount) => {
     props.networkActions.setNetworkSize({
       nodeCount,
       edgeCount
@@ -83,6 +93,12 @@ const MyNetworks = props => {
     checkCytoscapeConnection(props)
     props.networkActions.ndexNetworkFetchStarted({
       networkUUID: networkUUID
+    })
+  }
+
+  const handleSelectNetwork = (networkUUID, nodeCount, edgeCount) => {
+    props.ndexUiStateActions.setCurrentNetwork({
+      currentNetworkUUID: networkUUID
     })
   }
 
@@ -107,8 +123,8 @@ const MyNetworks = props => {
         className={classes.menuItem}
         alignItems="flex-start"
         key={externalId}
-        onClick={val => handleFetch(externalId, nodeCount, edgeCount)}
-        selected={externalId == props.network.uuid}
+        onClick={val => handleSelectNetwork(externalId, nodeCount, edgeCount)}
+        selected={externalId == props.ndexUiState.currentNetworkUUID}
       >
         <ListItemAvatar>
           <Avatar

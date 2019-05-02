@@ -83,10 +83,10 @@ class NDExLogin extends React.Component {
           this.props.profilesActions.addProfileStarted(newProfile)
         })
         .catch(error => {
-          var message = error.message
-          if (error.message === 'Failed to fetch')
-            message =
-              'Could not connect to NDEx server ' + profile.serverAddress
+          const message =
+            error.message === 'Failed to fetch'
+              ? 'Could not connect to NDEx server ' + profile.serverAddress
+              : error.message
           //console.log(message)
           this.setState({ error: message })
         })

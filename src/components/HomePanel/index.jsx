@@ -14,11 +14,6 @@ const HomePanel = props => {
       props.searchActions.fetchResultStarted({ jobId })
     }
 
-    if (props.uiState.urlParams.has('suid')) {
-      props.uiStateActions.setNDExImportOpen(true)
-      //console.log("Importing network.")
-    }
-
     window.onpopstate = onBackButtonEvent
     return () => {}
   }, [])

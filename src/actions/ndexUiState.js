@@ -29,3 +29,6 @@ export const getMyNetworksFailed = createAction(GET_MY_NETWORKS_FAILED)
 
 export const CLEAR_MY_NETWORKS = 'CLEAR_MY_NETWORKS'
 export const clearMyNetworks = createAction(CLEAR_MY_NETWORKS)
+
+export const SET_CURRENT_NETWORK = 'SET_CURRENT_NETWORK'
+export const setCurrentNetwork = createAction(SET_CURRENT_NETWORK)

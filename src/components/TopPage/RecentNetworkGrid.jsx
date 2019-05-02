@@ -25,17 +25,17 @@ const styles = theme => ({
     overflow: 'hidden',
     backgroundColor: theme.palette.background.paper
   },
-  gridList: {
-    width: '100%'
-  },
   gridListDiv: {
-    width: '100%',
+    width: '90%',
     'padding-left': '16px',
     'margin-bottom': '72px',
-    'padding-right': '16px'
+    'margin-top': '24px',
+    'padding-right': '16px',
+    alignItems: 'center'
   },
   gridListTile: {
-    overflow: 'hidden'
+    overflow: 'hidden',
+    height: '156px'
   },
   gridListTileDiv: {
     'background-color': 'rgba(0,0,0,0.05)',
@@ -52,8 +52,8 @@ const styles = theme => ({
 
 const RecentNetworkGrid = props => {
   const selectNetwork = networkUUID => {
-    props.networkActions.ndexNetworkFetchStarted({
-      networkUUID: networkUUID
+    props.ndexUiStateActions.setCurrentNetwork({
+      currentNetworkUUID: networkUUID
     })
   }
 
@@ -77,8 +77,7 @@ const RecentNetworkGrid = props => {
   return myNetworks ? (
     <div className={classes.gridListDiv}>
       <GridList
-        cellheight={128}
-        cellwidth={154}
+        cellheight="auto"
         cols={4}
         className={classes.gridList}
         spacing={16}
