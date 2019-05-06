@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { withStyles } from '@material-ui/core/styles'
 import FormGroup from '@material-ui/core/FormGroup'
@@ -37,49 +37,38 @@ const styles = theme => ({
 
 function getModalStyle() {}
 
-class NDExImport extends React.Component {
-  _isMounted = false
+const NDExImport = props => {
+  const { classes } = props
+  const hydrate = field => props[field] || ''
 
-  constructor(props) {
-    super(props)
-    this.loadData()
-    this.state = {
-      name: this.hydrate('name'),
-      uuid: this.hydrate('uuid'),
-      author: this.hydrate('author'),
-      organism: this.hydrate('organism'),
-      disease: this.hydrate('disease'),
-      tissue: this.hydrate('tissue'),
-      rightsHolder: this.hydrate('rightsHolder'),
-      version: this.hydrate('version'),
-      reference: this.hydrate('reference'),
-      description: this.hydrate('description'),
-      saveType: this.hydrate('saveType'),
-      saving: false,
-      public: false,
-      updatable: false,
-      overwrite: false,
-      success: false,
-      shareURL: null,
-      errorMessage: null
-    }
-    this.networkData = {}
-  }
+  const [state, setState] = useState({
+    name: hydrate('name'),
+    uuid: hydrate('uuid'),
+    author: hydrate('author'),
+    organism: hydrate('organism'),
+    disease: hydrate('disease'),
+    tissue: hydrate('tissue'),
+    rightsHolder: hydrate('rightsHolder'),
+    version: hydrate('version'),
+    reference: hydrate('reference'),
+    description: hydrate('description'),
+    saveType: hydrate('saveType'),
+    saving: false,
+    public: false,
+    updatable: false,
+    overwrite: false,
+    success: false,
+    shareURL: null,
+    errorMessage: null
+  })
 
-  hydrate = field => this.props[field] || ''
-
-  componentDidMount() {
-    this._isMounted = true
-    this.loadData()
-  }
-
-  componentWillUnmount() {
-    this._isMounted = false
-  }
-
-  checkPermissions = (profile, saveType) => {
+  const checkPermissions = (profile, saveType) => {
     const main = this
     saveType = saveType || this.state.saveType
+
+    console.log('savetype: ', saveType)
+    console.log('checking permissions: ', this.networkData)
+
     if (
       profile &&
       profile.userId &&
@@ -102,6 +91,7 @@ class NDExImport extends React.Component {
       })
         .then(resp => resp.json())
         .then(resp => {
+          console.log('Updatable test response', resp)
           main.setState({
             updatable: resp[uuid] === 'ADMIN' || resp[uuid] === 'WRITE'
           })
@@ -119,31 +109,31 @@ class NDExImport extends React.Component {
     }
   }
 
-  getAttributes = saveType => {
-    //console.log('networkData', this.networkData)
+  const getAttributes = saveType => {
+    console.log('getAttribules this.state', this.state)
     saveType = saveType || this.state.saveType
     if (!this.networkData.hasOwnProperty(saveType)) {
       console.log('no save type')
       return {}
     }
     const net = this.networkData[saveType]
-    this._isMounted &&
-      this.setState({
-        author: net['props']['author'] || '',
-        organism: net['props']['organism'] || '',
-        disease: net['props']['disease'] || '',
-        tissue: net['props']['tissue'] || '',
-        rightsHolder: net['props']['rightsHolder'] || '',
-        version: net['props']['version'] || '',
-        reference: net['props']['reference'] || '',
-        description: net['props']['description'] || '',
-        name: net['name'] || '',
-        saveType: saveType
-      })
-    this.checkPermissions(this.props.profiles.selectedProfile, saveType)
+    setState({
+      author: net['props']['author'] || '',
+      organism: net['props']['organism'] || '',
+      disease: net['props']['disease'] || '',
+      tissue: net['props']['tissue'] || '',
+      rightsHolder: net['props']['rightsHolder'] || '',
+      version: net['props']['version'] || '',
+      reference: net['props']['reference'] || '',
+      description: net['props']['description'] || '',
+      name: net['name'] || '',
+      saveType: saveType
+    })
+    checkPermissions(this.props.profiles.selectedProfile, saveType)
   }
 
-  loadComponentConfig() {
+  const loadData = () => {
+    const main = this
     fetch(
       'http://localhost:' + (window.restPort || '1234') + '/cyndex2/v1/status'
     )
@@ -159,18 +149,16 @@ class NDExImport extends React.Component {
           //  component: window.cyndexMode || resp.data.widget,
           //  parameters: resp.data.parameters
           //})
-          this._isMounted && this.setState(resp.data.parameters)
+          console.log('component config:', resp.data.parameters)
+          console.log('_isMounted:' + this._isMounted)
+          //main.props.saveType = resp.data.parameters.saveType
+          this.setState(resp.data.parameters)
         }
       })
       .catch(exc => {
-        this._isMounted && this.setState({ component: 'cyrestError' })
+        //this._isMounted && this.setState({ component: 'cyrestError' })
       })
-  }
 
-  loadData() {
-    this.loadComponentConfig()
-    //('loadData')
-    const main = this
     fetch(
       'http://localhost:' +
         (window.restPort || '1234') +
@@ -178,7 +166,7 @@ class NDExImport extends React.Component {
     )
       .then(resp => resp.json())
       .then(resp => {
-        console.log('component config', resp.data)
+        console.log('cyndex current network: ', resp.data)
         let newData = {
           collection: resp['data']['currentRootNetwork']
         }
@@ -199,191 +187,187 @@ class NDExImport extends React.Component {
       })
   }
 
-  handleClose = () => {
+  const handleClose = () => {
     this.props.ndexImportActions.saveToNDExCancelled()
   }
 
-  handleImport = () => {
+  const handleImport = () => {
     this.props.ndexImportActions.saveToNDExStarted({
       state: this.state,
       networkData: this.networkData
     })
   }
 
-  handleFieldChange = e => {
+  const handleFieldChange = e => {
     const newState = {
       [e.target.name]: e.target.value
     }
     this.setState(newState)
   }
 
-  handleChangeOverwrite = evt => {
+  const handleChangeOverwrite = evt => {
     this.setState({ overwrite: evt.target.checked })
     if (evt.target.checked) {
       this.setState({ public: false })
     }
   }
 
-  handleChangeVisibility = evt => {
+  const handleChangeVisibility = evt => {
     //console.log(evt.target.checked)
     this.setState({ public: evt.target.checked })
   }
 
-  render() {
-    const { classes, theme } = this.props
-    const isOpen = this.props.ndexUiState.isNDExImportOpen
-    //console.log('NDExImport dialog instantiated')
-    return (
-      <Dialog
-        open={isOpen}
-        onClose={this.handleClose}
-        aria-labelledby="import-dialog-title"
-      >
-        <DialogTitle id="simple-dialog-title">Save Network to NDEx</DialogTitle>
-        <div style={getModalStyle()} className={classes.loginModalPaper}>
-          <form className={classes.container} noValidate>
-            <div className={classes.importRow}>
-              <div className={classes.importColumn}>
-                <div className="form-group">
-                  <TextField
-                    name="author"
-                    label="Author"
-                    value={this.state.author}
-                    onChange={this.handleFieldChange}
-                  />
-                </div>
-                <div className="form-group">
-                  <TextField
-                    name="organism"
-                    label="Organism"
-                    value={this.state.organism}
-                    onChange={this.handleFieldChange}
-                  />
-                </div>
-                <div className="form-group">
-                  <TextField
-                    name="disease"
-                    label="Disease"
-                    value={this.state.disease}
-                    onChange={this.handleFieldChange}
-                  />
-                </div>
-                <div className="form-group">
-                  <TextField
-                    name="tissue"
-                    label="Tissue"
-                    value={this.state.tissue}
-                    onChange={this.handleFieldChange}
-                  />
-                </div>
-                <div className="form-group">
-                  <TextField
-                    name="rightsHolder"
-                    label="Rights Holder"
-                    value={this.state.rightsHolder}
-                    onChange={this.handleFieldChange}
-                  />
-                </div>
-                <div className="form-group">
-                  <TextField
-                    name="version"
-                    label="Version"
-                    value={this.state.version}
-                    onChange={this.handleFieldChange}
-                  />
-                </div>
-                <div className="form-group">
-                  <TextField
-                    name="reference"
-                    label="Reference"
-                    value={this.state.reference}
-                    onChange={this.handleFieldChange}
-                  />
-                </div>
+  //console.log('NDExImport dialog instantiated')
+  return (
+    <Dialog
+      open={props.ndexUiState.isNDExImportOpen}
+      onClose={handleClose}
+      aria-labelledby="import-dialog-title"
+    >
+      <DialogTitle id="simple-dialog-title">Save Network to NDEx</DialogTitle>
+      <div style={getModalStyle()} className={classes.loginModalPaper}>
+        <form className={classes.container} noValidate>
+          <div className={classes.importRow}>
+            <div className={classes.importColumn}>
+              <div className="form-group">
+                <TextField
+                  name="author"
+                  label="Author"
+                  value={state.author}
+                  onChange={handleFieldChange}
+                />
               </div>
-              <div className={classes.importColumn}>
-                <div className="form-group">
-                  <TextField
-                    name="description"
-                    label="Description"
-                    multiline
-                    rows="11"
-                    onChange={this.handleFieldChange}
-                    value={this.state.description}
-                    required={this.state.public}
-                  />
-                </div>
-                <FormGroup row>
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        onChange={this.handleChangeVisibility}
-                        checked={this.state.public}
-                      />
-                    }
-                    label="SAVE AS PUBLIC"
-                  />
-                </FormGroup>
-                <FormGroup row>
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        onChange={this.handleChangeOverwrite}
-                        checked={this.state.overwrite}
-                        disabled={this.state.updatable}
-                      />
-                    }
-                    label="UPDATE EXISTING NETWORK"
-                  />
-                </FormGroup>
+              <div className="form-group">
+                <TextField
+                  name="organism"
+                  label="Organism"
+                  value={state.organism}
+                  onChange={handleFieldChange}
+                />
+              </div>
+              <div className="form-group">
+                <TextField
+                  name="disease"
+                  label="Disease"
+                  value={state.disease}
+                  onChange={handleFieldChange}
+                />
+              </div>
+              <div className="form-group">
+                <TextField
+                  name="tissue"
+                  label="Tissue"
+                  value={state.tissue}
+                  onChange={handleFieldChange}
+                />
+              </div>
+              <div className="form-group">
+                <TextField
+                  name="rightsHolder"
+                  label="Rights Holder"
+                  value={state.rightsHolder}
+                  onChange={handleFieldChange}
+                />
+              </div>
+              <div className="form-group">
+                <TextField
+                  name="version"
+                  label="Version"
+                  value={state.version}
+                  onChange={handleFieldChange}
+                />
+              </div>
+              <div className="form-group">
+                <TextField
+                  name="reference"
+                  label="Reference"
+                  value={state.reference}
+                  onChange={handleFieldChange}
+                />
               </div>
             </div>
-            <div className={classes.importRow}>
-              {this.state.error && (
-                <div ng-if="errors" className="text-danger">
-                  <br />
-                  <strong>
-                    <span />
-                    {this.state.error}
-                  </strong>
-                </div>
-              )}
+            <div className={classes.importColumn}>
+              <div className="form-group">
+                <TextField
+                  name="description"
+                  label="Description"
+                  multiline
+                  rows="11"
+                  onChange={handleFieldChange}
+                  value={state.description}
+                  required={state.public}
+                />
+              </div>
+              <FormGroup row>
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      onChange={handleChangeVisibility}
+                      checked={state.public}
+                    />
+                  }
+                  label="SAVE AS PUBLIC"
+                />
+              </FormGroup>
+              <FormGroup row>
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      onChange={handleChangeOverwrite}
+                      checked={state.overwrite}
+                      disabled={state.updatable}
+                    />
+                  }
+                  label="UPDATE EXISTING NETWORK"
+                />
+              </FormGroup>
             </div>
-            <div className={classes.importFooter}>
-              <TextField
-                name="name"
-                label="Network Name"
-                fullWidth
-                onChange={this.handleFieldChange}
-                value={this.state.name}
-              />
-              <Button
-                variant="contained"
-                className={classes.button}
-                type="button"
-                onClick={this.handleImport}
-                disabled={
-                  this.state.public &&
-                  (!this.state.name ||
-                    !this.state.description ||
-                    !this.state.version)
-                }
-              >
-                Import
-              </Button>
-              <Button
-                className="btn btn-default"
-                onClick={this.handleClose}
-                type="button"
-              >
-                Cancel
-              </Button>
-            </div>
-          </form>
-        </div>
-      </Dialog>
-    )
-  }
+          </div>
+          <div className={classes.importRow}>
+            {state.error && (
+              <div ng-if="errors" className="text-danger">
+                <br />
+                <strong>
+                  <span />
+                  {state.error}
+                </strong>
+              </div>
+            )}
+          </div>
+          <div className={classes.importFooter}>
+            <TextField
+              name="name"
+              label="Network Name"
+              fullWidth
+              onChange={handleFieldChange}
+              value={state.name}
+            />
+            <Button
+              variant="contained"
+              className={classes.button}
+              type="button"
+              onClick={handleImport}
+              disabled={
+                state.public &&
+                (!state.name ||
+                  !state.description ||
+                  !state.version)
+              }
+            >
+              Import
+            </Button>
+            <Button
+              className="btn btn-default"
+              onClick={handleClose}
+              type="button"
+            >
+              Cancel
+            </Button>
+          </div>
+        </form>
+      </div>
+    </Dialog>
+  )
 }
 
 NDExImport.propTypes = {

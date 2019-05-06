@@ -10,6 +10,7 @@ import {
 } from '../actions/ndexImport'
 
 const defaultState = {
+  isImportDialogReady: false,
   isImportingNetwork: false,
   error: null
 }
