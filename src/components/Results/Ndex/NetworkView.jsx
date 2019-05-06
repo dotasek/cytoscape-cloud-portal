@@ -21,7 +21,6 @@ const NetworkView = props => {
   const { handleImportNetwork } = props
 
   const handleResizeEnd = e => {
-    console.log('+++++++!!!!! resizeE', e)
     setResize(e)
   }
 
