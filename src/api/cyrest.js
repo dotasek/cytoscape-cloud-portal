@@ -21,6 +21,17 @@ const cyNDExStatus = cyRESTPort => {
   })
 }
 
+const cyNDExCurrentNetwork = cyRESTPort => {
+  const cyNDExStatusUrl =
+    CYREST_BASE_URL + ':' + cyRESTPort + '/cyndex2/v1/networks/current'
+
+  //console.log('Calling CyREST API:', cyNDExStatusUrl)
+
+  return fetch(cyNDExStatusUrl, {
+    method: METHOD_GET
+  })
+}
+
 const importNetwork = (cyRESTPort, payload) => {
   const importNetworkUrl =
     CYREST_BASE_URL + ':' + cyRESTPort + '/cyndex2/v1/networks/cx'
@@ -48,7 +59,7 @@ const ndexNetworkFetch = (profile, networkUUID, authHeaders) => {
   })
 }
 
-const cyndex2Networks = (cyRESTPort, method, suid, payload) => {
+const cyNDExNetworks = (cyRESTPort, method, suid, payload) => {
   const currentNetworkUrl =
     CYREST_BASE_URL + ':' + cyRESTPort + '/cyndex2/v1/networks/' + suid
   //console.log('Calling CyREST getNetwork:', currentNetworkUrl, method, payload)
@@ -66,6 +77,7 @@ export {
   status,
   cyNDExStatus,
   importNetwork,
-  cyndex2Networks,
+  cyNDExNetworks,
+  cyNDExCurrentNetwork,
   ndexNetworkFetch
 }

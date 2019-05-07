@@ -18,7 +18,6 @@ const NDExComponent = props => {
 
   useEffect(() => {
     props.ndexUiStateActions.getCyNDExStatus()
-
     props.profilesActions.importFromLocalStorage()
 
     if (props.uiState.urlParams.has('suid')) {

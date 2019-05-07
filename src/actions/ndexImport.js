@@ -10,6 +10,16 @@ export const saveToNDExSucceeded = createAction(SAVE_TO_NDEX_SUCCEEDED)
 export const saveToNDExFailed = createAction(SAVE_TO_NDEX_FAILED)
 export const saveToNDExCancelled = createAction(SAVE_TO_NDEX_CANCELLED)
 
+export const GET_SAVE_TO_NDEX_PARAMS_STARTED = 'GET_SAVE_TO_NDEX_PARAMS_STARTED'
+export const getSaveToNDExParamsStarted = createAction(
+  GET_SAVE_TO_NDEX_PARAMS_STARTED
+)
+export const GET_SAVE_TO_NDEX_PARAMS_SUCCEEDED =
+  'GET_SAVE_TO_NDEX_PARAMS_SUCCEEDED'
+export const getSaveToNDExParamsSucceeded = createAction(
+  GET_SAVE_TO_NDEX_PARAMS_SUCCEEDED
+)
+
 export const IMPORT_FROM_NDEX_STARTED = 'IMPORT_FROM_NDEX_STARTED'
 export const IMPORT_FROM_NDEX_SUCCEEDED = 'IMPORT_FROM_NDEX_SUCCEEDED'
 export const IMPORT_FROM_NDEX_FAILED = 'IMPORT_FROM_NDEX_FAILED'

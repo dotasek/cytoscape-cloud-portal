@@ -1,4 +1,9 @@
-import { METHOD_GET, METHOD_POST, BASE_URL, CYREST_BASE_URL } from './apiConstants'
+import {
+  METHOD_GET,
+  METHOD_POST,
+  BASE_URL,
+  CYREST_BASE_URL
+} from './apiConstants'
 
 const fetchNetwork = (id, sourceUUID, networkUUID, authHeaders) => {
   const baseHeaders = {
@@ -42,6 +47,28 @@ const fetchUserNetworks = profile => {
   )
 }
 
+const checkPermissions = (profile, uuid) => {
+  if (profile && profile.userId && uuid) {
+    //console.log('profile for validation', profile)
+    const userId = profile.userId
+    const ndexUrl = profile.serverAddress
+    const headers = {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: 'Basic ' + btoa(profile.userName + ':' + profile.password)
+    }
+    return fetch(
+      ndexUrl + '/v2/user/' + userId + '/permission?networkid=' + uuid,
+      {
+        method: 'GET',
+        headers: headers
+      }
+    )
+  } else {
+    return null
+  }
+}
+
 const importNDExNetwork = (cyRESTPort, payload) => {
   const importNetworkUrl =
     CYREST_BASE_URL + ':' + cyRESTPort + '/cyndex2/v1/networks'
@@ -57,4 +84,10 @@ const importNDExNetwork = (cyRESTPort, payload) => {
   })
 }
 
-export { fetchNetwork, fetchUser, fetchUserNetworks, importNDExNetwork }
+export {
+  checkPermissions,
+  fetchNetwork,
+  fetchUser,
+  fetchUserNetworks,
+  importNDExNetwork
+}
