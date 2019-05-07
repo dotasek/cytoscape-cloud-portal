@@ -12,7 +12,6 @@ import {
 } from '../actions/ndexImport'
 
 const defaultState = {
-  isImportDialogReady: false,
   importDialogParams: undefined,
   isImportingNetwork: false,
   error: null
@@ -37,6 +36,7 @@ const source = handleActions(
       return {
         ...state,
         isImportingNetwork: false,
+        importDialogParams: undefined,
         error: null
       }
     },
@@ -50,7 +50,8 @@ const source = handleActions(
     },
     [saveToNDExCancelled]: (state, payload) => {
       return {
-        ...state
+        ...state,
+        importDialogParams: undefined
       }
     },
     [importFromNDExStarted]: (state, payload) => {

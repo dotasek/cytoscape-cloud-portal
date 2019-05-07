@@ -20,8 +20,15 @@ const NDExComponent = props => {
     props.ndexUiStateActions.getCyNDExStatus()
     props.profilesActions.importFromLocalStorage()
 
-    if (props.uiState.urlParams.has('suid')) {
-      props.history.push('/ndexAccount')
+    const urlParams = new URLSearchParams(props.history.location.search)
+    if (urlParams.has('suid')) {
+      console.log('search port', props.history.location.search)
+      urlParams.delete('suid')
+
+      props.history.replace({
+        pathname: '/ndexAccount',
+        search: urlParams.toString()
+      })
       props.ndexUiStateActions.setNDExImportOpen(true)
     }
 

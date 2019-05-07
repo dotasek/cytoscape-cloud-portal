@@ -21,8 +21,7 @@ const DEF_STATE = {
   NDExSignInHintOpen: true,
   myNetworks: undefined,
   currentNetworkUUID: undefined,
-  currentNetworkModified: undefined,
-  urlParams: new URLSearchParams(window.location.search)
+  currentNetworkModified: undefined
 }
 
 const ndexUiState = handleActions(
@@ -45,16 +44,8 @@ const ndexUiState = handleActions(
       }
     },
     [setNDExImportOpen]: (state, payload) => {
-      const urlParams = new URLSearchParams(window.location.search)
-      if (!payload.payload) {
-        urlParams.delete('suid')
-        window.location.search = urlParams.toString()
-      }
-
-      //console.log('NDExImport OPEN payload.payload= ', payload.payload)
       return {
         ...state,
-        urlParams: urlParams,
         isNDExImportOpen: payload.payload
       }
     },

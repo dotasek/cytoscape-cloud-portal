@@ -78,11 +78,20 @@ const NDExImport = props => {
 
   const handleClose = () => {
     props.ndexImportActions.saveToNDExCancelled()
+    handleSearchClear()
   }
 
   const handleImport = () => {
     props.ndexImportActions.saveToNDExStarted({
       state: state
+    })
+    handleSearchClear()
+  }
+
+  const handleSearchClear = () => {
+    props.history.replace({
+      pathname: '/ndexAccount',
+      search: ''
     })
   }
 
