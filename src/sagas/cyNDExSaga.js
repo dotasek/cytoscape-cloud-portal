@@ -43,6 +43,8 @@ import {
   SAVE_TO_NDEX_SUCCEEDED,
   SAVE_TO_NDEX_FAILED,
   SAVE_TO_NDEX_CANCELLED,
+  GET_SAVE_TO_NDEX_PARAMS_STARTED,
+  GET_SAVE_TO_NDEX_PARAMS_SUCCEEDED,
   IMPORT_FROM_NDEX_STARTED,
   IMPORT_FROM_NDEX_SUCCEEDED,
   IMPORT_FROM_NDEX_FAILED
@@ -61,11 +63,92 @@ export default function* cyNDExSaga() {
   yield takeLatest(NDEX_NETWORK_FETCH_STARTED, watchNDExNetworkFetch)
   yield takeLatest(IMPORT_FROM_NDEX_STARTED, watchImportNDExNetwork)
   yield takeLatest(SELECT_PROFILE_SUCCEEDED, watchProfileSelectSucceeded)
+  yield takeLatest(GET_SAVE_TO_NDEX_PARAMS_STARTED, watchGetSaveToNDEXParams)
 }
 
 export const getUIState = state => state.uiState
 export const getProfiles = state => state.profiles
 export const getAuthHeaders = state => state.search.authHeaders
+
+function* watchGetSaveToNDEXParams(action) {
+  const uiState = yield select(getUIState)
+  const cyrestport = uiState.urlParams.has('cyrestport')
+    ? uiState.urlParams.get('cyrestport')
+    : 1234
+  try {
+    const statusResponse = yield call(cyrest.cyNDExStatus, cyrestport)
+    const statusResponseJson = yield call([statusResponse, 'json'])
+    const statusParameters = statusResponseJson.data.parameters
+
+    const updatable = false
+    const overwrite = false
+    const publicNetwork = false
+
+    console.log('status response parameters', statusParameters)
+    //console.log('status response saveType', saveType)
+
+    const currentNetworkResponse = yield call(
+      cyrest.cyNDExCurrentNetwork,
+      cyrestport
+    )
+    const currentNetworkResponseJson = yield call([
+      currentNetworkResponse,
+      'json'
+    ])
+
+    console.log(
+      'currentNetwork response parameters',
+      currentNetworkResponseJson
+    )
+
+    let currentNetworkData = {
+      collection: currentNetworkResponseJson['data']['currentRootNetwork']
+    }
+    //console.log('resp:', resp)
+    if (currentNetworkResponseJson['data']['members']) {
+      currentNetworkResponseJson['data']['members'].forEach(member => {
+        if (
+          member['suid'] ===
+          currentNetworkResponseJson['data']['currentNetworkSuid']
+        ) {
+          currentNetworkData['network'] = member
+        }
+      })
+    }
+    console.log('data: ', currentNetworkData[statusParameters.saveType])
+
+    const saveNetworkData = currentNetworkData[statusParameters.saveType]
+    //main.networkData = newData
+
+    yield put({
+      type: GET_SAVE_TO_NDEX_PARAMS_SUCCEEDED,
+      payload: {
+        author: saveNetworkData['props']['author'] || '',
+        organism: saveNetworkData['props']['organism'] || '',
+        disease: saveNetworkData['props']['disease'] || '',
+        tissue: saveNetworkData['props']['tissue'] || '',
+        rightsHolder: saveNetworkData['props']['rightsHolder'] || '',
+        version: saveNetworkData['props']['version'] || '',
+        reference: saveNetworkData['props']['reference'] || '',
+        description: saveNetworkData['props']['description'] || '',
+        name: saveNetworkData['name'] || '',
+        public: publicNetwork,
+        updatable: updatable,
+        overwrite: overwrite,
+        suid: statusParameters.suid,
+        errorMessage: null
+      }
+    })
+  } catch (error) {
+    if (!window.sessionStorage.getItem('cyndexUnconnectedWarningDisplayed')) {
+      window.sessionStorage.setItem('cyndexUnconnectedWarningDisplayed', true)
+      yield put({
+        type: SET_NDEX_ACTION_MESSAGE,
+        payload: 'Unable to connect to CyNDEx App'
+      })
+    }
+  }
+}
 
 function* watchLogin(action) {
   const profile = action.payload
@@ -253,7 +336,7 @@ function* watchSaveToNDEx(action) {
   }
   const payload = JSON.stringify(payloadObj)
 
-  const suid = action.payload.networkData[action.payload.state.saveType]['suid']
+  const suid = action.payload.state.suid
 
   if (userName === undefined || userName === '') {
     alert('You must be logged with your NDEx username to save a network.')
@@ -261,7 +344,7 @@ function* watchSaveToNDEx(action) {
   }
 
   const response = yield call(
-    cyrest.cyndex2Networks,
+    cyrest.cyNDExNetworks,
     cyrestport,
     method,
     suid,

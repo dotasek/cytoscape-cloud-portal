@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { withStyles } from '@material-ui/core/styles'
 import FormGroup from '@material-ui/core/FormGroup'
@@ -53,6 +53,7 @@ const NDExImport = props => {
     reference: hydrate('reference'),
     description: hydrate('description'),
     saveType: hydrate('saveType'),
+    suid: undefined,
     saving: false,
     public: false,
     updatable: false,
@@ -62,159 +63,46 @@ const NDExImport = props => {
     errorMessage: null
   })
 
-  const checkPermissions = (profile, saveType) => {
-    const main = this
-    saveType = saveType || this.state.saveType
-
-    console.log('savetype: ', saveType)
-    console.log('checking permissions: ', this.networkData)
-
-    if (
-      profile &&
-      profile.userId &&
-      this.networkData[saveType] &&
-      this.networkData[saveType]['uuid']
-    ) {
-      const uuid = this.networkData[saveType]['uuid']
-      //console.log('profile for validation', profile)
-      const userId = profile.userId
-      const ndexUrl = profile.serverAddress
-      const headers = {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-        Authorization:
-          'Basic ' + btoa(profile.userName + ':' + profile.password)
+  useEffect(() => {
+    if (props.ndexUiState.isNDExImportOpen) {
+      if (!props.ndexImport.importDialogParams) {
+        props.ndexImportActions.getSaveToNDExParamsStarted()
+      } else {
+        setState(props.ndexImport.importDialogParams)
       }
-      fetch(ndexUrl + '/v2/user/' + userId + '/permission?networkid=' + uuid, {
-        method: 'GET',
-        headers: headers
-      })
-        .then(resp => resp.json())
-        .then(resp => {
-          console.log('Updatable test response', resp)
-          main.setState({
-            updatable: resp[uuid] === 'ADMIN' || resp[uuid] === 'WRITE'
-          })
-        })
-        .catch(ex => {
-          main.setState({
-            updatable: false
-          })
-        })
-    } else {
-      this._isMounted &&
-        this.setState({
-          updatable: false
-        })
     }
-  }
-
-  const getAttributes = saveType => {
-    console.log('getAttribules this.state', this.state)
-    saveType = saveType || this.state.saveType
-    if (!this.networkData.hasOwnProperty(saveType)) {
-      console.log('no save type')
-      return {}
+    return () => {
+      console.log('NDExImport unmounted')
     }
-    const net = this.networkData[saveType]
-    setState({
-      author: net['props']['author'] || '',
-      organism: net['props']['organism'] || '',
-      disease: net['props']['disease'] || '',
-      tissue: net['props']['tissue'] || '',
-      rightsHolder: net['props']['rightsHolder'] || '',
-      version: net['props']['version'] || '',
-      reference: net['props']['reference'] || '',
-      description: net['props']['description'] || '',
-      name: net['name'] || '',
-      saveType: saveType
-    })
-    checkPermissions(this.props.profiles.selectedProfile, saveType)
-  }
-
-  const loadData = () => {
-    const main = this
-    fetch(
-      'http://localhost:' + (window.restPort || '1234') + '/cyndex2/v1/status'
-    )
-      .then(blob => blob.json())
-      .then(resp => {
-        if (resp.errors.length !== 0) {
-          this._isMounted &&
-            this.setState({
-              component: 'error'
-            })
-        } else {
-          //this.setState({
-          //  component: window.cyndexMode || resp.data.widget,
-          //  parameters: resp.data.parameters
-          //})
-          console.log('component config:', resp.data.parameters)
-          console.log('_isMounted:' + this._isMounted)
-          //main.props.saveType = resp.data.parameters.saveType
-          this.setState(resp.data.parameters)
-        }
-      })
-      .catch(exc => {
-        //this._isMounted && this.setState({ component: 'cyrestError' })
-      })
-
-    fetch(
-      'http://localhost:' +
-        (window.restPort || '1234') +
-        '/cyndex2/v1/networks/current'
-    )
-      .then(resp => resp.json())
-      .then(resp => {
-        console.log('cyndex current network: ', resp.data)
-        let newData = {
-          collection: resp['data']['currentRootNetwork']
-        }
-        //console.log('resp:', resp)
-        if (resp['data']['members']) {
-          resp['data']['members'].forEach(member => {
-            if (member['suid'] === resp['data']['currentNetworkSuid']) {
-              newData['network'] = member
-            }
-          })
-        }
-        main.networkData = newData
-        console.log('main.networkData', main.networkData)
-      })
-      .then(() => {
-        main.getAttributes()
-        main.checkPermissions(this.props.profiles.selectedProfile)
-      })
-  }
+  }, [props.ndexUiState.isNDExImportOpen, props.ndexImport.importDialogParams])
 
   const handleClose = () => {
-    this.props.ndexImportActions.saveToNDExCancelled()
+    props.ndexImportActions.saveToNDExCancelled()
   }
 
   const handleImport = () => {
-    this.props.ndexImportActions.saveToNDExStarted({
-      state: this.state,
-      networkData: this.networkData
+    props.ndexImportActions.saveToNDExStarted({
+      state: state
     })
   }
 
   const handleFieldChange = e => {
-    const newState = {
-      [e.target.name]: e.target.value
-    }
-    this.setState(newState)
+    //const newState = {
+    //  [e.target.name]: e.target.value
+    //}
+    setState({ ...state, [e.target.name]: e.target.value })
   }
 
   const handleChangeOverwrite = evt => {
-    this.setState({ overwrite: evt.target.checked })
+    setState({ ...state, overwrite: evt.target.checked })
     if (evt.target.checked) {
-      this.setState({ public: false })
+      setState({ ...state, public: false })
     }
   }
 
   const handleChangeVisibility = evt => {
     //console.log(evt.target.checked)
-    this.setState({ public: evt.target.checked })
+    setState({ ...state, public: evt.target.checked })
   }
 
   //console.log('NDExImport dialog instantiated')
@@ -225,147 +113,148 @@ const NDExImport = props => {
       aria-labelledby="import-dialog-title"
     >
       <DialogTitle id="simple-dialog-title">Save Network to NDEx</DialogTitle>
-      <div style={getModalStyle()} className={classes.loginModalPaper}>
-        <form className={classes.container} noValidate>
-          <div className={classes.importRow}>
-            <div className={classes.importColumn}>
-              <div className="form-group">
-                <TextField
-                  name="author"
-                  label="Author"
-                  value={state.author}
-                  onChange={handleFieldChange}
-                />
+      {props.ndexImport.importDialogParams && (
+        <div style={getModalStyle()} className={classes.loginModalPaper}>
+         { console.log('state.author', state.author) }
+          <form className={classes.container} noValidate>
+            <div className={classes.importRow}>
+              <div className={classes.importColumn}>
+                <div className="form-group">
+                  <TextField
+                    name="author"
+                    label="Author"
+                    value={state.author}
+                    onChange={handleFieldChange}
+                  />
+                </div>
+                <div className="form-group">
+                  <TextField
+                    name="organism"
+                    label="Organism"
+                    value={state.organism}
+                    onChange={handleFieldChange}
+                  />
+                </div>
+                <div className="form-group">
+                  <TextField
+                    name="disease"
+                    label="Disease"
+                    value={state.disease}
+                    onChange={handleFieldChange}
+                  />
+                </div>
+                <div className="form-group">
+                  <TextField
+                    name="tissue"
+                    label="Tissue"
+                    value={state.tissue}
+                    onChange={handleFieldChange}
+                  />
+                </div>
+                <div className="form-group">
+                  <TextField
+                    name="rightsHolder"
+                    label="Rights Holder"
+                    value={state.rightsHolder}
+                    onChange={handleFieldChange}
+                  />
+                </div>
+                <div className="form-group">
+                  <TextField
+                    name="version"
+                    label="Version"
+                    value={state.version}
+                    onChange={handleFieldChange}
+                  />
+                </div>
+                <div className="form-group">
+                  <TextField
+                    name="reference"
+                    label="Reference"
+                    value={state.reference}
+                    onChange={handleFieldChange}
+                  />
+                </div>
               </div>
-              <div className="form-group">
-                <TextField
-                  name="organism"
-                  label="Organism"
-                  value={state.organism}
-                  onChange={handleFieldChange}
-                />
-              </div>
-              <div className="form-group">
-                <TextField
-                  name="disease"
-                  label="Disease"
-                  value={state.disease}
-                  onChange={handleFieldChange}
-                />
-              </div>
-              <div className="form-group">
-                <TextField
-                  name="tissue"
-                  label="Tissue"
-                  value={state.tissue}
-                  onChange={handleFieldChange}
-                />
-              </div>
-              <div className="form-group">
-                <TextField
-                  name="rightsHolder"
-                  label="Rights Holder"
-                  value={state.rightsHolder}
-                  onChange={handleFieldChange}
-                />
-              </div>
-              <div className="form-group">
-                <TextField
-                  name="version"
-                  label="Version"
-                  value={state.version}
-                  onChange={handleFieldChange}
-                />
-              </div>
-              <div className="form-group">
-                <TextField
-                  name="reference"
-                  label="Reference"
-                  value={state.reference}
-                  onChange={handleFieldChange}
-                />
+              <div className={classes.importColumn}>
+                <div className="form-group">
+                  <TextField
+                    name="description"
+                    label="Description"
+                    multiline
+                    rows="11"
+                    onChange={handleFieldChange}
+                    value={state.description}
+                    required={state.public}
+                  />
+                </div>
+                <FormGroup row>
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        onChange={handleChangeVisibility}
+                        checked={state.public}
+                      />
+                    }
+                    label="SAVE AS PUBLIC"
+                  />
+                </FormGroup>
+                <FormGroup row>
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        onChange={handleChangeOverwrite}
+                        checked={state.overwrite}
+                        disabled={state.updatable}
+                      />
+                    }
+                    label="UPDATE EXISTING NETWORK"
+                  />
+                </FormGroup>
               </div>
             </div>
-            <div className={classes.importColumn}>
-              <div className="form-group">
-                <TextField
-                  name="description"
-                  label="Description"
-                  multiline
-                  rows="11"
-                  onChange={handleFieldChange}
-                  value={state.description}
-                  required={state.public}
-                />
-              </div>
-              <FormGroup row>
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      onChange={handleChangeVisibility}
-                      checked={state.public}
-                    />
-                  }
-                  label="SAVE AS PUBLIC"
-                />
-              </FormGroup>
-              <FormGroup row>
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      onChange={handleChangeOverwrite}
-                      checked={state.overwrite}
-                      disabled={state.updatable}
-                    />
-                  }
-                  label="UPDATE EXISTING NETWORK"
-                />
-              </FormGroup>
+            <div className={classes.importRow}>
+              {state.error && (
+                <div ng-if="errors" className="text-danger">
+                  <br />
+                  <strong>
+                    <span />
+                    {state.error}
+                  </strong>
+                </div>
+              )}
             </div>
-          </div>
-          <div className={classes.importRow}>
-            {state.error && (
-              <div ng-if="errors" className="text-danger">
-                <br />
-                <strong>
-                  <span />
-                  {state.error}
-                </strong>
-              </div>
-            )}
-          </div>
-          <div className={classes.importFooter}>
-            <TextField
-              name="name"
-              label="Network Name"
-              fullWidth
-              onChange={handleFieldChange}
-              value={state.name}
-            />
-            <Button
-              variant="contained"
-              className={classes.button}
-              type="button"
-              onClick={handleImport}
-              disabled={
-                state.public &&
-                (!state.name ||
-                  !state.description ||
-                  !state.version)
-              }
-            >
-              Import
-            </Button>
-            <Button
-              className="btn btn-default"
-              onClick={handleClose}
-              type="button"
-            >
-              Cancel
-            </Button>
-          </div>
-        </form>
-      </div>
+            <div className={classes.importFooter}>
+              <TextField
+                name="name"
+                label="Network Name"
+                fullWidth
+                onChange={handleFieldChange}
+                value={state.name}
+              />
+              <Button
+                variant="contained"
+                className={classes.button}
+                type="button"
+                onClick={handleImport}
+                disabled={
+                  state.public &&
+                  (!state.name || !state.description || !state.version)
+                }
+              >
+                Import
+              </Button>
+              <Button
+                className="btn btn-default"
+                onClick={handleClose}
+                type="button"
+              >
+                Cancel
+              </Button>
+            </div>
+          </form>
+        </div>
+      )}
     </Dialog>
   )
 }

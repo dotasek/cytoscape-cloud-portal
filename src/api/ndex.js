@@ -1,4 +1,9 @@
-import { METHOD_GET, METHOD_POST, BASE_URL, CYREST_BASE_URL } from './apiConstants'
+import {
+  METHOD_GET,
+  METHOD_POST,
+  BASE_URL,
+  CYREST_BASE_URL
+} from './apiConstants'
 
 const fetchNetwork = (id, sourceUUID, networkUUID, authHeaders) => {
   const baseHeaders = {

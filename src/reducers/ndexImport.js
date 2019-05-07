@@ -1,5 +1,7 @@
 import { handleActions } from 'redux-actions'
 import {
+  getSaveToNDExParamsStarted,
+  getSaveToNDExParamsSucceeded,
   saveToNDExFailed,
   saveToNDExStarted,
   saveToNDExSucceeded,
@@ -11,12 +13,19 @@ import {
 
 const defaultState = {
   isImportDialogReady: false,
+  importDialogParams: undefined,
   isImportingNetwork: false,
   error: null
 }
 
 const source = handleActions(
   {
+    [getSaveToNDExParamsStarted]: (state, payload) => {
+      return { ...state }
+    },
+    [getSaveToNDExParamsSucceeded]: (state, payload) => {
+      return { ...state, importDialogParams: payload.payload }
+    },
     [saveToNDExStarted]: (state, payload) => {
       return {
         ...state,
