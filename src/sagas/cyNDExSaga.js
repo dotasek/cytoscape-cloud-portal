@@ -80,8 +80,6 @@ function* watchGetSaveToNDEXParams(action) {
     const statusResponseJson = yield call([statusResponse, 'json'])
     const statusParameters = statusResponseJson.data.parameters
 
-    const updatable = false
-    const overwrite = false
     const publicNetwork = false
 
     console.log('status response parameters', statusParameters)
@@ -118,7 +116,29 @@ function* watchGetSaveToNDEXParams(action) {
     console.log('data: ', currentNetworkData[statusParameters.saveType])
 
     const saveNetworkData = currentNetworkData[statusParameters.saveType]
-    //main.networkData = newData
+
+    let updatable = saveNetworkData.uuid != null
+    if (updatable) {
+      const profiles = yield select(getProfiles)
+      const selectedProfile = profiles.selectedProfile
+
+      const checkPermissionsResponse = yield call(
+        api.checkPermissions,
+        selectedProfile,
+        saveNetworkData['uuid']
+      )
+
+      if (checkPermissionsResponse) {
+        const checkPermissionsResponseJson = yield call([
+          checkPermissionsResponse,
+          'json'
+        ])
+        const permission = checkPermissionsResponseJson[saveNetworkData['uuid']]
+        updatable = permission === 'ADMIN' || permission === 'WRITE'
+      }
+    }
+
+    const overwrite = updatable
 
     yield put({
       type: GET_SAVE_TO_NDEX_PARAMS_SUCCEEDED,
@@ -188,7 +208,6 @@ function* watchGetCyNDExStatus(action) {
     : 1234
   try {
     const response = yield call(cyrest.cyNDExStatus, cyrestport)
-
     const responseJson = yield call([response, 'json'])
     //console.log(responseJson)
   } catch (error) {

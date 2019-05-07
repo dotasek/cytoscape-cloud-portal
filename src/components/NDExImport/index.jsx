@@ -115,7 +115,6 @@ const NDExImport = props => {
       <DialogTitle id="simple-dialog-title">Save Network to NDEx</DialogTitle>
       {props.ndexImport.importDialogParams && (
         <div style={getModalStyle()} className={classes.loginModalPaper}>
-         { console.log('state.author', state.author) }
           <form className={classes.container} noValidate>
             <div className={classes.importRow}>
               <div className={classes.importColumn}>
@@ -205,7 +204,7 @@ const NDExImport = props => {
                       <Checkbox
                         onChange={handleChangeOverwrite}
                         checked={state.overwrite}
-                        disabled={state.updatable}
+                        disabled={!state.updatable}
                       />
                     }
                     label="UPDATE EXISTING NETWORK"
