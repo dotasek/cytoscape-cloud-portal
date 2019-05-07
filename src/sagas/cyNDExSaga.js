@@ -82,9 +82,6 @@ function* watchGetSaveToNDEXParams(action) {
 
     const publicNetwork = false
 
-    console.log('status response parameters', statusParameters)
-    //console.log('status response saveType', saveType)
-
     const currentNetworkResponse = yield call(
       cyrest.cyNDExCurrentNetwork,
       cyrestport
@@ -94,15 +91,10 @@ function* watchGetSaveToNDEXParams(action) {
       'json'
     ])
 
-    console.log(
-      'currentNetwork response parameters',
-      currentNetworkResponseJson
-    )
-
     let currentNetworkData = {
       collection: currentNetworkResponseJson['data']['currentRootNetwork']
     }
-    //console.log('resp:', resp)
+
     if (currentNetworkResponseJson['data']['members']) {
       currentNetworkResponseJson['data']['members'].forEach(member => {
         if (
@@ -113,7 +105,6 @@ function* watchGetSaveToNDEXParams(action) {
         }
       })
     }
-    console.log('data: ', currentNetworkData[statusParameters.saveType])
 
     const saveNetworkData = currentNetworkData[statusParameters.saveType]
 

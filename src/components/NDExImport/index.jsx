@@ -87,9 +87,6 @@ const NDExImport = props => {
   }
 
   const handleFieldChange = e => {
-    //const newState = {
-    //  [e.target.name]: e.target.value
-    //}
     setState({ ...state, [e.target.name]: e.target.value })
   }
 
