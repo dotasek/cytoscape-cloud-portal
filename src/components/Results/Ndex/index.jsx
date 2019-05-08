@@ -33,22 +33,17 @@ const Ndex = props => {
   const id = props.search.results.jobId
 
   const checkCytoscapeConnection = props => {
-    console.log(props.uiState.urlParams)
     cyRESTApi
-      .status(
-        props.uiState.urlParams.has('cyrestport')
-          ? props.uiState.urlParams.get('cyrestport')
-          : 1234
-      )
+      .status(props.cyrest.port)
       .catch(e => {
         throw Error(e)
       })
       .then(res => handleErrors(res))
       .then(running => {
-        props.uiStateActions.setCytoscapeStatus(true)
+        props.cyrestActions.setAvailable(true)
       })
       .catch(error => {
-        props.uiStateActions.setCytoscapeStatus(false)
+        props.cyrestActions.setAvailable(false)
       })
   }
 

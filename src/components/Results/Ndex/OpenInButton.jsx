@@ -13,7 +13,7 @@ const styles = theme => ({
 })
 
 const OpenInButton = (props) => {
-  const { classes, uiState, handleImportNetwork } = props
+  const { classes, cyrest, handleImportNetwork } = props
 
   console.log('OpenInButton props', props)
 
@@ -21,7 +21,7 @@ const OpenInButton = (props) => {
     <Button
       variant="contained"
       color="default"
-      disabled={!uiState.isCytoscapeRunning}
+      disabled={!cyrest.available}
       onClick={handleImportNetwork}
     >
       Open in

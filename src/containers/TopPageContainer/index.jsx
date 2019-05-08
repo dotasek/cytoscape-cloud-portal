@@ -10,6 +10,7 @@ import * as sourceActions from '../../actions/source'
 import * as profilesActions from '../../actions/profiles'
 import * as ndexImportActions from '../../actions/ndexImport'
 import * as ndexUiStateActions from '../../actions/ndexUiState'
+import * as cyrestActions from '../../actions/cyrest'
 
 const TopPageContainer = props => <TopPage {...props} />
 function mapStateToProps(state) {
@@ -20,7 +21,8 @@ function mapStateToProps(state) {
     source: state.source,
     ndexImport: state.ndexImport,
     ndexUiState: state.ndexUiState,
-    profiles: state.profiles
+    profiles: state.profiles,
+    cyrest: state.cyrest
   }
 }
 function mapDispatchToProps(dispatch) {
@@ -31,7 +33,8 @@ function mapDispatchToProps(dispatch) {
     sourceActions: bindActionCreators(sourceActions, dispatch),
     ndexImportActions: bindActionCreators(ndexImportActions, dispatch),
     ndexUiStateActions: bindActionCreators(ndexUiStateActions, dispatch),
-    profilesActions: bindActionCreators(profilesActions, dispatch)
+    profilesActions: bindActionCreators(profilesActions, dispatch),
+    cyrestActions: bindActionCreators(cyrestActions, dispatch),
   }
 }
 

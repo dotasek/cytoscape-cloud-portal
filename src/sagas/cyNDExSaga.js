@@ -66,15 +66,13 @@ export default function* cyNDExSaga() {
   yield takeLatest(GET_SAVE_TO_NDEX_PARAMS_STARTED, watchGetSaveToNDEXParams)
 }
 
-export const getUIState = state => state.uiState
 export const getProfiles = state => state.profiles
 export const getAuthHeaders = state => state.search.authHeaders
+export const getCyRESTPort = state => state.cyrest.port
 
 function* watchGetSaveToNDEXParams(action) {
-  const uiState = yield select(getUIState)
-  const cyrestport = uiState.urlParams.has('cyrestport')
-    ? uiState.urlParams.get('cyrestport')
-    : 1234
+
+  const cyrestport = yield select(getCyRESTPort)
   try {
     const statusResponse = yield call(cyrest.cyNDExStatus, cyrestport)
     const statusResponseJson = yield call([statusResponse, 'json'])
@@ -193,10 +191,7 @@ function* watchLogin(action) {
 
 function* watchGetCyNDExStatus(action) {
   //console.log('Getting CyNDEx status')
-  const uiState = yield select(getUIState)
-  const cyrestport = uiState.urlParams.has('cyrestport')
-    ? uiState.urlParams.get('cyrestport')
-    : 1234
+  const cyrestport = yield select(getCyRESTPort)
   try {
     const response = yield call(cyrest.cyNDExStatus, cyrestport)
     const responseJson = yield call([response, 'json'])
@@ -309,10 +304,7 @@ function* watchProfileSelect(action) {
 }
 
 function* watchSaveToNDEx(action) {
-  const uiState = yield select(getUIState)
-  const cyrestport = uiState.urlParams.has('cyrestport')
-    ? uiState.urlParams.get('cyrestport')
-    : 1234
+  const cyrestport = yield select(getCyRESTPort)
 
   const profiles = yield select(getProfiles)
   const selectedProfile = profiles.selectedProfile
@@ -534,10 +526,7 @@ function* watchImportNDExNetwork(action) {
   console.log('watchImportNDExNetwork', action.payload)
 
   try {
-    const uiState = yield select(getUIState)
-    const cyrestport = uiState.urlParams.has('cyrestport')
-      ? uiState.urlParams.get('cyrestport')
-      : 1234
+    const cyrestport = yield select(getCyRESTPort)
 
     const response = yield call(api.importNDExNetwork, cyrestport, ndexData)
 

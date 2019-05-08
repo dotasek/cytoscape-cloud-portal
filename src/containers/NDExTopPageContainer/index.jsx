@@ -21,7 +21,8 @@ function mapStateToProps(state) {
     source: state.source,
     ndexImport: state.ndexImport,
     ndexUiState: state.ndexUiState,
-    profiles: state.profiles
+    profiles: state.profiles,
+    cyrest: state.cyrest
   }
 }
 function mapDispatchToProps(dispatch) {
