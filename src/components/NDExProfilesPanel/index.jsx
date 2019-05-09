@@ -8,11 +8,14 @@ import { Link as RouterLink } from 'react-router-dom'
 import List from '@material-ui/core/List'
 import Divider from '@material-ui/core/Divider'
 import ListItem from '@material-ui/core/ListItem'
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction'
 import ListItemAvatar from '@material-ui/core/ListItemAvatar'
 import ListItemText from '@material-ui/core/ListItemText'
+import IconButton from '@material-ui/core/IconButton'
 import Typography from '@material-ui/core/Typography'
 import './style.css'
 import { Avatar } from '@material-ui/core'
+import RemoveCircle from '@material-ui/icons/RemoveCircle'
 
 const styles = theme => ({
   accountPopover: {
@@ -128,15 +131,14 @@ class NDExProfilesPanel extends React.Component {
                 <Link component={MyNetworksLink}>My Networks</Link>
               </Typography>
             </div>
-            <Button
-              variant="contained"
+            <IconButton
               className={classes.button}
               onClick={event =>
                 this.handleDeleteProfile(event, selectedProfile)
               }
             >
-              Remove
-            </Button>
+              <RemoveCircle />
+            </IconButton>
           </div>
         )}
         {profiles.length > 1 && <Divider />}
@@ -167,13 +169,14 @@ class NDExProfilesPanel extends React.Component {
                     Inactive
                   </Typography>
                 </div>
-                <Button
-                  variant="contained"
-                  className={classes.button}
-                  onClick={event => this.handleDeleteProfile(event, profile)}
-                >
-                  Remove
-                </Button>
+                <ListItemSecondaryAction>
+                  <IconButton
+                    aria-label="Delete"
+                    onClick={event => this.handleDeleteProfile(event, profile)}
+                  >
+                    <RemoveCircle />
+                  </IconButton>
+                </ListItemSecondaryAction>
               </ListItem>
             ))}
         </List>
