@@ -71,7 +71,6 @@ export const getAuthHeaders = state => state.search.authHeaders
 export const getCyRESTPort = state => state.cyrest.port
 
 function* watchGetSaveToNDEXParams(action) {
-
   const cyrestport = yield select(getCyRESTPort)
   try {
     const statusResponse = yield call(cyrest.cyNDExStatus, cyrestport)
@@ -366,6 +365,8 @@ function* watchSaveToNDEx(action) {
     const uuid = json.data ? json.data.uuid : null
     //const response = yield call(cyrest.cyNDExStatus, cyrestport)
 
+    yield put({ type: CLEAR_MY_NETWORKS, payload: undefined })
+    yield put({ type: NETWORK_CLEAR, payload: {} })
     if (uuid) {
       yield put({
         type: SET_CURRENT_NETWORK,
@@ -376,7 +377,6 @@ function* watchSaveToNDEx(action) {
     yield put({ type: SAVE_TO_NDEX_SUCCEEDED, payload: {} })
     yield put({ type: SET_NDEX_IMPORT_OPEN, payload: false })
 
-    yield put({ type: CLEAR_MY_NETWORKS, payload: undefined })
     const shareURL =
       action.payload.state.public && uuid
         ? selectedProfile.serverAddress + '/#/network/' + uuid
@@ -511,7 +511,6 @@ function* watchNDExNetworkFetch(action) {
       ndexData: ndexData
     })
   } catch (error) {
-    console.log(error)
     yield put({ type: NETWORK_FETCH_FAILED, error })
   }
 }
@@ -527,7 +526,6 @@ function* watchImportNDExNetwork(action) {
 
   try {
     const cyrestport = yield select(getCyRESTPort)
-
     const response = yield call(api.importNDExNetwork, cyrestport, ndexData)
 
     console.log('CyREST response:', response)
