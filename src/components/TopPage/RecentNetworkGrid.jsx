@@ -74,6 +74,8 @@ const RecentNetworkGrid = props => {
   const { classes, ndexUiState } = props
   const { myNetworks } = ndexUiState
 
+  const MAX_RECENT_NETWORKS = 4
+
   return myNetworks ? (
     <div className={classes.gridListDiv}>
       <GridList
@@ -88,7 +90,12 @@ const RecentNetworkGrid = props => {
           </ListSubheader>
         </GridListTile>
         {myNetworks
-          .slice(0, myNetworks.length > 8 ? 8 : myNetworks.length)
+          .slice(
+            0,
+            myNetworks.length > MAX_RECENT_NETWORKS
+              ? MAX_RECENT_NETWORKS
+              : myNetworks.length
+          )
           .map(network => (
             <Link
               component={RouterLink}
