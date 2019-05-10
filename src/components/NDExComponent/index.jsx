@@ -17,7 +17,11 @@ const NDExComponent = props => {
   const { classes, ...others } = props
 
   useEffect(() => {
-    props.ndexUiStateActions.getCyNDExStatus()
+    props.cyrestActions.queryAvailable()
+
+    if (typeof props.cyrest.available !== 'undefined') {
+      props.ndexUiStateActions.getCyNDExStatus()
+    }
     props.profilesActions.importFromLocalStorage()
 
     const urlParams = new URLSearchParams(props.history.location.search)
@@ -35,7 +39,7 @@ const NDExComponent = props => {
     return () => {
       //console.log('NDExComponent unmounted')
     }
-  }, [])
+  }, [props.cyrest.available])
 
   const handleProfiles = event => {
     if (props.profiles.availableProfiles.length > 0) {

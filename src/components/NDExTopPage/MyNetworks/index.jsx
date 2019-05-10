@@ -58,20 +58,6 @@ const MyNetworks = props => {
     return false
   }
 
-  const checkCytoscapeConnection = props => {
-    cyRESTApi
-      .status(props.cyrest.port)
-      .catch(e => {
-        throw Error(e)
-      })
-      .then(res => handleErrors(res))
-      .then(running => {
-        props.cyrestActions.setAvailable(true)
-      })
-      .catch(error => {
-        props.cyrestActions.setAvailable(false)
-      })
-  }
 
   const handleFetchNetwork = (networkUUID, nodeCount, edgeCount) => {
     props.networkActions.setNetworkSize({
@@ -86,7 +72,7 @@ const MyNetworks = props => {
       return
     }
 
-    checkCytoscapeConnection(props)
+    props.cyrestActions.queryAvailable()
     props.networkActions.ndexNetworkFetchStarted({
       networkUUID: networkUUID
     })
