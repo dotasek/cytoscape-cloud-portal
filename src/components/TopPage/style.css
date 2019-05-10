@@ -29,7 +29,8 @@
 }
 
 .start-logo-main {
-  height: 25vh;
+  display: flex;
+  flex-basis: 60%
 }
 
 .start-logo {
@@ -40,8 +41,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 60vw;
-  height: 10vh;
+  flex-basis: 60%;
   padding: 0.3em;
 }
 

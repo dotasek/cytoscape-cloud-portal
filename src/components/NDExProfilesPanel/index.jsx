@@ -15,10 +15,12 @@ import IconButton from '@material-ui/core/IconButton'
 import Typography from '@material-ui/core/Typography'
 import './style.css'
 import { Avatar } from '@material-ui/core'
-import RemoveCircle from '@material-ui/icons/RemoveCircle'
+import RemoveCircleOutline from '@material-ui/icons/RemoveCircleOutline'
+import Tooltip from '@material-ui/core/Tooltip'
 
 const styles = theme => ({
   accountPopover: {
+    padding: '1em',
     //width: '240px',
     flexShrink: 0
   },
@@ -31,7 +33,8 @@ const styles = theme => ({
     height: 80
   },
   selectedProfile: {
-    'align-items': 'center'
+    'align-items': 'center',
+    padding: '1em'
   },
   ndexProfileAvatar: {
     display: 'inline-block',
@@ -39,11 +42,12 @@ const styles = theme => ({
   },
   ndexProfileText: {
     display: 'inline-block',
-    padding: '1em 1em 1em 1em',
+    'padding-left': '1em',
+    'padding-right': '1em',
     'vertical-align': 'middle'
   },
   ndexProfilesFooter: {
-    padding: '.5em 1em .5em 1em'
+    padding: '1em'
   },
   link: {
     margin: theme.spacing.unit
@@ -131,14 +135,16 @@ class NDExProfilesPanel extends React.Component {
                 <Link component={MyNetworksLink}>My Networks</Link>
               </Typography>
             </div>
-            <IconButton
-              className={classes.button}
-              onClick={event =>
-                this.handleDeleteProfile(event, selectedProfile)
-              }
-            >
-              <RemoveCircle />
-            </IconButton>
+            <Tooltip title="Remove NDEx Profile" placement="bottom">
+              <IconButton
+                className={classes.button}
+                onClick={event =>
+                  this.handleDeleteProfile(event, selectedProfile)
+                }
+              >
+                <RemoveCircleOutline />
+              </IconButton>
+            </Tooltip>
           </div>
         )}
         {profiles.length > 1 && <Divider />}
@@ -169,22 +175,23 @@ class NDExProfilesPanel extends React.Component {
                     Inactive
                   </Typography>
                 </div>
+                <Tooltip title="Remove NDEx Profile" placement="bottom">
                 <ListItemSecondaryAction>
                   <IconButton
                     aria-label="Delete"
                     onClick={event => this.handleDeleteProfile(event, profile)}
                   >
-                    <RemoveCircle />
+                    <RemoveCircleOutline />
                   </IconButton>
                 </ListItemSecondaryAction>
+                </Tooltip>
               </ListItem>
             ))}
         </List>
-
         <Divider />
-        <div className={classes.ndexProfilesFooter}>
+        <div className={classes.ndexProfilesFooter} align="center">
           <Button
-            variant="contained"
+            color="primary"
             className={classes.button}
             onClick={this.handleAddProfile}
           >

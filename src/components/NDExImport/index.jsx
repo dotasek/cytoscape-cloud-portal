@@ -19,25 +19,22 @@ const styles = theme => ({
     padding: '0em 1em 1em 1em'
   },
   importRow: {
-    display: 'flex'
+    display: 'flex',
+    'padding-left': '1em'
+  },
+  importDoubleColumn: {
+    flex: '100%'
   },
   importLeftColumn: {
-    flex: '50%',
-    padding: '0em 1em 1em 1em'
+    flex: '50%'
   },
   importRightColumn: {
-    flex: '50%',
-    padding: '0em 1em 0em 0em'
+    flex: '50%'
   },
   importFooter: {
-    display: 'flex',
-    'justify-content': 'center',
-    padding: '0em 0em 0em 1em'
+    'padding-top': '1em'
   },
-  importButton: {
-    margin: '0em 0em 0em 1em',
-    padding: '0em 2em 0em 2em'
-  }
+  importButton: {}
 })
 
 const NDExImport = props => {
@@ -125,6 +122,17 @@ const NDExImport = props => {
       {props.ndexImport.importDialogParams && (
         <div className={classes.importModalPaper}>
           <form className={classes.container} noValidate>
+            <div className={classes.importRow}>
+              <div className={classes.importDoubleColumn}>
+                <TextField
+                  name="name"
+                  label="Network Name"
+                  fullWidth
+                  onChange={handleFieldChange}
+                  value={state.name}
+                />
+              </div>
+            </div>
             <div className={classes.importRow}>
               <div className={classes.importLeftColumn}>
                 <div className="form-group">
@@ -232,17 +240,16 @@ const NDExImport = props => {
                 </div>
               )}
             </div>
-            <div className={classes.importFooter}>
-              <TextField
-                name="name"
-                label="Network Name"
-                fullWidth
-                onChange={handleFieldChange}
-                value={state.name}
-              />
+            <div className={classes.importFooter} align='right'>
               <Button
-              color="primary"
-                variant="contained"
+                className={classes.importButton}
+                onClick={handleClose}
+                type="button"
+              >
+                Cancel
+              </Button>
+              <Button
+                color="primary"
                 className={classes.importButton}
                 type="button"
                 onClick={handleImport}
@@ -253,15 +260,7 @@ const NDExImport = props => {
               >
                 Upload
               </Button>
-              <Button
-                variant="contained"
-                className={classes.button}
-                className={classes.importButton}
-                onClick={handleClose}
-                type="button"
-              >
-                Cancel
-              </Button>
+
             </div>
           </form>
         </div>

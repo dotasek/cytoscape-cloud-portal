@@ -11,7 +11,12 @@ const styles = theme => ({
   loginModal: {
     //width: '240px',
   },
-  loginModalPaper: {}
+  loginModalPaper: {
+    margin: '1em'
+  },
+  loginButtons: {
+    'margin-top': '1em'
+  }
 })
 
 function getModalStyle() {}
@@ -162,25 +167,23 @@ class NDExLogin extends React.Component {
               </div>
             )}
 
-            <div
-              className="AlignRight"
-              // style="margin-top:1em"
-            >
-              <Button
-                variant="contained"
-                className={classes.button}
-                type="button"
-                onClick={this.handleAddProfile}
-              >
-                Confirm
-              </Button>
-              <Button
+            <div className={classes.loginButtons} align='right'>
+            <Button
                 className="btn btn-default"
                 onClick={this.handleClose}
                 type="button"
               >
                 Cancel
               </Button>
+              <Button
+                color="primary"
+                className={classes.button}
+                type="button"
+                onClick={this.handleAddProfile}
+              >
+                Add
+              </Button>
+
             </div>
           </form>
         </div>
