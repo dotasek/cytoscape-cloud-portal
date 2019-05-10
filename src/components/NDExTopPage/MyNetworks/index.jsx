@@ -51,14 +51,6 @@ const MyNetworks = props => {
 
   const NETWORK_SIZE_TH = 5000
 
-  const handleErrors = res => {
-    if (res !== undefined) {
-      return true
-    }
-    return false
-  }
-
-
   const handleFetchNetwork = (networkUUID, nodeCount, edgeCount) => {
     props.networkActions.setNetworkSize({
       nodeCount,
