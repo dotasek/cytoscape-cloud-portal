@@ -33,6 +33,11 @@ const styles = theme => ({
     'padding-right': '16px',
     alignItems: 'center'
   },
+  gridListHeader: {
+    display: 'flex',
+    'justify-content': 'space-between',
+    'align-items': 'center'
+  },
   gridListTile: {
     overflow: 'hidden',
     height: '156px'
@@ -85,8 +90,13 @@ const RecentNetworkGrid = props => {
         spacing={16}
       >
         <GridListTile key="Subheader" cols={4} style={{ height: 'auto' }}>
-          <ListSubheader component="div" align="center">
-            Recent Networks
+          <ListSubheader
+            component="div"
+            align="center"
+            className={classes.gridListHeader}
+          >
+            <Typography variant="subtitle1">Recent Networks</Typography>
+            <RouterLink to="/ndexAccount">see more...</RouterLink>
           </ListSubheader>
         </GridListTile>
         {myNetworks
@@ -109,7 +119,7 @@ const RecentNetworkGrid = props => {
                 className={classes.gridListTile}
               >
                 <div className={classes.gridListTileDiv}>
-                  <Typography variant="subtitle1">{network.name}</Typography>
+                  <Typography variant="subtitle2">{network.name}</Typography>
                   {network.description && (
                     <Tooltip title={network.description} placement="bottom">
                       <Typography variant="caption" noWrap={true}>
