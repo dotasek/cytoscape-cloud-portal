@@ -91,6 +91,8 @@ const CytoscapeViewer = props => {
     cyInstance.resize()
     if (highlights) {
       cyInstance.elements().addClass('faded')
+      const query = cyInstance.filter('node[querynode = "true"]')
+      query.addClass('highlight')
     } else {
       cyInstance.elements().removeClass('faded')
     }

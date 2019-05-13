@@ -46,6 +46,7 @@ const Ndex = props => {
     }
 
     props.cyrestActions.queryAvailable()
+    props.uiStateActions.setHighlights(false)
     props.networkActions.networkFetchStarted({
       id,
       sourceUUID,

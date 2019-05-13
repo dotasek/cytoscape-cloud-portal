@@ -92,6 +92,13 @@ const fadedEdge = {
   }
 }
 
+const highlight = {
+  selector: '.highlight',
+  css: {
+    opacity: 1.0
+  }
+}
+
 const network = handleActions(
   {
     [ndexNetworkFetchStarted]: (state, payload) => {
@@ -300,6 +307,7 @@ const checkLayout = nodes => {
 const styleUpdater = style => {
   style.push(fadedNode)
   style.push(fadedEdge)
+  style.push(highlight)
   // PRESET_VS.push({
   //   selector: 'node:selected',
   //   css: {
