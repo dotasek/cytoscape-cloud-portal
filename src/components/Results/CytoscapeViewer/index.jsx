@@ -26,6 +26,7 @@ const BASE_STYLE = {
  * @constructor
  */
 const CytoscapeViewer = props => {
+  const { highlights } = props.uiState
 
   useEffect(() => {
     if (cyInstance === undefined || cyInstance === null) {
@@ -75,26 +76,24 @@ const CytoscapeViewer = props => {
     }
   }, [])
 
-  console.log('** Network rendering start:', props)
-
   const numObjects = props.network.nodeCount + props.network.edgeCount
   if (numObjects > 5000) {
     return <Warning />
   }
 
-  if (
-    props.network.originalCX === null ||
-    props.network.originalCX === undefined
-  ) {
+  if (props.network.network === null || props.network.network === undefined) {
     return null
   }
 
   const { resized } = props
 
-  console.log('%%%%%%%%%%resize:', resized)
-
   if (cyInstance !== null) {
     cyInstance.resize()
+    if (highlights) {
+      cyInstance.elements().addClass('faded')
+    } else {
+      cyInstance.elements().removeClass('faded')
+    }
   }
 
   return (
@@ -110,7 +109,6 @@ const CytoscapeViewer = props => {
           const backgroundLayer = cyInstance.cyCanvas({
             zIndex: -2
           })
-
           const canvas = backgroundLayer.getCanvas()
           const ctx = backgroundLayer.getCanvas().getContext('2d')
 

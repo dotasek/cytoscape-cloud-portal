@@ -77,6 +77,21 @@ PRESET_VS.push({
   }
 })
 
+// For class-based style update
+const fadedNode = {
+  selector: 'node.faded',
+  css: {
+    opacity: 0.2
+  }
+}
+
+const fadedEdge = {
+  selector: 'edge.faded',
+  css: {
+    opacity: 0.2
+  }
+}
+
 const network = handleActions(
   {
     [ndexNetworkFetchStarted]: (state, payload) => {
@@ -115,9 +130,10 @@ const network = handleActions(
         originalCX: null,
         niceCX: null,
         network: null,
+        isLayoutComplete: false,
+        backgroundColor: '#222233',
         style: PRESET_VS,
         layoutScalingFactor: 2.0,
-        backgroundColor: '#222233',
         isLayoutComplete: false
       }
     },
@@ -231,6 +247,21 @@ const convertCx2cyjs = (network, originalCX) => {
   }
 }
 
+const VS_TAG = 'cyVisualProperties'
+const getBackGround = cx => {
+  let color = 'pink'
+
+  const vps = cx.filter(entry => entry[VS_TAG])
+  if (vps !== undefined && vps !== null && vps.length !== 0) {
+    const vp = vps[0]
+    const allVp = vp[VS_TAG]
+    const networkVp = allVp.filter(p => p['properties_of'] === 'network')
+    return networkVp[0].properties['NETWORK_BACKGROUND_PAINT']
+  } else {
+    return color
+  }
+}
+
 // Utility function to get better results
 const adjustLayout = (nodes, queryGenes, layoutScalingFactor) => {
   let len = nodes.length
@@ -267,32 +298,34 @@ const checkLayout = nodes => {
 }
 
 const styleUpdater = style => {
-  PRESET_VS.push({
-    selector: 'node:selected',
-    css: {
-      'background-color': SELECTION_COLOR,
-      width: ele => ele.width() * 1.3,
-      height: ele => ele.height() * 1.3
-    }
-  })
-
-  PRESET_VS.push({
-    selector: 'edge:selected',
-    css: {
-      'line-color': SELECTION_COLOR,
-      'target-arrow-color': SELECTION_COLOR,
-      opacity: 1.0,
-      width: 6
-    }
-  })
-
-  PRESET_VS.push({
-    selector: '.connected',
-    css: {
-      'background-color': SELECTION_COLOR,
-      'background-opacity': 1.0
-    }
-  })
+  style.push(fadedNode)
+  style.push(fadedEdge)
+  // PRESET_VS.push({
+  //   selector: 'node:selected',
+  //   css: {
+  //     'background-color': SELECTION_COLOR,
+  //     width: ele => ele.width() * 1.3,
+  //     height: ele => ele.height() * 1.3
+  //   }
+  // })
+  //
+  // PRESET_VS.push({
+  //   selector: 'edge:selected',
+  //   css: {
+  //     'line-color': SELECTION_COLOR,
+  //     'target-arrow-color': SELECTION_COLOR,
+  //     opacity: 1.0,
+  //     width: 6
+  //   }
+  // })
+  //
+  // PRESET_VS.push({
+  //   selector: '.connected',
+  //   css: {
+  //     'background-color': SELECTION_COLOR,
+  //     'background-opacity': 1.0
+  //   }
+  // })
   return style
 }
 

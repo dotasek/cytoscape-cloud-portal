@@ -99,6 +99,7 @@ const NetworkToolbar = props => {
         {props.network.networkName}
       </Typography>
       <div className={classes.grow} />
+      <Highlighter {...others} />
       <OpenInButton handleImportNetwork={handleImportNetwork} {...others} />
     </div>
   )
