@@ -118,7 +118,7 @@ const NDExImport = props => {
       onClose={handleClose}
       aria-labelledby="import-dialog-title"
     >
-      <DialogTitle id="simple-dialog-title">Upload Network to NDEx</DialogTitle>
+      <DialogTitle id="simple-dialog-title">Export Network to NDEx</DialogTitle>
       {props.ndexImport.importDialogParams && (
         <div className={classes.importModalPaper}>
           <form className={classes.container} noValidate>
@@ -212,7 +212,7 @@ const NDExImport = props => {
                         checked={state.public}
                       />
                     }
-                    label="SAVE AS PUBLIC"
+                    label="MAKE PUBLIC"
                   />
                 </FormGroup>
                 <FormGroup row>
@@ -224,7 +224,7 @@ const NDExImport = props => {
                         disabled={!state.updatable}
                       />
                     }
-                    label="REPLACE EXISTING NETWORK"
+                    label="UPDATE EXISTING NETWORK"
                   />
                 </FormGroup>
               </div>
@@ -240,7 +240,7 @@ const NDExImport = props => {
                 </div>
               )}
             </div>
-            <div className={classes.importFooter} align='right'>
+            <div className={classes.importFooter} align="right">
               <Button
                 className={classes.importButton}
                 onClick={handleClose}
@@ -258,9 +258,8 @@ const NDExImport = props => {
                   (!state.name || !state.description || !state.version)
                 }
               >
-                Upload
+                Export
               </Button>
-
             </div>
           </form>
         </div>
