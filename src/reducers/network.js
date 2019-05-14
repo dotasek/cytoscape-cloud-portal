@@ -138,8 +138,8 @@ const network = handleActions(
         niceCX: null,
         network: null,
         isLayoutComplete: false,
-        backgroundColor: '#222233',
-        style: PRESET_VS,
+        backgroundColor: null,
+        style: null,
         layoutScalingFactor: 2.0,
         isLayoutComplete: false
       }
@@ -233,7 +233,7 @@ const convertCx2cyjs = (network, originalCX) => {
 
   const updatedStyle = network.style
     ? styleUpdater(network.style, network.queryGenes)
-    : cx2js.cyStyleFromNiceCX(niceCX, attributeNameMap)
+    : styleUpdater(cx2js.cyStyleFromNiceCX(niceCX, attributeNameMap))
   const updatedNodes = network.layoutScalingFactor
     ? adjustLayout(
         elementsObj.nodes,
