@@ -125,7 +125,7 @@ const Ndex = props => {
   return (
     <Split sizes={[50, 50]} gutterSize={7} className="ndex-base">
       <NetworkList renderNetworkListItem={renderNetworkListItem} {...props} />
-      <NetworkView handleImportNetwork={handleImportNetwork} {...props} />
+      <NetworkView handleImportNetwork={handleImportNetwork} showHighlighter={true} {...props} />
     </Split>
   )
 }
