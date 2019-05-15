@@ -32,7 +32,7 @@ const Ndex = props => {
 
   const id = props.search.results.jobId
 
-  const handleFetch = (networkUUID, networkName, nodeCount, edgeCount) => {
+  const handleFetch = (networkUUID, networkName, nodeCount, edgeCount, hitGenes) => {
     props.networkActions.setNetworkSize({
       nodeCount,
       edgeCount
@@ -47,12 +47,17 @@ const Ndex = props => {
 
     props.cyrestActions.queryAvailable()
     props.uiStateActions.setHighlights(false)
+
+    // Reset selection
+    props.searchActions.setSelectedGenes([])
+
     props.networkActions.networkFetchStarted({
       id,
       sourceUUID,
       networkUUID,
       networkName,
-      geneList
+      geneList,
+      hitGenes
     })
   }
 
@@ -67,7 +72,8 @@ const Ndex = props => {
       percentOverlap,
       nodes,
       edges,
-      imageURL
+      imageURL,
+      hitGenes
     } = networkEntry
 
     return (
@@ -75,7 +81,9 @@ const Ndex = props => {
         className={classes.menuItem}
         alignItems="flex-start"
         key={networkUUID}
-        onClick={val => handleFetch(networkUUID, description, nodes, edges)}
+        onClick={val =>
+          handleFetch(networkUUID, description, nodes, edges, hitGenes)
+        }
       >
         <ListItemAvatar>
           <Avatar className={classes.networkAvatar} src={imageURL} />
