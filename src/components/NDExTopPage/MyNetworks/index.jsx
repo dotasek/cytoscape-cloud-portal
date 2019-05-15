@@ -36,7 +36,9 @@ const MyNetworks = props => {
       if (props.ndexUiState.currentNetworkUUID != props.network.uuid) {
         handleFetchNetwork(props.ndexUiState.currentNetworkUUID)
       } else {
-        const ndexNetwork = props.ndexUiState.myNetworks.filter(value => value.externalId == props.ndexUiState.currentNetworkUUID)
+        const ndexNetwork = props.ndexUiState.myNetworks.filter(
+          value => value.externalId == props.ndexUiState.currentNetworkUUID
+        )
         if (ndexNetwork.length > 0) {
           console.log('Network exists; compare timestamps')
         } else {
@@ -47,7 +49,11 @@ const MyNetworks = props => {
     return () => {
       props.networkActions.networkClear()
     }
-  }, [props.profiles.selectedProfile, props.ndexUiState.myNetworks, props.ndexUiState.currentNetworkUUID])
+  }, [
+    props.profiles.selectedProfile,
+    props.ndexUiState.myNetworks,
+    props.ndexUiState.currentNetworkUUID
+  ])
 
   const NETWORK_SIZE_TH = 5000
 
@@ -137,7 +143,11 @@ const MyNetworks = props => {
   return (
     <Split sizes={[50, 50]} gutterSize={7} className="ndex-base">
       <NetworkList renderNetworkListItem={renderNetworkListItem} {...props} />
-      <NetworkView handleImportNetwork={handleImportNetwork} {...props} />
+      <NetworkView
+        handleImportNetwork={handleImportNetwork}
+        showHighlighter={false}
+        {...props}
+      />
     </Split>
   )
 }

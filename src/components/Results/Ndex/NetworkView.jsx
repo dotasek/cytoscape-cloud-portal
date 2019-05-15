@@ -18,7 +18,7 @@ const DEFAULT_RATIO = [60, 40]
 const NetworkView = props => {
   const [resized, setResize] = useState(null)
 
-  const { handleImportNetwork } = props
+  const { handleImportNetwork, showHighlighter } = props
 
   const handleResizeEnd = e => {
     setResize(e)
@@ -26,7 +26,11 @@ const NetworkView = props => {
 
   return (
     <div className={'network-view-top'}>
-      <NetworkToolbar handleImportNetwork={handleImportNetwork} {...props} />
+      <NetworkToolbar
+        handleImportNetwork={handleImportNetwork}
+        showHighlighter={showHighlighter}
+        {...props}
+      />
       <Split
         sizes={DEFAULT_RATIO}
         direction="vertical"
@@ -34,10 +38,7 @@ const NetworkView = props => {
         className={'nv-container'}
         onDragEnd={handleResizeEnd}
       >
-        <NetworkViewer
-          resized={resized}
-          {...props}
-        />
+        <NetworkViewer resized={resized} showHighlighter={true} {...props} />
         <TableBrowser {...props} />
       </Split>
     </div>

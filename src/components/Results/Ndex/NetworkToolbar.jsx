@@ -80,7 +80,7 @@ const styles = theme => ({
 })
 
 const NetworkToolbar = props => {
-  const { classes, handleImportNetwork, ...others } = props
+  const { classes, handleImportNetwork, showHighlighter, ...others } = props
   return (
     <div className={classes.toolbar}>
       <IconButton
@@ -99,7 +99,7 @@ const NetworkToolbar = props => {
         {props.network.networkName}
       </Typography>
       <div className={classes.grow} />
-      <Highlighter {...others} />
+      {showHighlighter && <Highlighter {...others} />}
       <OpenInButton handleImportNetwork={handleImportNetwork} {...others} />
     </div>
   )
