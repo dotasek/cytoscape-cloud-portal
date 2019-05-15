@@ -33,7 +33,13 @@ const Ndex = props => {
 
   const id = props.search.results.jobId
 
-  const handleFetch = (networkUUID, networkName, nodeCount, edgeCount, hitGenes) => {
+  const handleFetch = (
+    networkUUID,
+    networkName,
+    nodeCount,
+    edgeCount,
+    hitGenes
+  ) => {
     props.networkActions.setNetworkSize({
       nodeCount,
       edgeCount
@@ -132,7 +138,11 @@ const Ndex = props => {
   return (
     <Split sizes={[50, 50]} gutterSize={7} className="ndex-base">
       <NetworkList renderNetworkListItem={renderNetworkListItem} {...props} />
-      <NetworkView handleImportNetwork={handleImportNetwork} showHighlighter={true} {...props} />
+      <NetworkView
+        handleImportNetwork={handleImportNetwork}
+        showHighlighter={true}
+        {...props}
+      />
     </Split>
   )
 }
