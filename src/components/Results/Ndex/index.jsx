@@ -47,6 +47,7 @@ const Ndex = props => {
     }
 
     props.cyrestActions.queryAvailable()
+    // Reset the UI state (hilight)
     props.uiStateActions.setHighlights(false)
 
     // Reset selection
