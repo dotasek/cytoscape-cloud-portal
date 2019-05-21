@@ -218,6 +218,18 @@ const network = handleActions(
         edgeCount: 0
       }
     },
+    [networkClear]: (state, payload) => {
+      return {
+        ...state,
+        uuid: '',
+        originalCX: null,
+        network: null,
+        backgroundColor: null,
+        isFetching: false,
+        nodeCount: 0,
+        edgeCount: 0
+      }
+    },
     [setNetworkSize]: (state, payload) => {
       return {
         ...state,
