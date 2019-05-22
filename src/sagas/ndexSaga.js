@@ -29,7 +29,7 @@ const API_CALL_INTERVAL = 1000
 
 export const getAuthHeaders = state => state.search.authHeaders
 
-const SELECTED_SOURCES = ['enrichment', 'interactome']
+const SELECTED_SOURCES = ['keyword', 'enrichment', 'interactome']
 
 export default function* rootSaga() {
   yield takeLatest(SEARCH_STARTED, watchSearch)
