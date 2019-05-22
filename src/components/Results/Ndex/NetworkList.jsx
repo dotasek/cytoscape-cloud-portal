@@ -15,14 +15,13 @@ const styles = theme => ({
     marginTop: '0.5em'
   },
   networkAvatar: {
-    margin: 10,
+    margin: 5,
     color: '#fff',
     backgroundColor: '#FAFAFA'
   },
   menuItem: {
-    height: '4em',
     '&:focus': {
-      backgroundColor: 'rgba(200,205,200,0.5)'
+      backgroundColor: 'rgba(230,230,230,0.6)'
     }
   },
   menuText: {
@@ -41,17 +40,20 @@ const styles = theme => ({
 })
 
 const NetworkList = props => {
-  const { classes, hits, renderNetworkListItem, network } = props
+  const { classes, hits, renderNetworkListItem, network, search } = props
 
   if (!hits) {
     return <div className="network-list-wrapper" />
   }
 
+  const querySize = search && search.results ? search.results.genes.size : 0
+  console.log('LIST val:::', querySize, props)
+
   return (
     <div className="network-list-wrapper">
       <div className="network-list">
         <MenuList>
-          {hits.map(entry => renderNetworkListItem(entry, classes))}
+          {hits.map(entry => renderNetworkListItem(querySize, entry, classes))}
         </MenuList>
       </div>
     </div>

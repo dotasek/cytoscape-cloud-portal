@@ -13,7 +13,7 @@ import Avatar from '@material-ui/core/Avatar'
 import Typography from '@material-ui/core/Typography'
 
 import * as cyRESTApi from '../../../api/cyrest'
-import MenuItem from '@material-ui/core/MenuItem'
+import { ListItem } from '@material-ui/core'
 import no_image from '../../../assets/images/no_image.png'
 /**
  * Top page for the application
@@ -86,22 +86,16 @@ const MyNetworks = props => {
     props.ndexImportActions.importFromNDExStarted(props.network.ndexData)
   }
 
-  const renderNetworkListItem = (networkEntry, classes) => {
-    const {
-      name,
-      externalId,
-      percentOverlap,
-      nodeCount,
-      edgeCount
-    } = networkEntry
+  const renderNetworkListItem = (querySize, networkEntry, classes) => {
+    const { name, externalId, nodeCount, edgeCount } = networkEntry
 
     const imageURL =
       'http://v1.storage.cytoscape.io/images/' + externalId + '.png'
 
     return (
-      <MenuItem
+    <ListItem
+        button
         className={classes.menuItem}
-        alignItems="flex-start"
         key={externalId}
         onClick={val => handleSelectNetwork(externalId, nodeCount, edgeCount)}
         selected={externalId == props.ndexUiState.currentNetworkUUID}
@@ -136,7 +130,7 @@ const MyNetworks = props => {
             </React.Fragment>
           }
         />
-      </MenuItem>
+      </ListItem>
     )
   }
 

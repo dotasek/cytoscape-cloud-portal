@@ -7,15 +7,12 @@ import NetworkList from './NetworkList'
 
 import ListItemText from '@material-ui/core/ListItemText'
 import ListItemAvatar from '@material-ui/core/ListItemAvatar'
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction'
 
 import Avatar from '@material-ui/core/Avatar'
 import Typography from '@material-ui/core/Typography'
 
-import MenuItem from '@material-ui/core/MenuItem'
-
 import * as cyRESTApi from '../../../api/cyrest'
-import Tooltip from '@material-ui/core/Tooltip'
+import { ListItem } from '@material-ui/core'
 
 const NETWORK_SIZE_TH = 5000
 
@@ -73,11 +70,10 @@ const Ndex = props => {
     props.cyrestActions.importNetworkStarted(props.network.originalCX)
   }
 
-  const renderNetworkListItem = (networkEntry, classes) => {
+  const renderNetworkListItem = (querySize, networkEntry, classes) => {
     const {
       description,
       networkUUID,
-      percentOverlap,
       nodes,
       edges,
       imageURL,
@@ -85,9 +81,9 @@ const Ndex = props => {
     } = networkEntry
 
     return (
-      <MenuItem
+      <ListItem
+        button
         className={classes.menuItem}
-        alignItems="flex-start"
         key={networkUUID}
         onClick={val =>
           handleFetch(networkUUID, description, nodes, edges, hitGenes)
@@ -97,46 +93,26 @@ const Ndex = props => {
           <Avatar className={classes.networkAvatar} src={imageURL} />
         </ListItemAvatar>
         <ListItemText
-          className={classes.menuText}
           primary={description}
           secondary={
             <React.Fragment>
               <Typography
                 component="span"
                 className={classes.inline}
-                color="textPrimary"
               >
                 {'Nodes: ' + nodes + ', Edges: ' + edges}
               </Typography>
-              <Tooltip
-                title={percentOverlap + '% overlap of network by search genes.'}
-                placement="right"
-                key={networkUUID}
-              >
-                <div
-                  style={{
-                    background: 'teal',
-                    color: 'white',
-                    height: '1.5em',
-                    width: percentOverlap * 3 + 'px'
-                  }}
-                >
-                  <Typography variant="body2" style={{ color: '#AAAAAA' }}>
-                    {percentOverlap + '%'}
-                  </Typography>
-                </div>
-              </Tooltip>
+              
+              {hitGenes && ('  Hit/Query = ' + hitGenes.length + '/' + querySize)} 
             </React.Fragment>
           }
         />
-
-        <ListItemSecondaryAction className={classes.secondary} />
-      </MenuItem>
+      </ListItem>
     )
   }
 
   return (
-    <Split sizes={[50, 50]} gutterSize={7} className="ndex-base">
+    <Split sizes={[35, 65]} gutterSize={7} className="ndex-base">
       <NetworkList renderNetworkListItem={renderNetworkListItem} {...props} />
       <NetworkView
         handleImportNetwork={handleImportNetwork}
