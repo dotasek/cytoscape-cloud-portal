@@ -29,6 +29,8 @@ const API_CALL_INTERVAL = 1000
 
 export const getAuthHeaders = state => state.search.authHeaders
 
+const SELECTED_SOURCES = ['enrichment', 'interactome']
+
 export default function* rootSaga() {
   yield takeLatest(SEARCH_STARTED, watchSearch)
   yield takeLatest(FETCH_RESULT_STARTED, watchSearchResult)
@@ -175,7 +177,17 @@ function* fetchSource(action) {
     const sources = yield call(cySearchApi.getSource, null)
     const json = yield call([sources, 'json'])
 
-    yield put({ type: FIND_SOURCE_SUCCEEDED, sources: json.results })
+    const reducedSources = json.results.filter(entry =>
+      SELECTED_SOURCES.includes(entry['name'])
+    )
+
+    const orderedSources = reducedSources.sort(
+      (firstEl, secondEl) =>
+        SELECTED_SOURCES.indexOf(firstEl['name']) >
+        SELECTED_SOURCES.indexOf(secondEl['name'])
+    )
+
+    yield put({ type: FIND_SOURCE_SUCCEEDED, sources: orderedSources })
   } catch (error) {
     yield put({ type: FIND_SOURCE_FAILED, error })
   }
