@@ -34,7 +34,11 @@ const MyNetworks = props => {
       props.ndexUiStateActions.getMyNetworksStarted()
     } else {
       if (props.ndexUiState.currentNetworkUUID != props.network.uuid) {
-        handleFetchNetwork(props.ndexUiState.currentNetworkUUID)
+        handleFetchNetwork(
+          props.ndexUiState.currentNetworkUUID,
+          props.ndexUiState.currentNetworkNodeSize,
+          props.ndexUiState.currentNetworkEdgeSize
+        )
       } else {
         const ndexNetwork = props.ndexUiState.myNetworks.filter(
           value => value.externalId == props.ndexUiState.currentNetworkUUID
@@ -65,12 +69,14 @@ const MyNetworks = props => {
 
     const networkSize = nodeCount + edgeCount
 
+    props.cyrestActions.queryAvailable()
+
     // Do not load if size is too big to render!
     if (networkSize > NETWORK_SIZE_TH) {
       return
     }
 
-    props.cyrestActions.queryAvailable()
+    console.log('network size is fine (' + networkSize + ') starting a fetch')
     props.networkActions.ndexNetworkFetchStarted({
       networkUUID: networkUUID
     })
@@ -78,7 +84,9 @@ const MyNetworks = props => {
 
   const handleSelectNetwork = (networkUUID, nodeCount, edgeCount) => {
     props.ndexUiStateActions.setCurrentNetwork({
-      currentNetworkUUID: networkUUID
+      currentNetworkUUID: networkUUID,
+      currentNetworkNodeSize: nodeCount,
+      currentNetworkEdgeSize: edgeCount
     })
   }
 
@@ -93,7 +101,7 @@ const MyNetworks = props => {
       'http://v1.storage.cytoscape.io/images/' + externalId + '.png'
 
     return (
-    <ListItem
+      <ListItem
         button
         className={classes.menuItem}
         key={externalId}

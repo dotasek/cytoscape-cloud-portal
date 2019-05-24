@@ -21,6 +21,8 @@ const DEF_STATE = {
   NDExSignInHintOpen: true,
   myNetworks: undefined,
   currentNetworkUUID: undefined,
+  currentNetworkNodeSize: undefined,
+  currentNetworkEdgeSize: undefined,
   currentNetworkModified: undefined
 }
 
@@ -97,6 +99,8 @@ const ndexUiState = handleActions(
       return {
         ...state,
         currentNetworkUUID: payload.payload.currentNetworkUUID,
+        currentNetworkNodeSize: payload.payload.currentNetworkNodeSize,
+        currentNetworkEdgeSize: payload.payload.currentNetworkEdgeSize,
         currentNetworkModified: payload.payload.currentNetworkModified
       }
     }
