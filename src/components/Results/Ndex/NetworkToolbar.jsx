@@ -84,7 +84,9 @@ const NetworkToolbar = props => {
   const { classes, handleImportNetwork, showHighlighter, ...others } = props
   return (
     <div className={classes.toolbar}>
-      <Tooltip title={props.network.networkName}>
+      <Tooltip
+        title={props.network.networkName ? props.network.networkName : ''}
+      >
         <Typography
           className={classes.title}
           variant="subtitle1"
