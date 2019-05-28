@@ -1,6 +1,7 @@
 import { call, put, takeLatest, select } from 'redux-saga/effects'
 import * as cyrest from '../api/cyrest'
 import * as api from '../api/ndex'
+import { METHOD_GET } from '../api/apiConstants'
 
 import {
   ADD_PROFILE_STARTED,
@@ -68,6 +69,7 @@ export default function* cyNDExSaga() {
 
 export const getProfiles = state => state.profiles
 export const getAuthHeaders = state => state.search.authHeaders
+export const getNdexImportSUID = state => state.ndexUiState.ndexImportSUID
 export const getCyRESTPort = state => state.cyrest.port
 
 function* watchGetSaveToNDEXParams(action) {
@@ -79,9 +81,13 @@ function* watchGetSaveToNDEXParams(action) {
 
     const publicNetwork = false
 
+    const ndexImportSUID = yield select(getNdexImportSUID)
+
     const currentNetworkResponse = yield call(
-      cyrest.cyNDExCurrentNetwork,
-      cyrestport
+      cyrest.cyNDExNetworks,
+      cyrestport,
+      METHOD_GET,
+      ndexImportSUID
     )
     const currentNetworkResponseJson = yield call([
       currentNetworkResponse,
@@ -442,7 +448,7 @@ function* watchProfileDelete(action) {
 function* watchSaveToNDExCancelled(action) {
   yield put({
     type: SET_NDEX_IMPORT_OPEN,
-    payload: false
+    payload: { isNDExImportOpen: false }
   })
   yield put({
     type: SET_NDEX_ACTION_MESSAGE,

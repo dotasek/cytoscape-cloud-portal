@@ -26,6 +26,7 @@ const NDExComponent = props => {
 
     const urlParams = new URLSearchParams(props.history.location.search)
     if (urlParams.has('suid')) {
+      const suid = urlParams.get('suid')
       console.log('search port', props.history.location.search)
       urlParams.delete('suid')
 
@@ -33,7 +34,10 @@ const NDExComponent = props => {
         pathname: '/ndexAccount',
         search: urlParams.toString()
       })
-      props.ndexUiStateActions.setNDExImportOpen(true)
+      props.ndexUiStateActions.setNDExImportOpen({
+        isNDExImportOpen: true,
+        ndexImportSUID: suid
+      })
     }
 
     return () => {

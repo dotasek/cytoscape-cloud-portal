@@ -16,6 +16,7 @@ import {
 const DEF_STATE = {
   isProfilesOpen: false,
   isNDExImportOpen: false,
+  ndexImportSUID: undefined,
   isNDExLoginOpen: false,
   NDExActionMessage: undefined,
   NDExSignInHintOpen: true,
@@ -48,7 +49,8 @@ const ndexUiState = handleActions(
     [setNDExImportOpen]: (state, payload) => {
       return {
         ...state,
-        isNDExImportOpen: payload.payload
+        isNDExImportOpen: payload.payload.isNDExImportOpen,
+        ndexImportSUID: payload.payload.ndexImportSUID
       }
     },
     [getCyNDExStatus]: (state, payload) => {
