@@ -153,6 +153,7 @@ function* watchGetSaveToNDEXParams(action) {
       }
     })
   } catch (error) {
+    console.error(error)
     if (!window.sessionStorage.getItem('cyndexUnconnectedWarningDisplayed')) {
       window.sessionStorage.setItem('cyndexUnconnectedWarningDisplayed', true)
       yield put({
@@ -201,6 +202,7 @@ function* watchGetCyNDExStatus(action) {
     const responseJson = yield call([response, 'json'])
     //console.log(responseJson)
   } catch (error) {
+    console.error(error)
     if (!window.sessionStorage.getItem('cyndexUnconnectedWarningDisplayed')) {
       window.sessionStorage.setItem('cyndexUnconnectedWarningDisplayed', true)
       yield put({
@@ -382,11 +384,11 @@ function* watchSaveToNDEx(action) {
       })
     }
 
-    yield put({ type: SAVE_TO_NDEX_SUCCEEDED, payload: {} })
     yield put({
       type: SET_NDEX_IMPORT_OPEN,
       payload: { isNDExImportOpen: false, ndexImportSUID: undefined }
     })
+    yield put({ type: SAVE_TO_NDEX_SUCCEEDED, payload: {} })
 
     const shareURL =
       action.payload.state.public && uuid
