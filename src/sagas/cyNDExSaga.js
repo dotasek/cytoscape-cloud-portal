@@ -364,7 +364,10 @@ function* watchSaveToNDEx(action) {
     })
     console.error(response.errors)
     yield put({ type: SAVE_TO_NDEX_FAILED, payload: response.errors[0] })
-    yield put({ type: SET_NDEX_IMPORT_OPEN, payload: false })
+    yield put({
+      type: SET_NDEX_IMPORT_OPEN,
+      payload: { isNDExImportOpen: false, ndexImportSUID: undefined }
+    })
   } else {
     const json = yield call([response, 'json'])
     const uuid = json.data ? json.data.uuid : null
@@ -380,7 +383,10 @@ function* watchSaveToNDEx(action) {
     }
 
     yield put({ type: SAVE_TO_NDEX_SUCCEEDED, payload: {} })
-    yield put({ type: SET_NDEX_IMPORT_OPEN, payload: false })
+    yield put({
+      type: SET_NDEX_IMPORT_OPEN,
+      payload: { isNDExImportOpen: false, ndexImportSUID: undefined }
+    })
 
     const shareURL =
       action.payload.state.public && uuid
@@ -447,7 +453,7 @@ function* watchProfileDelete(action) {
 function* watchSaveToNDExCancelled(action) {
   yield put({
     type: SET_NDEX_IMPORT_OPEN,
-    payload: { isNDExImportOpen: false }
+    payload: { isNDExImportOpen: false, ndexImportSUID: undefined }
   })
   yield put({
     type: SET_NDEX_ACTION_MESSAGE,
