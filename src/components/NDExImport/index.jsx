@@ -53,7 +53,6 @@ const NDExImport = props => {
     reference: hydrate('reference'),
     description: hydrate('description'),
     saveType: hydrate('saveType'),
-    suid: undefined,
     saving: false,
     public: false,
     updatable: false,

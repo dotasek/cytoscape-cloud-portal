@@ -149,7 +149,6 @@ function* watchGetSaveToNDEXParams(action) {
         public: publicNetwork,
         updatable: updatable,
         overwrite: overwrite,
-        suid: statusParameters.suid,
         errorMessage: null
       }
     })
@@ -343,7 +342,7 @@ function* watchSaveToNDEx(action) {
   }
   const payload = JSON.stringify(payloadObj)
 
-  const suid = action.payload.state.suid
+  const suid = yield select(getNdexImportSUID)
 
   if (userName === undefined || userName === '') {
     alert('You must be logged with your NDEx username to save a network.')
